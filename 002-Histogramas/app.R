@@ -1,32 +1,35 @@
 library(shiny)
+library('ggplot2')
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
 
   # App title ----
-  titlePanel("Hello Shiny!"),
+  titlePanel("Histogramas"),
 
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
 
     # Sidebar panel for inputs ----
     sidebarPanel(
+      
 
-      # Input: Slider for the number of bins ----
+      selectInput( inputId = "n", 
+                   label = "Tipo de frecuencia",
+                   choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+                   selected = NULL),
+      
       sliderInput(inputId = "bins",
-                  label = "Number of bins:",
+                  label = "Número de intervalos:",
                   min = 1,
-                  max = 50,
-                  value = 30)
+                  max = 10,
+                  value = 1)
 
     ),
 
     # Main panel for displaying outputs ----
     mainPanel(
-
-      # Output: Histogram ----
-      plotOutput(outputId = "distPlot")
-
+         plotOutput(outputId = "distPlot")
     )
   )
 )
@@ -34,22 +37,32 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram ----
 server <- function(input, output) {
 
-  # Histogram of the Old Faithful Geyser Data ----
-  # with requested number of bins
-  # This expression that generates a histogram is wrapped in a call
-  # to renderPlot to indicate that:
-  #
-  # 1. It is "reactive" and therefore should be automatically
-  #    re-executed when inputs (input$bins) change
-  # 2. Its output type is a plot
+  sueldos <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
+               54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
+  dat<-data.frame(sueldos)
+  
   output$distPlot <- renderPlot({
+    
+    if(input$n=='Frecuencia absoluta'){
+    
+    ggplot(dat,aes(x=sueldos))+
+      geom_histogram( aes(y=..count..),
+                      closed="left",bins = input$bins,
+                      fill="blue",col="black",alpha=0.7)+
+      labs(title = "Histograma", x="Clases", y="Frecuencia")
+      
+    }
+    
+    else if(input$n=='Frecuencia relativa'){
+      
+      ggplot(dat,aes(x=sueldos))+
+        geom_histogram( aes(y=..density..),
+                        closed="left",bins = input$bins,
+                        fill="blue",col="black",alpha=0.7)+
+        labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
+      
+    }
 
-    x    <- faithful$waiting
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-    hist(x, breaks = bins, col = "#75AADB", border = "white",
-         xlab = "Waiting time to next eruption (in mins)",
-         main = "Histogram of waiting times")
 
     })
 
