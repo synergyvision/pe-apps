@@ -1,59 +1,61 @@
 library(shiny)
 
-# Define UI for app that draws a histogram ----
+# Crear tablas de frecuencias con Sueldos.
 ui <- fluidPage(
 
-  # App title ----
-  titlePanel("Hello Shiny!"),
+  titlePanel("Tablas de Frecuencias"),
 
-  # Sidebar layout with input and output definitions ----
   sidebarLayout(
 
-    # Sidebar panel for inputs ----
     sidebarPanel(
+      
+      selectInput( inputId = "n", label = "Opciones:",choices= c("Frecuencia","Frecuencia Relativa"), selected = NULL
+                   ), 
 
-      # Input: Slider for the number of bins ----
       sliderInput(inputId = "bins",
-                  label = "Number of bins:",
+                  label = "Número de intervalos:",
                   min = 1,
                   max = 50,
                   value = 30)
-
+      
     ),
-
-    # Main panel for displaying outputs ----
-    mainPanel(
-
-      # Output: Histogram ----
-      plotOutput(outputId = "distPlot")
-
+       mainPanel(
+         
+              tableOutput(outputId = "table")
     )
   )
 )
 
-# Define server logic required to draw a histogram ----
+
 server <- function(input, output) {
 
-  # Histogram of the Old Faithful Geyser Data ----
-  # with requested number of bins
-  # This expression that generates a histogram is wrapped in a call
-  # to renderPlot to indicate that:
-  #
-  # 1. It is "reactive" and therefore should be automatically
-  #    re-executed when inputs (input$bins) change
-  # 2. Its output type is a plot
-  output$distPlot <- renderPlot({
+  
+  output$table <- renderTable({
 
-    x    <- faithful$waiting
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-    hist(x, breaks = bins, col = "#75AADB", border = "white",
-         xlab = "Waiting time to next eruption (in mins)",
-         main = "Histogram of waiting times")
+    x <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
+                         54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
+    
+    Intervalo <- cut(x,breaks = seq(min(x),max(x),length.out = input$bins+1),include.lowest = T,right = F)
+    
+    #conteo
+    if(input$n=="Frecuencia"){
+    conteo<-table(Intervalo)
+    df<-data.frame(conteo)
+    colnames(df)<-c("Intervalos","Frecuencia")
+    return(df)
+    }
+    else if(input$n=="Frecuencia Relativa"){
+    conteo<-table(Intervalo)
+    df<-data.frame(conteo)
+    colnames(df)<-c("Intervalos","Frecuencia")
+    fr<-transform(df,Fr=prop.table(Frecuencia))
+    colnames(fr)<-c("Intervalos","Frecuencias","Frecuencias Relativa")
+    return(fr)
+    }
 
     })
 
 }
 
-# Create Shiny app ----
+
 shinyApp(ui = ui, server = server)

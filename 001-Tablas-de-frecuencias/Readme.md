@@ -1,3 +1,3 @@
-This small Shiny application demonstrates Shiny's automatic UI updates. 
+Ésta es una aplicación que demuestra cómo podemos visualizar tablas de frecuencias con los datos de Sueldos manipulando el número de intervalos.
 
-Move the *Number of bins* slider and notice how the `renderPlot` expression is automatically re-evaluated when its dependant, `input$bins`, changes, causing a histogram with a new number of bins to be rendered.
+
