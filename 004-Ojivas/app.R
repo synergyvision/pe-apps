@@ -53,7 +53,7 @@ server <- function(input, output) {
       return(fa)
     }
     
-  })
+  },digits=4)
   
   output$distPlot <- renderPlot({
     

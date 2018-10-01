@@ -1,1 +1,1 @@
-Ésta aplicación muestra las distribuciones de frecuencia de la variable Sueldos donde especificamos el tipo de frecuencia y obtenemos la gráfica a partir ésta, la gráfica obtenida se le conoce como ojiva.
+Ésta aplicación muestra los diagramas de barras de dos datos de ejemplo, el tiempo de uso de equipos de una compañía ó los sueldos en miles de dólares en el primer trabajo de 42 licenciados en ingeniería eléctrica recién graduados.

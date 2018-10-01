@@ -5,7 +5,7 @@ library('ggplot2')
 ui <- fluidPage(
 
   # App title ----
-  titlePanel("Distribución de Frecuencia"),
+  titlePanel("Gráficos de Barras"),
 
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -15,8 +15,8 @@ ui <- fluidPage(
       
 
       selectInput( inputId = "n", 
-                   label = "Tipo de frecuencia",
-                   choices= c('Frecuencia Acumulada','Frecuencia Acumulada Relativa'), 
+                   label = "Datos de ejemplos:",
+                   choices= c('Tiempo de uso de equipos','Sueldos'), 
                    selected = NULL)
 
     ),
@@ -34,67 +34,45 @@ server <- function(input, output) {
 
   sueldos <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
                54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
+
+  Horas<-c(2,3,4,6,7)
+  Frecuencia<-c(46,15,12,52,8)
   
   output$tabla<-renderTable({
-    
-    if(input$n=='Frecuencia Acumulada'){
-      
-      fr<-data.frame(table(sueldos))
-      fa<-transform(fr,fAcum=cumsum(Freq))
-      colnames(fa)<-c("Sueldos","Frecuencia","Frecuencia Acumulada")
-      return(fa)
+    if(input$n=='Tiempo de uso de equipos'){
+      data<-data.frame(Horas,Frecuencia)
+      return(data)
     }
-    
-    else if(input$n=='Frecuencia Acumulada Relativa'){
-      
+    else if(input$n=='Sueldos'){
       fr<-data.frame(table(sueldos))
-      fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
-      colnames(fa)<-c("Sueldos","Frecuencia","Frecuencia Acumulada Relativa")
-      return(fa)
+      colnames(fr)<-c("Sueldos","Frecuencia")
+      return(fr)
+    }
+  },digits = 0)
+  
+  output$distPlot<-renderPlot({
+    if(input$n=='Tiempo de uso de equipos'){
+      
+      data<-data.frame(Horas,Frecuencia)
+      
+      ggplot(data, aes(x=Horas,y=Frecuencia))+
+        geom_bar(stat = "identity", color="black",
+                 fill="Blue", alpha=0.5)+
+        labs(title = "Diagrama de Barra", x="Horas",y="Frecuencias")
+    }
+    else if(input$n=='Sueldos'){
+      fr<-data.frame(table(sueldos))
+      colnames(fr)<-c("Sueldos","Frecuencia")
+      
+      ggplot(fr, aes(x=Sueldos,y=Frecuencia))+
+        geom_bar(stat = "identity", color="black",
+                 fill="Blue", alpha=0.5)+
+        labs(title = "Diagrama de Barra", 
+             x="Sueldos en miles de dólares",y="Frecuencias")
     }
     
   })
   
-  output$distPlot <- renderPlot({
-    
-    if(input$n=='Frecuencia Acumulada'){
-      
-      fr<-data.frame(table(sueldos))
-      fa<-transform(fr,fAcum=cumsum(Freq))
-      colnames(fa)<-c("Sueldos","Frecuencia","Frecuencia Acumulada")
-    
-      dat<-data.frame(sueldos=as.numeric(fa$Sueldos),
-                      facum=as.numeric(fa$`Frecuencia Acumulada`))
-      
-      ggplot(dat,mapping = aes(sueldos,facum))+ 
-        geom_point(colour="blue" )+
-        geom_line( colour="blue")+
-        labs(title = "Distribución de Frecuencia", x="x", 
-             y="Frecuencia Acumulada")
-    
-      
-    }
-    
-    else if(input$n=='Frecuencia Acumulada Relativa'){
-      
-      fr<-data.frame(table(sueldos))
-      fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
-      colnames(fa)<-c("Sueldos","Frecuencia","Frecuencia Acumulada Relativa")
-      
-      dat<-data.frame(sueldos=as.numeric(fa$Sueldos),
-                      far=as.numeric(fa$`Frecuencia Acumulada Relativa`))
-      
-      ggplot(dat,mapping = aes(sueldos,far))+ 
-        geom_point(colour="blue" )+
-        geom_line( colour="blue")+
-        labs(title = "Distribución de Frecuencia", x="x", 
-             y="Frecuencia Acumulada")
-      
-    }
-
-
-    })
-
 }
 
 # Create Shiny app ----
