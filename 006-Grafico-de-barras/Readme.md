@@ -1,0 +1,1 @@
+Ésta aplicación muestra las distribuciones de frecuencia de la variable Sueldos donde especificamos el tipo de frecuencia y obtenemos la gráfica a partir ésta, la gráfica obtenida se le conoce como ojiva.
