@@ -1,6 +1,6 @@
 library(shiny)
 
-# Crear polígonos de frecuencias con Sueldos.
+# Crear diagramas de tallo y hoja con Sueldos.
 ui <- fluidPage(
 
   titlePanel("Diagrama de Tallo y Hoja"),
