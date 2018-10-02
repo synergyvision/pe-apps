@@ -12,19 +12,44 @@ ui <- fluidPage(
 
     # Sidebar panel for inputs ----
     sidebarPanel(
-      
-
-      selectInput( inputId = "n", 
-                   label = "Tipo de frecuencia",
-                   choices= c('Frecuencia absoluta','Frecuencia relativa'), 
-                   selected = NULL),
-      
-      sliderInput(inputId = "bins",
-                  label = "Número de intervalos:",
-                  min = 1,
-                  max = 10,
-                  value = 1)
-
+      radioButtons(inputId="n",
+                   label = "Tipos de Datos",
+                   choices = c('Ejemplos del libro','Generados aleatoriamente','cargados'),
+                   selected = " "),
+      conditionalPanel( condition = "input.n=='Ejemplos del libro'",
+                        selectInput( inputId = "m", 
+                                     label = "Ejemplo",
+                                     choices= c('Sueldos','ventas','Otros'), 
+                                     selected = NULL),
+                        conditionalPanel(condition = "input.m=='Sueldos'",
+                                         selectInput( inputId = "n1", 
+                                                      label = "Ejemplo",
+                                                      choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+                                                      selected = NULL),
+                                         sliderInput(inputId = "bins",
+                                                     label = "Número de intervalos:",
+                                                     min = 1,
+                                                     max = 10,
+                                                     value = 1)
+                                         )
+                        ),
+      conditionalPanel( condition = "input.n=='cargados'",
+                        fileInput( inputId = "datoscargados",
+                                   label = "Seleccionar archivo:", buttonLabel = "Buscar...",
+                                   placeholder = "Aun no seleccionas el archivo...")
+      ),
+      conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
+                        sliderInput(inputId = "filas",
+                                    label = "Número de filas",
+                                    min = 1,
+                                    max = 10,
+                                    value = 1),
+                        sliderInput(inputId = "columnas",
+                                    label = "Número de columnas",
+                                    min = 1,
+                                    max = 10,
+                                    value = 1)
+      )
     ),
 
     # Main panel for displaying outputs ----
@@ -70,3 +95,15 @@ server <- function(input, output) {
 
 # Create Shiny app ----
 shinyApp(ui = ui, server = server)
+
+
+# selectInput( inputId = "n", 
+#              label = "Tipo de frecuencia",
+#              choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+#              selected = NULL),
+# 
+# sliderInput(inputId = "bins",
+#             label = "Número de intervalos:",
+#             min = 1,
+#             max = 10,
+#             value = 1)
