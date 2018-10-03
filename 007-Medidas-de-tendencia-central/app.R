@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(readxl)
 
 ui <- fluidPage(
   
@@ -33,7 +34,7 @@ ui <- fluidPage(
       
     ),
     mainPanel(
-       plotOutput("displot")
+       tableOutput("table")
     )
   )
 )
@@ -42,7 +43,37 @@ ui <- fluidPage(
 
 server <- function(input, output) {
 
+ data<-reactive ({
+   if (is.null(input$n)){
+     return(NULL)
+   }
+   
+   else if(input$n=="gen"){
+    M<-matrix( as.integer(runif(input$m*input$f,1,20)),
+               ncol = input$f, nrow = input$m)
+    colnames(M)<-c(paste0("Vari_",1:input$f))
+    rownames(M)<-c(paste0("fil_",1:input$m))
+    return(M)
+   } else if(input$n=="car"){
+     
+     file1<-input$datoscargados
+     
+     if(is.null(file1)){
+       return()
+     }
+     
+     D<-read_excel(file1$datapath)
+     data.frame(D)
+      
+    }
+ 
+  })
   
+ output$table <- renderTable({ data() },
+                              striped = TRUE,hover = TRUE,
+                              bordered = TRUE,rownames = TRUE
+ )
+ 
 }
 
 
