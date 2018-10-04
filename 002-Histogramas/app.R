@@ -14,7 +14,7 @@ ui <- fluidPage(
     sidebarPanel(
       radioButtons(inputId="n",
                    label = "Tipos de Datos",
-                   choices = c('Ejemplos del libro','Generados aleatoriamente','cargados'),
+                   choices = c('Ejemplos del libro','Generados aleatoriamente','Cargados'),
                    selected = " "),
       conditionalPanel( condition = "input.n=='Ejemplos del libro'",
                         selectInput( inputId = "m", 
@@ -25,26 +25,39 @@ ui <- fluidPage(
                                      label = "Ejemplo",
                                      choices= c('Frecuencia absoluta','Frecuencia relativa'), 
                                      selected = NULL),
-                        sliderInput(inputId = "bins",
+                        sliderInput(inputId = "bins1",
                                     label = "Número de intervalos:",
                                      min = 1,
                                      max = 10,
                                      value = 1)
                                          
                         ),
-      conditionalPanel( condition = "input.n=='cargados'",
+      conditionalPanel( condition = "input.n=='Cargados'",
                         fileInput( inputId = "datoscargados",
                                    label = "Seleccionar archivo:", buttonLabel = "Buscar...",
-                                   placeholder = "Aun no seleccionas el archivo...")
-      ),
-      conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
-                        sliderInput(inputId = "filas",
-                                    label = "Número de filas",
+                                   placeholder = "Aun no seleccionas el archivo..."),
+                        selectInput( inputId = "n2", 
+                                     label = "Ejemplo",
+                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+                                     selected = NULL),
+                        sliderInput(inputId = "bins2",
+                                    label = "Número de intervalos:",
                                     min = 1,
                                     max = 10,
-                                    value = 1),
-                        sliderInput(inputId = "columnas",
-                                    label = "Número de columnas",
+                                    value = 1)
+      ),
+      conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
+                        sliderInput(inputId = "CantidadDatos",
+                                    label = "Cantidad de datos a generar",
+                                    min = 1,
+                                    max = 100,
+                                    value = 5),
+                        selectInput( inputId = "n3", 
+                                     label = "Ejemplo",
+                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+                                     selected = NULL),
+                        sliderInput(inputId = "bins3",
+                                    label = "Número de intervalos:",
                                     min = 1,
                                     max = 10,
                                     value = 1)
@@ -53,8 +66,8 @@ ui <- fluidPage(
 
     # Main panel for displaying outputs ----
     mainPanel(
-         #plotOutput(outputId = "distPlot")
-         tableOutput("table")
+         tableOutput("table"),
+         plotOutput(outputId = "distPlot")
     )
   )
 )
@@ -81,55 +94,95 @@ server <- function(input, output) {
       infile1<-input$m
       
       if(infile1=='Sueldos'){
-      data.frame(Sueldos)
+       data.frame(h=Sueldos)
       }
       
       else if(infile1=='Ventas'){
-        data.frame(Ventas)
+        data.frame(h=Ventas)
       }
       
       else if(infile1=='Otros')
-        data.frame(Otros)
+        data.frame(h=Otros)
     }
     
-    else if(infile=='cargados'){
-      return()
+    else if(infile=='Cargados'){
+      infile2<-input$datoscargados
+      if(is.null(infile2)){
+        return()
+      }
+      
+      else{
+        read_excel(infile2$datapath)
+      }
     }
     
     else if(infile=='Generados aleatoriamente'){
-      return()
+      data.frame(Datos=sample(80:100,input$CantidadDatos,replace = TRUE))
     }
     
     })
   
   output$table<-renderTable({
-    return(data.frame(dat()))
-  })
+    return(dat())
+  },digits = 1)
   
-  # output$distPlot <- renderPlot({
-  #   
-  #   if(input$n=='Frecuencia absoluta'){
-  #   
-  #   ggplot(dat,aes(x=sueldos))+
-  #     geom_histogram( aes(y=..count..),
-  #                     closed="left",bins = input$bins,
-  #                     fill="blue",col="black",alpha=0.7)+
-  #     labs(title = "Histograma", x="Clases", y="Frecuencia")
-  #     
-  #   }
-  #   
-  #   else if(input$n=='Frecuencia relativa'){
-  #     
-  #     ggplot(dat,aes(x=sueldos))+
-  #       geom_histogram( aes(y=..density..),
-  #                       closed="left",bins = input$bins,
-  #                       fill="blue",col="black",alpha=0.7)+
-  #       labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
-  #     
-  #   }
-  # 
-  # 
-  #   })
+  output$distPlot <- renderPlot({
+    
+    infile <- input$n
+    
+    if(is.null(infile)){
+      return()
+    }
+    
+    else if(infile=='Ejemplos del libro'){
+
+    if(input$n1=='Frecuencia absoluta'){
+      
+    ggplot(dat(),aes(x=dat()$h))+
+      geom_histogram( aes(y=..count..),
+                      closed="left",bins = input$bins1,
+                      fill="blue",col="black",alpha=0.7)+
+      labs(title = "Histograma", x="Clases", y="Frecuencia")
+
+    }
+
+    else if(input$n1=='Frecuencia relativa'){
+
+      ggplot(dat(),aes(x=dat()$h))+
+        geom_histogram( aes(y=..density..),
+                        closed="left",bins = input$bins1,
+                        fill="blue",col="black",alpha=0.7)+
+        labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
+
+    }
+    }
+    
+    else if(infile=='Generados aleatoriamente'){
+      
+      if(input$n3=='Frecuencia absoluta'){
+        
+        ggplot(dat(),aes(x=dat()$Datos))+
+          geom_histogram( aes(y=..count..),
+                          closed="left",bins = input$bins3,
+                          fill="blue",col="black",alpha=0.7)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia")
+        
+      }
+      
+      else if(input$n3=='Frecuencia relativa'){
+        
+        ggplot(dat(),aes(x=dat()$Datos))+
+          geom_histogram( aes(y=..density..),
+                          closed="left",bins = input$bins3,
+                          fill="blue",col="black",alpha=0.7)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
+        
+      }
+      
+    }
+
+
+    })
 
 }
 
