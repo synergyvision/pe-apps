@@ -1,5 +1,6 @@
 library(shiny)
 library('ggplot2')
+library('readxl')
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
@@ -49,7 +50,7 @@ ui <- fluidPage(
       conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
                         sliderInput(inputId = "CantidadDatos",
                                     label = "Cantidad de datos a generar",
-                                    min = 1,
+                                    min = 2,
                                     max = 100,
                                     value = 5),
                         selectInput( inputId = "n3", 
@@ -82,6 +83,7 @@ server <- function(input, output) {
   
   Otros<-c(rep(10,4),rep(22,5),rep(35,2),rep(46,10),rep(57,9),rep(68,6),rep(74,6))
   
+  
   dat<-reactive({
     
     infile <- input$n
@@ -94,15 +96,15 @@ server <- function(input, output) {
       infile1<-input$m
       
       if(infile1=='Sueldos'){
-       data.frame(h=Sueldos)
+       data.frame(Sueldos)
       }
       
       else if(infile1=='Ventas'){
-        data.frame(h=Ventas)
+        data.frame(Ventas)
       }
       
       else if(infile1=='Otros')
-        data.frame(h=Otros)
+        data.frame(Otros)
     }
     
     else if(infile=='Cargados'){
@@ -138,7 +140,7 @@ server <- function(input, output) {
 
     if(input$n1=='Frecuencia absoluta'){
       
-    ggplot(dat(),aes(x=dat()$h))+
+    ggplot(dat(),aes(x=dat()[,1]))+
       geom_histogram( aes(y=..count..),
                       closed="left",bins = input$bins1,
                       fill="blue",col="black",alpha=0.7)+
@@ -148,7 +150,7 @@ server <- function(input, output) {
 
     else if(input$n1=='Frecuencia relativa'){
 
-      ggplot(dat(),aes(x=dat()$h))+
+      ggplot(dat(),aes(x=dat()[,1]))+
         geom_histogram( aes(y=..density..),
                         closed="left",bins = input$bins1,
                         fill="blue",col="black",alpha=0.7)+
@@ -180,6 +182,36 @@ server <- function(input, output) {
       }
       
     }
+    
+    else if(infile=='Cargados'){
+      
+      if(is.null(input$datoscargados)){
+        return()
+      }
+      
+      else{
+      
+      if(input$n2=='Frecuencia absoluta'){
+
+        ggplot(dat(),aes(x=dat()[,1][[1]]))+
+          geom_histogram( aes(y=..count..),
+                          closed="left",bins = input$bins2,
+                          fill="blue",col="black",alpha=0.7)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia")
+
+      }
+
+      else if(input$n2=='Frecuencia relativa'){
+
+        ggplot(dat(),aes(x=dat()[,1][[1]]))+
+          geom_histogram( aes(y=..density..),
+                          closed="left",bins = input$bins2,
+                          fill="blue",col="black",alpha=0.7)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
+      }
+      }
+
+    }
 
 
     })
@@ -188,15 +220,3 @@ server <- function(input, output) {
 
 # Create Shiny app ----
 shinyApp(ui = ui, server = server)
-
-#----------------------------------------------------------------------------------------------------
-# selectInput( inputId = "n", 
-#              label = "Tipo de frecuencia",
-#              choices= c('Frecuencia absoluta','Frecuencia relativa'), 
-#              selected = NULL),
-# 
-# sliderInput(inputId = "bins",
-#             label = "Número de intervalos:",
-#             min = 1,
-#             max = 10,
-#             value = 1)
