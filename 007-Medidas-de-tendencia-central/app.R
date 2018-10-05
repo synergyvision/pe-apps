@@ -3,6 +3,7 @@ library(shinydashboard)
 library(readxl)
 library(psych)
 library(modeest)
+library(matrixStats)
 
 ui <- fluidPage(
   
@@ -21,28 +22,38 @@ ui <- fluidPage(
                                      min = 1, max = 20, value = 5),
                         sliderInput( "f",
                                      label = "Número de variables:",
-                                     min = 1, max = 10, value = 5)
+                                     min = 1, max = 10, value = 5),
+                        selectInput( inputId = "medias", label = "Medidas de Tendencia Central:",
+                                     choices= c("Media Aritmética","Media Geométrica","Media Armónica",
+                                                "Media Ponderada","Mediana","Moda"), 
+                                     selected = NULL)
+                        
        ),
       conditionalPanel( condition = "input.n == 'car'", 
                         fileInput(inputId = "datoscargados",label = "Seleccionar desde un archivo guardado:", 
-                                  buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo...")
+                                  buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo..."),
+                        selectInput( inputId = "medias", label = "Medidas de Tendencia Central:",
+                                     choices= c("Media Aritmética","Media Geométrica","Media Armónica",
+                                                "Media Ponderada","Mediana","Moda"), 
+                                     selected = NULL)
+                        
       ),
       
       conditionalPanel( condition = "input.n == 'ejem'", 
                         selectInput( inputId = "ejemplos", label = "Datos de ejemplo:",
                                      choices= c("Sueldos","Horas","Ventas"), 
+                                     selected = NULL),
+                        selectInput( inputId = "medias", label = "Medidas de Tendencia Central:",
+                                     choices= c("Media Aritmética","Media Geométrica","Media Armónica",
+                                                "Media Ponderada","Mediana","Moda"), 
                                      selected = NULL)
-      ),
+      )
       
-      selectInput( inputId = "medias", label = "Medidas de Tendencia Central:",
-                   choices= c("Media Aritmética","Media Geométrica","Media Armónica",
-                              "Media Ponderada","Mediana","Moda"), 
-                   selected = NULL)
       
     ),
     mainPanel(
        tableOutput("table"),
-       verbatimTextOutput("medias")
+       verbatimTextOutput("medias1")
     )
   )
 )
@@ -53,7 +64,7 @@ server <- function(input, output) {
 
  data<-reactive ({
    if (is.null(input$n)){
-     return(NULL)
+     return()
    }
    
    else if(input$n=="gen"){
@@ -96,10 +107,13 @@ server <- function(input, output) {
  output$table <- renderTable({ data() },
                               striped = TRUE,hover = TRUE,
                               bordered = TRUE,rownames = FALSE)
- output$medias<-renderPrint({
+ output$medias1<-renderPrint({
    
-   if(input$medias=="Media Aritmética"){
-     colMeans(data())
+   if(is.null(input$medias)){
+     return()
+   }
+   else if(input$medias=="Media Aritmética"){
+     apply(data(),2,mean)
    } else if(input$medias=="Media Geométrica"){
      geometric.mean(data())
    } else if(input$medias=="Media Armónica"){
@@ -108,6 +122,29 @@ server <- function(input, output) {
      apply(data(),2,median)
    } else if(input$medias=="Moda"){
      apply(data(),2,mfv)
+   } else if(input$medias=="Media Ponderada"){
+     
+     if(input$n=="gen"){
+       w<-prop.table(data(),2) #Pesos generados.
+      
+       w1<-data()*w
+       w1<-colSums(w1)
+       return(w1)
+     } else if(input$n=="car"){
+       d<-as.matrix(data())
+       w2<-prop.table(d,2) #Pesos generados.
+       
+       w3<-d*w2
+       w3<-colSums(w3)
+       return(w3)
+     } else if(input$n=="ejem"){
+       d1<-as.matrix(data())
+       w4<-prop.table(d1,2) #Pesos generados.
+       
+       w5<-d1*w4
+       w5<-colSums(w5)
+       return(w5)
+     }
    }
    
  })
