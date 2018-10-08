@@ -26,26 +26,58 @@ ui <- fluidPage(
                                      label = "Ejemplo",
                                      choices= c('Frecuencia absoluta','Frecuencia relativa'), 
                                      selected = NULL),
-                        sliderInput(inputId = "bins1",
-                                    label = "Número de intervalos:",
-                                     min = 1,
-                                     max = 10,
-                                     value = 1)
+                        radioButtons(inputId="interval",
+                                     label = "Elección de intervalos de clases:",
+                                     choices = c('Métodos dados','Manual'),
+                                     selected = " "),
+                        conditionalPanel(condition = "input.interval=='Métodos dados'",
+                                         selectInput( inputId = "metodo1", 
+                                                      label = "Elija el método a usar",
+                                                      choices= c('Fórmula de Sturges','Regla de Scott','Selección de Freedman-Diaconis'), 
+                                                      selected = NULL)
+                                         ),
+                        conditionalPanel(condition = "input.interval=='Manual'",
+                                         sliderInput(inputId = "bins1",
+                                                     label = "Número de intervalos:",
+                                                     min = 1,
+                                                     max = 20,
+                                                     value = 1)
+                                         )
                                          
                         ),
       conditionalPanel( condition = "input.n=='Cargados'",
                         fileInput( inputId = "datoscargados",
                                    label = "Seleccionar archivo:", buttonLabel = "Buscar...",
                                    placeholder = "Aun no seleccionas el archivo..."),
+                        numericInput( inputId = "columna", 
+                                      label="Elija número de columna", 
+                                      min = 1, 
+                                      max = 100,
+                                      step = 1, 
+                                      value = 1, 
+                                      width = "40%"),
                         selectInput( inputId = "n2", 
                                      label = "Ejemplo",
                                      choices= c('Frecuencia absoluta','Frecuencia relativa'), 
                                      selected = NULL),
-                        sliderInput(inputId = "bins2",
-                                    label = "Número de intervalos:",
-                                    min = 1,
-                                    max = 10,
-                                    value = 1)
+                        radioButtons(inputId="interval1",
+                                     label = "Elección de intervalos de clases:",
+                                     choices = c('Métodos dados','Manual'),
+                                     selected = " "),
+                        conditionalPanel(condition = "input.interval1=='Métodos dados'",
+                                         selectInput( inputId = "metodo1", 
+                                                      label = "Elija el método a usar",
+                                                      choices= c('Fórmula de Sturges','Regla de Scott','Selección de Freedman-Diaconis'), 
+                                                      selected = NULL)
+                        ),
+                        conditionalPanel(condition = "input.interval1=='Manual'",
+                                         sliderInput(inputId = "bins2",
+                                                     label = "Número de intervalos:",
+                                                     min = 1,
+                                                     max = 20,
+                                                     value = 1)
+                        )
+                        
       ),
       conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
                         sliderInput(inputId = "CantidadDatos",
@@ -57,11 +89,23 @@ ui <- fluidPage(
                                      label = "Ejemplo",
                                      choices= c('Frecuencia absoluta','Frecuencia relativa'), 
                                      selected = NULL),
-                        sliderInput(inputId = "bins3",
-                                    label = "Número de intervalos:",
-                                    min = 1,
-                                    max = 10,
-                                    value = 1)
+                        radioButtons(inputId="interval2",
+                                     label = "Elección de intervalos de clases:",
+                                     choices = c('Métodos dados','Manual'),
+                                     selected = " "),
+                        conditionalPanel(condition = "input.interval2=='Métodos dados'",
+                                         selectInput( inputId = "metodo1", 
+                                                      label = "Elija el método a usar",
+                                                      choices= c('Fórmula de Sturges','Regla de Scott','Selección de Freedman-Diaconis'), 
+                                                      selected = NULL)
+                        ),
+                        conditionalPanel(condition = "input.interval2=='Manual'",
+                                         sliderInput(inputId = "bins3",
+                                                     label = "Número de intervalos:",
+                                                     min = 1,
+                                                     max = 20,
+                                                     value = 1)
+                        )
       )
     ),
 
@@ -137,14 +181,18 @@ server <- function(input, output) {
     }
     
     else if(infile=='Ejemplos del libro'){
+      
+      intervalo<-input$bins1
+      Ancho<-(max(dat()[,1])-min(dat()[,1]))/intervalo
+      Centro<-(2*min(dat()[,1])+Ancho)/2
 
     if(input$n1=='Frecuencia absoluta'){
       
     ggplot(dat(),aes(x=dat()[,1]))+
-      geom_histogram( aes(y=..count..),
-                      closed="left",bins = input$bins1,
-                      fill="blue",col="black",alpha=0.7)+
-      labs(title = "Histograma", x="Clases", y="Frecuencia")
+      geom_histogram(aes(y=..count..),
+                      closed="left",bins = intervalo,
+                      fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+      labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
 
     }
 
@@ -152,22 +200,26 @@ server <- function(input, output) {
 
       ggplot(dat(),aes(x=dat()[,1]))+
         geom_histogram( aes(y=..density..),
-                        closed="left",bins = input$bins1,
-                        fill="blue",col="black",alpha=0.7)+
-        labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
+                        closed="left",bins = intervalo,
+                        fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+        labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
 
     }
     }
     
     else if(infile=='Generados aleatoriamente'){
       
+      intervalo1<-input$bins3
+      Ancho1<-(max(dat()$Datos)-min(dat()$Datos))/intervalo1
+      Centro1<-(2*min(dat()$Datos)+Ancho1)/2
+      
       if(input$n3=='Frecuencia absoluta'){
         
         ggplot(dat(),aes(x=dat()$Datos))+
           geom_histogram( aes(y=..count..),
-                          closed="left",bins = input$bins3,
-                          fill="blue",col="black",alpha=0.7)+
-          labs(title = "Histograma", x="Clases", y="Frecuencia")
+                          closed="left",bins = intervalo1,
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1))
         
       }
       
@@ -175,9 +227,9 @@ server <- function(input, output) {
         
         ggplot(dat(),aes(x=dat()$Datos))+
           geom_histogram( aes(y=..density..),
-                          closed="left",bins = input$bins3,
-                          fill="blue",col="black",alpha=0.7)+
-          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
+                          closed="left",bins = intervalo1,
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1))
         
       }
       
@@ -190,24 +242,30 @@ server <- function(input, output) {
       }
       
       else{
+        
+        ncolumna<-input$columna
+        
+        intervalo2<-input$bins2
+        Ancho2<-(max(dat()[,ncolumna][[1]])-min(dat()[,ncolumna][[1]]))/intervalo2
+        Centro2<-(2*min(dat()[,ncolumna][[1]])+Ancho2)/2
       
       if(input$n2=='Frecuencia absoluta'){
 
-        ggplot(dat(),aes(x=dat()[,1][[1]]))+
+        ggplot(dat(),aes(x=dat()[,ncolumna][[1]]))+
           geom_histogram( aes(y=..count..),
-                          closed="left",bins = input$bins2,
-                          fill="blue",col="black",alpha=0.7)+
-          labs(title = "Histograma", x="Clases", y="Frecuencia")
+                          closed="left",bins = intervalo2,
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna][[1]]),max(dat()[,ncolumna][[1]])+Ancho2,by=Ancho2))
 
       }
 
       else if(input$n2=='Frecuencia relativa'){
 
-        ggplot(dat(),aes(x=dat()[,1][[1]]))+
+        ggplot(dat(),aes(x=dat()[,ncolumna][[1]]))+
           geom_histogram( aes(y=..density..),
-                          closed="left",bins = input$bins2,
-                          fill="blue",col="black",alpha=0.7)+
-          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")
+                          closed="left",bins = intervalo2,
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna][[1]]),max(dat()[,ncolumna][[1]])+Ancho2,by=Ancho2))
       }
       }
 
