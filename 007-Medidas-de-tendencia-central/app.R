@@ -107,9 +107,10 @@ server <- function(input, output) {
  output$table <- renderTable({ data() },
                               striped = TRUE,hover = TRUE,
                               bordered = TRUE,rownames = FALSE)
+ 
  output$medias1<-renderPrint({
    
-   if(is.null(input$medias)){
+   if(is.null(input$medias)||is.null(data())){
      return()
    }
    else if(input$medias=="Media Aritmética"){
