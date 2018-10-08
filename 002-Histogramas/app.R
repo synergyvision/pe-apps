@@ -22,10 +22,6 @@ ui <- fluidPage(
                                      label = "Ejemplo",
                                      choices= c('Sueldos','Ventas','Otros'), 
                                      selected = NULL),
-                        selectInput( inputId = "n1", 
-                                     label = "Ejemplo",
-                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
-                                     selected = NULL),
                         radioButtons(inputId="interval",
                                      label = "Elección de intervalos de clases:",
                                      choices = c('Métodos dados','Manual'),
@@ -42,24 +38,23 @@ ui <- fluidPage(
                                                      min = 1,
                                                      max = 20,
                                                      value = 1)
-                                         )
-                                         
+                                         ),
+                        selectInput( inputId = "n1", 
+                                     label = "Tipo de frecuencia:",
+                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+                                     selected = NULL)
                         ),
       conditionalPanel( condition = "input.n=='Cargados'",
                         fileInput( inputId = "datoscargados",
                                    label = "Seleccionar archivo:", buttonLabel = "Buscar...",
                                    placeholder = "Aun no seleccionas el archivo..."),
                         numericInput( inputId = "columna", 
-                                      label="Elija número de columna", 
+                                      label="Elija el número de columna deseado", 
                                       min = 1, 
                                       max = 100,
                                       step = 1, 
                                       value = 1, 
                                       width = "40%"),
-                        selectInput( inputId = "n2", 
-                                     label = "Ejemplo",
-                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
-                                     selected = NULL),
                         radioButtons(inputId="interval1",
                                      label = "Elección de intervalos de clases:",
                                      choices = c('Métodos dados','Manual'),
@@ -76,8 +71,11 @@ ui <- fluidPage(
                                                      min = 1,
                                                      max = 20,
                                                      value = 1)
-                        )
-                        
+                        ),
+                        selectInput( inputId = "n2", 
+                                     label = "Tipo de frecuencia:",
+                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+                                     selected = NULL)
       ),
       conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
                         sliderInput(inputId = "CantidadDatos",
@@ -85,10 +83,6 @@ ui <- fluidPage(
                                     min = 2,
                                     max = 100,
                                     value = 5),
-                        selectInput( inputId = "n3", 
-                                     label = "Ejemplo",
-                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
-                                     selected = NULL),
                         radioButtons(inputId="interval2",
                                      label = "Elección de intervalos de clases:",
                                      choices = c('Métodos dados','Manual'),
@@ -105,7 +99,11 @@ ui <- fluidPage(
                                                      min = 1,
                                                      max = 20,
                                                      value = 1)
-                        )
+                        ),
+                        selectInput( inputId = "n3", 
+                                     label = "Tipo de frecuencia:",
+                                     choices= c('Frecuencia absoluta','Frecuencia relativa'), 
+                                     selected = NULL)
       )
     ),
 
@@ -181,6 +179,14 @@ server <- function(input, output) {
     }
     
     else if(infile=='Ejemplos del libro'){
+      
+      #if(input$interval==Métodos dados){
+      
+      #}
+      
+      #else if(input$interval==Manual){
+      
+      #}
       
       intervalo<-input$bins1
       Ancho<-(max(dat()[,1])-min(dat()[,1]))/intervalo
