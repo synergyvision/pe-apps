@@ -1,6 +1,11 @@
-library(shiny)
-library('ggplot2')
-library('readxl')
+ensure_version <- function(pkg, ver = "0.0") {
+  if (system.file(package = pkg)  == "" || packageVersion(pkg) < ver)
+    install.packages(pkg)
+}
+
+ensure_version("shiny", "1.1.0")
+ensure_version("ggplot2", "3.0.0")
+ensure_version("readxl", "1.1.0")
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
@@ -54,7 +59,7 @@ ui <- fluidPage(
                                       max = 100,
                                       step = 1, 
                                       value = 1, 
-                                      width = "40%"),
+                                      width = "100%"),
                         radioButtons(inputId="interval1",
                                      label = "Elección de intervalos de clases:",
                                      choices = c('Métodos dados','Manual'),
