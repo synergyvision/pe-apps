@@ -60,7 +60,7 @@ ui <- fluidPage(
                                      choices = c('Métodos dados','Manual'),
                                      selected = " "),
                         conditionalPanel(condition = "input.interval1=='Métodos dados'",
-                                         selectInput( inputId = "metodo1", 
+                                         selectInput( inputId = "metodo2", 
                                                       label = "Elija el método a usar",
                                                       choices= c('Fórmula de Sturges','Regla de Scott','Selección de Freedman-Diaconis'), 
                                                       selected = NULL)
@@ -88,7 +88,7 @@ ui <- fluidPage(
                                      choices = c('Métodos dados','Manual'),
                                      selected = " "),
                         conditionalPanel(condition = "input.interval2=='Métodos dados'",
-                                         selectInput( inputId = "metodo1", 
+                                         selectInput( inputId = "metodo3", 
                                                       label = "Elija el método a usar",
                                                       choices= c('Fórmula de Sturges','Regla de Scott','Selección de Freedman-Diaconis'), 
                                                       selected = NULL)
@@ -180,65 +180,151 @@ server <- function(input, output) {
     
     else if(infile=='Ejemplos del libro'){
       
-      #if(input$interval==Métodos dados){
+      if(is.null(input$interval)){
+        return()
+      }
       
-      #}
-      
-      #else if(input$interval==Manual){
-      
-      #}
-      
-      intervalo<-input$bins1
+      else if(input$interval=='Métodos dados'){
+
+      intervalo<-if(input$metodo1=='Fórmula de Sturges'){
+      nclass.Sturges(dat()[,1])
+      }
+      else if(input$metodo1=='Regla de Scott'){
+      nclass.scott(dat()[,1])
+      }
+      else if(input$metodo1=='Selección de Freedman-Diaconis'){
+      nclass.FD(dat()[,1])
+      }
+
       Ancho<-(max(dat()[,1])-min(dat()[,1]))/intervalo
       Centro<-(2*min(dat()[,1])+Ancho)/2
 
-    if(input$n1=='Frecuencia absoluta'){
+      if(input$n1=='Frecuencia absoluta'){
+
+        ggplot(dat(),aes(x=dat()[,1]))+
+          geom_histogram(aes(y=..count..),
+                         closed="left",bins = intervalo,
+                         fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
+
+      }
+
+      else if(input$n1=='Frecuencia relativa'){
+
+        ggplot(dat(),aes(x=dat()[,1]))+
+          geom_histogram( aes(y=..density..),
+                          closed="left",bins = intervalo,
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
+
+      }
+
+
+      }
+
+      else if(input$interval=='Manual'){
+
+       intervalo<-input$bins1
+
+      Ancho<-(max(dat()[,1])-min(dat()[,1]))/intervalo
+      Centro<-(2*min(dat()[,1])+Ancho)/2
+
+      if(input$n1=='Frecuencia absoluta'){
+
+        ggplot(dat(),aes(x=dat()[,1]))+
+          geom_histogram(aes(y=..count..),
+                         closed="left",bins = intervalo,
+                         fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
+
+      }
+
+      else if(input$n1=='Frecuencia relativa'){
+
+        ggplot(dat(),aes(x=dat()[,1]))+
+          geom_histogram( aes(y=..density..),
+                          closed="left",bins = intervalo,
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+          labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
+
+
+       }
+      }
+
       
-    ggplot(dat(),aes(x=dat()[,1]))+
-      geom_histogram(aes(y=..count..),
-                      closed="left",bins = intervalo,
-                      fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
-      labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
-
-    }
-
-    else if(input$n1=='Frecuencia relativa'){
-
-      ggplot(dat(),aes(x=dat()[,1]))+
-        geom_histogram( aes(y=..density..),
-                        closed="left",bins = intervalo,
-                        fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
-        labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho))
-
-    }
     }
     
     else if(infile=='Generados aleatoriamente'){
       
+      if(is.null(input$interval2)){
+        return()
+      }
+      
+      else if(input$interval2=='Métodos dados'){
+        
+        intervalo1<-if(input$metodo3=='Fórmula de Sturges'){
+          nclass.Sturges(dat()$Datos)
+        }
+        else if(input$metodo3=='Regla de Scott'){
+          nclass.scott(dat()$Datos)
+        }
+        else if(input$metodo3=='Selección de Freedman-Diaconis'){
+          nclass.FD(dat()$Datos)
+        }
+        
+        Ancho1<-(max(dat()$Datos)-min(dat()$Datos))/intervalo1
+        Centro1<-(2*min(dat()$Datos)+Ancho1)/2
+        
+        if(input$n3=='Frecuencia absoluta'){
+          
+          ggplot(dat(),aes(x=dat()$Datos))+
+            geom_histogram( aes(y=..count..),
+                            closed="left",bins = intervalo1,
+                            fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+            labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1))
+          
+        }
+        
+        else if(input$n3=='Frecuencia relativa'){
+          
+          ggplot(dat(),aes(x=dat()$Datos))+
+            geom_histogram( aes(y=..density..),
+                            closed="left",bins = intervalo1,
+                            fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+            labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1))
+          
+        }
+        
+        
+      }
+      
+      else if(input$interval2=='Manual'){
+      
       intervalo1<-input$bins3
       Ancho1<-(max(dat()$Datos)-min(dat()$Datos))/intervalo1
       Centro1<-(2*min(dat()$Datos)+Ancho1)/2
-      
+
       if(input$n3=='Frecuencia absoluta'){
-        
+
         ggplot(dat(),aes(x=dat()$Datos))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = intervalo1,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
           labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1))
-        
+
       }
-      
+
       else if(input$n3=='Frecuencia relativa'){
-        
+
         ggplot(dat(),aes(x=dat()$Datos))+
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo1,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
           labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1))
-        
+
       }
       
+      }
     }
     
     else if(infile=='Cargados'){
@@ -250,6 +336,49 @@ server <- function(input, output) {
       else{
         
         ncolumna<-input$columna
+        
+        if(is.null(input$interval1)){
+          return()
+        }
+        
+        else if(input$interval1=='Métodos dados'){
+          
+          intervalo2<-if(input$metodo2=='Fórmula de Sturges'){
+            nclass.Sturges(dat()[,ncolumna][[1]])
+          }
+          else if(input$metodo2=='Regla de Scott'){
+            nclass.scott(dat()[,ncolumna][[1]])
+          }
+          else if(input$metodo2=='Selección de Freedman-Diaconis'){
+            nclass.FD(dat()[,ncolumna][[1]])
+          }
+          
+          Ancho2<-(max(dat()[,ncolumna][[1]])-min(dat()[,ncolumna][[1]]))/intervalo2
+          Centro2<-(2*min(dat()[,ncolumna][[1]])+Ancho2)/2
+          
+          if(input$n2=='Frecuencia absoluta'){
+            
+            ggplot(dat(),aes(x=dat()[,ncolumna][[1]]))+
+              geom_histogram( aes(y=..count..),
+                              closed="left",bins = intervalo2,
+                              fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2)+
+              labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna][[1]]),max(dat()[,ncolumna][[1]])+Ancho2,by=Ancho2))
+            
+          }
+          
+          else if(input$n2=='Frecuencia relativa'){
+            
+            ggplot(dat(),aes(x=dat()[,ncolumna][[1]]))+
+              geom_histogram( aes(y=..density..),
+                              closed="left",bins = intervalo2,
+                              fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2)+
+              labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna][[1]]),max(dat()[,ncolumna][[1]])+Ancho2,by=Ancho2))
+          }
+          
+        }
+        
+        
+        else if(input$interval1=='Manual'){
         
         intervalo2<-input$bins2
         Ancho2<-(max(dat()[,ncolumna][[1]])-min(dat()[,ncolumna][[1]]))/intervalo2
@@ -273,9 +402,10 @@ server <- function(input, output) {
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2)+
           labs(title = "Histograma", x="Clases", y="Frecuencia Relativa")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna][[1]]),max(dat()[,ncolumna][[1]])+Ancho2,by=Ancho2))
       }
+        }
       }
 
-    }
+    } 
 
 
     })
