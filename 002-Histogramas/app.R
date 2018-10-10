@@ -7,6 +7,10 @@ ensure_version("shiny", "1.1.0")
 ensure_version("ggplot2", "3.0.0")
 ensure_version("readxl", "1.1.0")
 
+library(shiny)
+library(ggplot2)
+library(readxl)
+
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
 
