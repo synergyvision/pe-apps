@@ -1,3 +1,15 @@
+ensure_version <- function(pkg, ver = "0.0") {
+  if (system.file(package = pkg)  == "" || packageVersion(pkg) < ver)
+    install.packages(pkg)
+}
+
+ensure_version("shiny", "1.1.0")
+ensure_version("readxl", "1.1.0")
+ensure_version("shinydasboard", "0.7.0")
+ensure_version("psych", "1.8.4")
+ensure_version("modeest", "2.1")
+ensure_version("matrixStats", "0.54.0")
+
 library(shiny)
 library(shinydashboard)
 library(readxl)
