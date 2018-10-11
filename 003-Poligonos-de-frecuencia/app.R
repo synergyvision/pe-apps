@@ -1,7 +1,18 @@
+ensure_version <- function(pkg, ver = "0.0") {
+  if (system.file(package = pkg)  == "" || packageVersion(pkg) < ver)
+    install.packages(pkg)
+}
+
+ensure_version("shiny", "1.1.0")
+ensure_version("readxl", "1.1.0")
+ensure_version("ggplot2", "3.0.0")
+
+
 library(shiny)
 library(ggplot2)
+library(readxl)
 
-# Crear polígonos de frecuencias con Sueldos.
+# Crear polígonos de frecuencias.
 ui <- fluidPage(
 
   titlePanel("Polígonos de Frecuencias"),
