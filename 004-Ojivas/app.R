@@ -251,9 +251,9 @@ server <- function(input, output) {
           nclass.FD(dat()$Datos)
         }
         
-        clase<-cut(dat()[,1],breaks = intervalo1,include.lowest = TRUE,right = FALSE)
+        clase<-cut(dat()$Datos,breaks = intervalo1,include.lowest = TRUE,right = FALSE)
         
-        if(input$n1=='Frecuencia Acumulada'){
+        if(input$n3=='Frecuencia Acumulada'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,fAcum=cumsum(Freq))
@@ -261,7 +261,7 @@ server <- function(input, output) {
           return(fa)
         }
         
-        else if(input$n1=='Frecuencia Acumulada Relativa'){
+        else if(input$n3=='Frecuencia Acumulada Relativa'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
@@ -274,9 +274,9 @@ server <- function(input, output) {
       else if(input$interval2=='Manual'){
         
         intervalo1<-input$bins3
-        clase<-cut(dat()[,1],breaks = intervalo1,include.lowest = TRUE,right = FALSE)
+        clase<-cut(dat()$Datos,breaks = intervalo1,include.lowest = TRUE,right = FALSE)
         
-        if(input$n1=='Frecuencia Acumulada'){
+        if(input$n3=='Frecuencia Acumulada'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,fAcum=cumsum(Freq))
@@ -284,7 +284,7 @@ server <- function(input, output) {
           return(fa)
         }
         
-        else if(input$n1=='Frecuencia Acumulada Relativa'){
+        else if(input$n3=='Frecuencia Acumulada Relativa'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
@@ -318,7 +318,7 @@ server <- function(input, output) {
         
         clase<-cut(dat()[,ncolumna],breaks = intervalo2,include.lowest = TRUE,right = FALSE)
         
-        if(input$n1=='Frecuencia Acumulada'){
+        if(input$n2=='Frecuencia Acumulada'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,fAcum=cumsum(Freq))
@@ -326,7 +326,7 @@ server <- function(input, output) {
           return(fa)
         }
         
-        else if(input$n1=='Frecuencia Acumulada Relativa'){
+        else if(input$n2=='Frecuencia Acumulada Relativa'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
@@ -342,7 +342,7 @@ server <- function(input, output) {
         
         clase<-cut(dat()[,ncolumna],breaks = intervalo2,include.lowest = TRUE,right = FALSE)
         
-        if(input$n1=='Frecuencia Acumulada'){
+        if(input$n2=='Frecuencia Acumulada'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,fAcum=cumsum(Freq))
@@ -350,7 +350,7 @@ server <- function(input, output) {
           return(fa)
         }
         
-        else if(input$n1=='Frecuencia Acumulada Relativa'){
+        else if(input$n2=='Frecuencia Acumulada Relativa'){
           
           fr<-data.frame(table(clase))
           fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
@@ -367,46 +367,277 @@ server <- function(input, output) {
     return(dat())
     })
   
-  #output$distPlot <- renderPlot({
-  #   
-  #   if(input$n=='Frecuencia Acumulada'){
-  #     
-  #     fr<-data.frame(table(sueldos))
-  #     fa<-transform(fr,fAcum=cumsum(Freq))
-  #     colnames(fa)<-c("Sueldos","Frecuencia","Frecuencia Acumulada")
-  #   
-  #     dat<-data.frame(sueldos=as.numeric(fa$Sueldos),
-  #                     facum=as.numeric(fa$`Frecuencia Acumulada`))
-  #     
-  #     ggplot(dat,mapping = aes(sueldos,facum))+ 
-  #       geom_point(colour="blue" )+
-  #       geom_line( colour="blue")+
-  #       labs(title = "Distribución de Frecuencia", x="x", 
-  #            y="Frecuencia Acumulada")
-  #   
-  #     
-  #   }
-  #   
-  #   else if(input$n=='Frecuencia Acumulada Relativa'){
-  #     
-  #     fr<-data.frame(table(sueldos))
-  #     fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
-  #     colnames(fa)<-c("Sueldos","Frecuencia","Frecuencia Acumulada Relativa")
-  #     
-  #     dat<-data.frame(sueldos=as.numeric(fa$Sueldos),
-  #                     far=as.numeric(fa$`Frecuencia Acumulada Relativa`))
-  #     
-  #     ggplot(dat,mapping = aes(sueldos,far))+ 
-  #       geom_point(colour="blue" )+
-  #       geom_line( colour="blue")+
-  #       labs(title = "Distribución de Frecuencia", x="x", 
-  #            y="Frecuencia Acumulada")
-  #     
-  #   }
-  # 
-  # 
-  #   })
-
+  output$distPlot<-renderPlot({
+    
+    if(is.null(input$n)){
+      return()
+    }
+    
+    else if(input$n=='Ejemplos del libro'){
+      
+      if(is.null(input$interval)){
+        return()
+      }
+      
+      else if(input$interval=='Métodos dados'){
+        
+        intervalo<-if(input$metodo1=='Fórmula de Sturges'){
+          nclass.Sturges(dat()[,1])
+        }
+        else if(input$metodo1=='Regla de Scott'){
+          nclass.scott(dat()[,1])
+        }
+        else if(input$metodo1=='Selección de Freedman-Diaconis'){
+          nclass.FD(dat()[,1])
+        }
+        
+        clase<-cut(dat()[,1],breaks = intervalo,include.lowest = TRUE,right = FALSE)
+        Ancho<-(max(dat()[,1])-min(dat()[,1]))/intervalo
+        
+        if(input$n1=='Frecuencia Acumulada'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,fAcum=cumsum(Freq))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),y=fa$`Frecuencia Acumulada`))+
+                  geom_point(colour="blue" )+
+                  geom_line( colour="blue")+
+                  labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                       y="Frecuencia Acumulada")+scale_x_continuous(breaks = seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho))
+        }
+        
+        else if(input$n1=='Frecuencia Acumulada Relativa'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada Relativa")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),y=fa$`Frecuencia Acumulada Relativa`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada Relativa")+scale_x_continuous(breaks = seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho))
+        }
+      }
+      
+      else if(input$interval=='Manual'){
+        
+        intervalo<-input$bins1
+        clase<-cut(dat()[,1],breaks = intervalo,include.lowest = TRUE,right = FALSE)
+        Ancho<-(max(dat()[,1])-min(dat()[,1]))/intervalo
+        
+        if(input$n1=='Frecuencia Acumulada'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,fAcum=cumsum(Freq))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),y=fa$`Frecuencia Acumulada`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada")+scale_x_continuous(breaks = seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho))
+        }
+        
+        else if(input$n1=='Frecuencia Acumulada Relativa'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada Relativa")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),y=fa$`Frecuencia Acumulada Relativa`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada Relativa")+scale_x_continuous(breaks = seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho))
+        }
+        
+      }
+      
+    }
+    
+    else if(input$n=='Generados aleatoriamente'){
+      
+      if(is.null(input$interval2)){
+        return()
+      }
+      
+      else if(input$interval2=='Métodos dados'){
+        
+        intervalo1<-if(input$metodo3=='Fórmula de Sturges'){
+          nclass.Sturges(dat()$Datos)
+        }
+        else if(input$metodo3=='Regla de Scott'){
+          nclass.scott(dat()$Datos)
+        }
+        else if(input$metodo3=='Selección de Freedman-Diaconis'){
+          nclass.FD(dat()$Datos)
+        }
+        
+        clase<-cut(dat()$Datos,breaks = intervalo1,include.lowest = TRUE,right = FALSE)
+        Ancho<-(max(dat()$Datos)-min(dat()$Datos))/intervalo1
+        
+        if(input$n3=='Frecuencia Acumulada'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,fAcum=cumsum(Freq))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),y=fa$`Frecuencia Acumulada`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada")+scale_x_continuous(breaks = seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho))
+        }
+        
+        else if(input$n3=='Frecuencia Acumulada Relativa'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada Relativa")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),y=fa$`Frecuencia Acumulada Relativa`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada Relativa")+scale_x_continuous(breaks = seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho))
+        }
+        
+      }
+      
+      else if(input$interval2=='Manual'){
+        
+        intervalo1<-input$bins3
+        clase<-cut(dat()$Datos,breaks = intervalo1,include.lowest = TRUE,right = FALSE)
+        Ancho<-(max(dat()$Datos)-min(dat()$Datos))/intervalo1
+        
+        if(input$n3=='Frecuencia Acumulada'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,fAcum=cumsum(Freq))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),y=fa$`Frecuencia Acumulada`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada")+scale_x_continuous(breaks = seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho))
+        }
+        
+        else if(input$n3=='Frecuencia Acumulada Relativa'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada Relativa")
+          
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),y=fa$`Frecuencia Acumulada Relativa`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada Relativa")+scale_x_continuous(breaks = seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho))
+        }
+        
+      }
+      
+    }
+    
+    else if(input$n=='Cargados'){
+      
+      ncolumna<-input$columna
+      
+      if(is.null(input$interval1)){
+        return()
+      }
+      
+      else if(input$interval1=='Métodos dados'){
+        
+        intervalo2<-if(input$metodo2=='Fórmula de Sturges'){
+          nclass.Sturges(dat()[,ncolumna])
+        }
+        else if(input$metodo2=='Regla de Scott'){
+          nclass.scott(dat()[,ncolumna])
+        }
+        else if(input$metodo2=='Selección de Freedman-Diaconis'){
+          nclass.FD(dat()[,ncolumna])
+        }
+        
+        clase<-cut(dat()[,ncolumna],breaks = intervalo2,include.lowest = TRUE,right = FALSE)
+        Ancho<-(max(dat()[,ncolumna])-min(dat()[,ncolumna]))/intervalo2
+        
+        if(input$n2=='Frecuencia Acumulada'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,fAcum=cumsum(Freq))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),y=fa$`Frecuencia Acumulada`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho))
+          
+          
+        }
+        
+        else if(input$n2=='Frecuencia Acumulada Relativa'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada Relativa")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),y=fa$`Frecuencia Acumulada Relativa`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada Relativa")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho))
+          
+        }
+        
+      }
+      
+      else if(input$interval1=='Manual'){
+        
+        intervalo2<-input$bins2
+        clase<-cut(dat()[,ncolumna],breaks = intervalo2,include.lowest = TRUE,right = FALSE)
+        Ancho<-(max(dat()[,ncolumna])-min(dat()[,ncolumna]))/intervalo2
+        
+        if(input$n2=='Frecuencia Acumulada'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,fAcum=cumsum(Freq))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),y=fa$`Frecuencia Acumulada`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho))
+          
+          
+        }
+        
+        else if(input$n2=='Frecuencia Acumulada Relativa'){
+          
+          fr<-data.frame(table(clase))
+          fa<-transform(fr,FreAcuRel=cumsum(prop.table(`Freq`)))
+          colnames(fa)<-c("Intervalos","Frecuencia","Frecuencia Acumulada Relativa")
+          
+          ggplot(fa,mapping = aes(x=seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),y=fa$`Frecuencia Acumulada Relativa`))+
+            geom_point(colour="blue" )+
+            geom_line( colour="blue")+
+            labs(title = "Distribución de Frecuencia", x="Ojiva menor que",
+                 y="Frecuencia Acumulada Relativa")+scale_x_continuous(breaks = seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho))
+          
+        }
+        
+      }
+      
+    }
+  })
+  
+  
 }
 
 # Create Shiny app ----
