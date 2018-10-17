@@ -1,0 +1,22 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- Variables aleatorias:
+
+  1) Simular el lanzamiento de una moneda con la imagen de la moneda (cara o sello).
+  
+  2) Simular el lanzamiento de un dado.
+  
+  3) ¿Por qué la probabilidad frecuentista tiene esa forma? (Ley de los grandes números)
+  
+  4) Mostrar visualmente como cambia el espacio muestral en probabilidad condicional, y probabilidad total
+  
+  5) Gráfico para calcular las probabilidades en un rango.
+  
+  6) 
