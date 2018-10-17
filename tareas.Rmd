@@ -1,13 +1,11 @@
 ---
-title: "Untitled"
+title: "Aplicaciones Interactivas"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-- Variables aleatorias:
 
   1) Simular el lanzamiento de una moneda con la imagen de la moneda (cara o sello).
   
@@ -19,4 +17,57 @@ knitr::opts_chunk$set(echo = TRUE)
   
   5) Gráfico para calcular las probabilidades en un rango.
   
-  6) 
+  6) Aplicación para distribuciones discretas
+  
+    - Selección de la distribución (Bernoulli, Binomial, Geométrica,...)
+    - Características de la función seleccionada (función de densidad, distribución, media, varianza)
+    - Cálculo de función de densidad, probabilidades rangos seleccionados y puntuales.
+    - Cálculo de función de distribución, probabilidades acumuladas.
+    - Cálculo de Quantiles.
+    - Cálculo de una muestra aleatoria.
+    - Interacción con los parámetros y gráficos que muestren dichos cálculos.
+  
+  7) Realizar una aplicación igual en el caso de las distribuciones continuas.
+  
+    - Selección de la distribución (unifome, gamma, weibull,...).
+    
+    - Características de la función seleccionada (función de densidad, distribución, media, varianza).
+    
+    - Cálculo de función de densidad, probabilidades rangos seleccionados.
+    
+    - Cálculo de función de distribución, probabilidades acumuladas.
+    
+    - Cálculo de cuantiles.
+    
+    - Cálculo de una muestra aleatoria.
+    
+    - Interacción con los parámetros y gráficos que muestren dichos calculos.
+  
+  8) Realizar una aplicación para la distribución Normal.
+  
+    - Características de densidad Normal (función de densidad, distribución, esperanza, varianza).
+    
+    - Gráfico con comparación de distintas medias.
+    
+    - Gráfico con comparación de distintas varianzas.
+    
+    - Distribución Normal Estándar.
+    
+    - Cálculo de probabilidades acumuladas y por rangos.
+    
+    - Cálculo de cuantiles.
+    
+    - Calculo de muestras aleatorias.
+    
+    - Interacción con los parametros y gráficos que muestren dichos calculos.
+    
+  9) Comparar funciones de densidad y de distribución con distintos valores parametricos. Con las mismas distribuciones y con distintas distribuciones.
+  
+  10) Pruebas de hipótesis.
+  
+  11) Intervalos de Confianza.
+  
+  12) Análisis de Varianza.
+  
+  
+  
