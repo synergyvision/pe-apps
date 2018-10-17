@@ -1,3 +1,11 @@
+ensure_version <- function(pkg, ver = "0.0") {
+  if (system.file(package = pkg)  == "" || packageVersion(pkg) < ver)
+    install.packages(pkg)
+}
+
+ensure_version("shiny", "1.1.0")
+ensure_version("readxl", "1.1.0")
+
 library(shiny)
 library('readxl')
 
@@ -261,13 +269,13 @@ server <- function(input, output) {
       
       else if(input$interval2=="Métodos dados"){
         
-        b<-if(input$metodo1=='Fórmula de Sturges'){
+        b<-if(input$metodo3=='Fórmula de Sturges'){
           nclass.Sturges(data()[,1])
         }
-        else if(input$metodo1=='Regla de Scott'){
+        else if(input$metodo3=='Regla de Scott'){
           nclass.scott(data()[,1])
         }
-        else if(input$metodo1=='Selección de Freedman-Diaconis'){
+        else if(input$metodo3=='Selección de Freedman-Diaconis'){
           nclass.FD(data()[,1])
         }
         
