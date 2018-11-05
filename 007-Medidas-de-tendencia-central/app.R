@@ -57,8 +57,8 @@ ui <- fluidPage(
     ),
     mainPanel(
       
-       tableOutput("table"),
-       verbatimTextOutput("medias1")
+      div(style="height:400px; overflow-y: scroll",tableOutput("table")),
+      div(style="height:100px; overflow-y: scroll",verbatimTextOutput("medias1"))
     )
   )
 )

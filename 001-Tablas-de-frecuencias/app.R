@@ -115,8 +115,8 @@ ui <- fluidPage(
  ),
        mainPanel(
          
-              column(width=4,tableOutput(outputId = "table")),
-              column(width=8,tableOutput(outputId = "table1"))
+              column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput(outputId = "table"))),
+              column(width=8,div(style="height:400px; overflow-y: scroll",tableOutput(outputId = "table1")))
     )
   )
 )
@@ -162,7 +162,7 @@ server <- function(input, output) {
     
   }) 
   
-  output$table<- renderTable({data()}, 
+  output$table<- renderTable({data()},
                              striped = TRUE,hover = TRUE,
                              bordered = TRUE,rownames = FALSE)
   

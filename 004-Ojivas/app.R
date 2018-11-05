@@ -109,8 +109,8 @@ ui <- fluidPage(
 
     # Main panel for displaying outputs ----
     mainPanel(
-      column(width = 3,tableOutput('tabla')),
-      column(width = 9,fluidRow(tableOutput('tabla1')),fluidRow(plotOutput('distPlot')))
+      column(width = 3,div(style="height:300px; overflow-y: scroll",tableOutput('tabla'))),
+      column(width = 9,fluidRow(div(style="height:300px; overflow-y: scroll",tableOutput('tabla1'))),fluidRow(plotOutput('distPlot')))
     )
   )
 )
