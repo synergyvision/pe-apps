@@ -1,4 +1,5 @@
 library(shiny)
+library(readxl)
 
 # Crear diagramas de tallo y hoja con Sueldos.
 ui <- fluidPage(
@@ -38,7 +39,7 @@ ui <- fluidPage(
                         selectInput( inputId = "ejemplos", label = "Datos de ejemplo:",
                                      choices= c("Sueldos","Horas","Ventas"), 
                                      selected = NULL),
-                        sliderInput(inputId = "scale1",
+                        sliderInput(inputId = "scale2",
                                     label = "Número de escala:",
                                     min = 0.2,
                                     max = 2,
@@ -52,24 +53,86 @@ ui <- fluidPage(
        mainPanel(
          
          column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput(outputId = "table"))),
-              column(width=8,verbatimTextOutput("displot"))
+              column(width=8,verbatimTextOutput(outputId = "displot"))
     )
   )
 )
 
 
 server <- function(input, output) {
+  
+  
+  data<-reactive ({
+   if (is.null(input$n)){
+      return()
+   }
 
-  sueldos <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
-               54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
+    else if(input$n=="gen"){
+      data.frame(Datos=sample(80:100,input$m,replace = TRUE))
+    } else if(input$n=="car"){
+      
+      file1<-input$datoscargados
+      
+      if(is.null(file1)){
+        return()
+      }
+      
+      read_excel(file1$datapath)
+      
+      
+    } else if(input$n=="ejem"){
+      
+      Sueldos<- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
+                  54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
+      Horas<-c(rep(2,46),rep(3,15),rep(4,12),rep(6,52),rep(7,8))
+      
+      Ventas <- c(1034,1075,1123,1172,1218,1265,1313,1379,1452,1597)
+      
+      if(input$ejemplos=="Sueldos"){
+        data.frame(Sueldos)
+      } else if(input$ejemplos=="Horas"){
+        data.frame(Horas)
+      } else if(input$ejemplos=="Ventas"){
+        data.frame(Ventas)
+      }
+      
+    }
+    
+  })
+  
+  output$table<- renderTable({data()},
+                             striped = TRUE,hover = TRUE,
+                             bordered = TRUE,rownames = FALSE)
+  
 
   
+  
   output$displot <- renderPrint({
-       
-  stem(x=sueldos, scale = as.numeric(input$scale))
-    
-
+  
+    if(is.null(input$n))({
+      return()
     })
+    
+    
+    num<-as.numeric(unlist(data()))
+    num<-num[is.finite(num) & !is.na(num)]
+    scale3<-as.numeric(unlist(input$scale))
+    scale1<-as.numeric(unlist(input$scale1))
+    scale2<-as.numeric(unlist(input$scale2))
+
+      if(input$n=="gen")({
+        stem(x=num, scale = scale3)
+      })
+     else if(input$n=="car")({
+       stem(x=num, scale = scale1)
+     })
+     else if(input$n=="ejem")({
+       stem(x=num, scale = scale2)
+     })
+
+ invisible(NULL)
+
+  })
 
 }
 
