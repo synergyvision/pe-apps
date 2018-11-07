@@ -1,3 +1,11 @@
+ensure_version <- function(pkg, ver = "0.0") {
+  if (system.file(package = pkg)  == "" || packageVersion(pkg) < ver)
+    install.packages(pkg)
+}
+
+ensure_version("shiny", "1.1.0")
+ensure_version("readxl", "1.1.0")
+
 library(shiny)
 library(readxl)
 
@@ -115,7 +123,6 @@ server <- function(input, output) {
     
     
     num<-as.numeric(unlist(data()))
-    num<-num[is.finite(num) & !is.na(num)]
     scale3<-as.numeric(unlist(input$scale))
     scale1<-as.numeric(unlist(input$scale1))
     scale2<-as.numeric(unlist(input$scale2))
@@ -124,7 +131,12 @@ server <- function(input, output) {
         stem(x=num, scale = scale3)
       })
      else if(input$n=="car")({
+       
+       if(is.null(input$datoscargados))({
+         return()
+       }) else({
        stem(x=num, scale = scale1)
+       })
      })
      else if(input$n=="ejem")({
        stem(x=num, scale = scale2)
