@@ -1,5 +1,15 @@
+ensure_version <- function(pkg, ver = "0.0") {
+  if (system.file(package = pkg)  == "" || packageVersion(pkg) < ver)
+    install.packages(pkg)
+}
+
+ensure_version("shiny", "1.1.0")
+ensure_version("ggplot2", "3.0.0")
+ensure_version("readxl", "1.1.0")
+
 library(shiny)
-library('ggplot2')
+library(ggplot2)
+library(readxl)
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
@@ -13,12 +23,36 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
       
-
-      selectInput( inputId = "n", 
-                   label = "Datos de ejemplos:",
-                   choices= c('Tiempo de uso de equipos','Sueldos'), 
-                   selected = NULL)
-
+      
+      radioButtons(inputId="n",
+                   label = "Tipos de Datos",
+                   choices = c('Ejemplos del libro','Generados aleatoriamente','Cargados'),
+                   selected = " "),
+      conditionalPanel( condition = "input.n=='Ejemplos del libro'",
+                        selectInput( inputId = "m", 
+                                     label = "Ejemplo",
+                                     choices= c('Tiempo de uso de equipos','Sueldos','Otros'), 
+                                     selected = NULL)
+                        ),
+      conditionalPanel( condition = "input.n=='Cargados'",
+                        fileInput( inputId = "datoscargados",
+                                   label = "Seleccionar archivo:", buttonLabel = "Buscar...",
+                                   placeholder = "Aun no seleccionas el archivo..."),
+                        numericInput( inputId = "columna", 
+                                      label="Elija el número de columna deseado", 
+                                      min = 1, 
+                                      max = 100,
+                                      step = 1, 
+                                      value = 1, 
+                                      width = "100%")
+                        ),
+      conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
+                        sliderInput(inputId = "CantidadDatos",
+                                    label = "Cantidad de datos a generar",
+                                    min = 1,
+                                    max = 100,
+                                    value = 5)
+                      )
     ),
 
     # Main panel for displaying outputs ----
