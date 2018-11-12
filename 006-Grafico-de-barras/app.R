@@ -57,8 +57,8 @@ ui <- fluidPage(
 
     # Main panel for displaying outputs ----
     mainPanel(
-      tableOutput('tabla'),
-      plotOutput(outputId = "distPlot")
+      column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput("tabla"))),
+      column(width=8,plotOutput(outputId = "distPlot"))
     )
   )
 )
@@ -66,46 +66,123 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram ----
 server <- function(input, output) {
 
-  sueldos <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
+  Sueldos <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
                54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
 
-  Horas<-c(2,3,4,6,7)
-  Frecuencia<-c(46,15,12,52,8)
+  Horas<-c(rep(2,46),rep(3,15),rep(4,12),rep(6,52),rep(7,8))
   
-  output$tabla<-renderTable({
-    if(input$n=='Tiempo de uso de equipos'){
-      data<-data.frame(Horas,Frecuencia)
-      return(data)
-    }
-    else if(input$n=='Sueldos'){
-      fr<-data.frame(table(sueldos))
-      colnames(fr)<-c("Sueldos","Frecuencia")
-      return(fr)
-    }
-  },digits = 0)
+  Otros<-c(rep(10,4),rep(22,5),rep(35,2),rep(46,10),rep(57,9),rep(68,6),rep(74,6))
   
-  output$distPlot<-renderPlot({
-    if(input$n=='Tiempo de uso de equipos'){
-      
-      data<-data.frame(Horas,Frecuencia)
-      
-      ggplot(data, aes(x=Horas,y=Frecuencia))+
-        geom_bar(stat = "identity", color="black",
-                 fill="Blue", alpha=0.5)+
-        labs(title = "Diagrama de Barra", x="Horas",y="Frecuencias")
+  dat<-reactive({
+    
+    infile <- input$n
+    if(is.null(infile)){
+      return()
     }
-    else if(input$n=='Sueldos'){
-      fr<-data.frame(table(sueldos))
-      colnames(fr)<-c("Sueldos","Frecuencia")
+    
+    else if(infile=='Ejemplos del libro'){
       
-      ggplot(fr, aes(x=Sueldos,y=Frecuencia))+
-        geom_bar(stat = "identity", color="black",
-                 fill="Blue", alpha=0.5)+
-        labs(title = "Diagrama de Barra", 
-             x="Sueldos en miles de dólares",y="Frecuencias")
+      infile1<-input$m
+      
+      if(infile1=='Sueldos'){
+        data.frame(Sueldos)
+      }
+      
+      else if(infile1=='Tiempo de uso de equipos'){
+        data.frame(Horas)
+      }
+      
+      else if(infile1=='Otros')
+        data.frame(Otros)
+    }
+    
+    else if(infile=='Cargados'){
+      infile2<-input$datoscargados
+      if(is.null(infile2)){
+        return()
+      }
+      
+      else{
+        as.data.frame(read_excel(infile2$datapath))
+      }
+    }
+    
+    else if(infile=='Generados aleatoriamente'){
+      data.frame(Datos=sample(80:100,input$CantidadDatos,replace = TRUE))
     }
     
   })
+  
+vars<-reactive({
+   if(input$n=='Cargados'){
+      names(dat())[input$columna]
+    }
+    else{
+      names(dat())
+    }
+  })
+
+fr<-reactive({
+  if(input$n=='Cargados'){
+        if(is.null(input$datoscargados)){
+          return()
+        }
+        else{
+        h<-data.frame(table(dat()[,input$columna]))
+        colnames(h)<-c(vars(),"Frecuencia")
+        return(h)
+        }
+  }
+  else{
+    h<-data.frame(table(dat()))
+    colnames(h)<-c(vars(),"Frecuencia")
+    return(h)
+  }
+})
+
+output$tabla<-renderTable({
+  if(is.null(input$n)){
+        return()
+  }
+  return(fr())
+})
+  
+  
+  output$distPlot<-renderPlot({
+    if(is.null(input$n)){
+      return()
+    }
+    else if(is.null(input$datoscargados)){
+      return()
+    }
+    else{
+      ggplot(fr(), aes(x=fr()[,1],y=Frecuencia))+
+        geom_bar(stat = "identity", color="black",
+                 fill="Blue", alpha=0.5)+
+        labs(title = "Diagrama de Barra", x=vars(),y="Frecuencias")
+    }
+  })
+  
+  # output$tabla<-renderTable({
+  #   if(is.null(input$n)){
+  #     return()
+  #   }
+  #   else if(input$n=='Cargados'){
+  #     if(is.null(input$datoscargados)){
+  #       return()
+  #     }
+  #     else{
+  #     fr<-data.frame(table(dat()[,input$columna]))
+  #     colnames(fr)<-c(vars(),"Frecuencia")
+  #     return(fr)
+  #     }
+  #   }
+  #   else{
+  #     fr<-data.frame(table(dat()))
+  #     colnames(fr)<-c(vars(),"Frecuencia")
+  #     return(fr)
+  #   }
+  # },digits = 1)
   
 }
 
