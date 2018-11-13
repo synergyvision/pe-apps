@@ -152,8 +152,16 @@ output$tabla<-renderTable({
     if(is.null(input$n)){
       return()
     }
-    else if(is.null(input$datoscargados)){
+    else if(input$n=='Cargados'){
+      if(is.null(input$datoscargados)){
       return()
+      }
+      else{
+        ggplot(fr(), aes(x=fr()[,1],y=Frecuencia))+
+          geom_bar(stat = "identity", color="black",
+                   fill="Blue", alpha=0.5)+
+          labs(title = "Diagrama de Barra", x=vars(),y="Frecuencias")
+      }
     }
     else{
       ggplot(fr(), aes(x=fr()[,1],y=Frecuencia))+
