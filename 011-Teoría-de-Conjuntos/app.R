@@ -27,45 +27,15 @@ ui <- fluidPage(
     
     sidebarPanel(
       
-      radioButtons( inputId = "n",label = "Origen de los datos:", 
-                    choices = c("Generados"="gen", "Cargados"="car", "Ejemplos"="ejem"),
-                    selected=" "),
-      conditionalPanel( condition = "input.n == 'gen'", 
-                         sliderInput( "m",
-                                     label = "Número de filas:",
-                                     min = 1, max = 20, value = 5),
-                        sliderInput( "f",
-                                     label = "Número de variables:",
-                                     min = 1, max = 10, value = 5)
-                        
-       ),
-      conditionalPanel( condition = "input.n == 'car'", 
-                        fileInput(inputId = "datoscargados",label = "Seleccionar desde un archivo guardado:", 
-                                  buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo...")
-                        
-      ),
       
-      conditionalPanel( condition = "input.n == 'ejem'", 
-                        selectInput( inputId = "ejemplos", label = "Datos de ejemplo:",
-                                     choices= c("Sueldos","Horas","Ventas"), 
-                                     selected = NULL)),
-          selectInput( inputId = "medias", label = "Medidas de Posición o Orden:",
-                       choices= c("Cuantiles","Diagrama de Caja"
-                                                ), 
-                        selected = NULL),
-      conditionalPanel(condition = "input.medias== 'Cuantiles'",textInput(inputId = "vect", label = "Introducir la probabilidad deseada",
-                                                                          placeholder = "0.1,0.2,...")),
-      conditionalPanel(condition= "input.medias=='Diagrama de Caja'",
-                       conditionalPanel(condition= "input.n=='gen'",
-                                        numericInput( inputId = "k", label="Escoja el número de la variable deseada:", min = 1,
-                                                      max = 100,step = 1,
-                                                      value = 1, width = "40%")),
-                       conditionalPanel(condition="input.n=='car'",
-                                        numericInput( inputId = "d", label="Escoja el número de columna deseado:", min = 1,
-                                                      max = 100,step = 1,
-                                                      value = 1, width = "40%")))
+      textInput(inputId = "con1", label = "Introducir el primer conjunto",placeholder = "a,b,..."),
+      textInput(inputId = "con2", label = "Introducir el segundo conjunto",placeholder = "a,b,..."),
+      textInput(inputId = "con3", label = "Introducir el tercer conjunto",placeholder = "a,b,..."),
       
-      
+      conditionalPanel(condition = "input.con3", checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",
+                                                                    choices = c("Conjunto 1","Conjunto 2","Conjunto 3",selected=NULL))),
+      conditionalPanel(condition="input.con",selectInput(inputId = "ope",label = "Operaciones de cojuntos",choices = c("Unión","Intersección","Diferencia","Complemento","Producto Cartesiano","Potencia"),
+                                                         selected = NULL))
     ),
     mainPanel(
       
