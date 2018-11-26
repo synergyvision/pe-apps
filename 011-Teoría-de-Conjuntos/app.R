@@ -37,12 +37,14 @@ ui <- fluidPage(
       
       conditionalPanel(condition="input.con1",selectInput(inputId = "ope",label = "Operaciones de cojuntos",choices = c("Unión","Intersección","Diferencia","Complemento","Producto Cartesiano","Potencia"),
                                                          selected = NULL),checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",
-                                                                   choices = c("Conjunto 1"= "con1","Conjunto 2"= "con2","Conjunto 3"= "con3",selected=NULL)))
+                                                                   choices = c("Conjunto 1"="con1","Conjunto 2"="con2","Conjunto 3"="con3",selected=NULL)))
+      
       ),
 
     mainPanel(
       
       column(width=5,h3("Operación"),verbatimTextOutput("op1")),
+      
       column(width=5,h3("Diagrama de Venn"),plotOutput("plot"))
     )
   )
@@ -50,49 +52,53 @@ ui <- fluidPage(
 
 
 
-server <- function(input, output) {
+server <- function(input, output,session) {
   
   conjunto1<-reactive({
-    if(is.null(input$con1)){
+    if(is.null(input$con=="con1")){
       return(NULL)
     } else{
       as.vector(unlist(strsplit(input$con1,",")))
     }
   })
   
-   conjunto2<-reactive({ 
-    if(is.null(input$con2)){
+   conjunto2<-reactive({
+    if(is.null(input$con=="con2")){
       return(NULL)
     } else{
       as.vector(unlist(strsplit(input$con2,",")))
     }
 })
+
+    conjunto3<-reactive({
+      if(is.null(input$con=="con3")){
+       return(NULL)
+      } else{
+        as.vector(unlist(strsplit(input$con3,",")))
+      }
+     })
+
+    # observe({
+    #   vars<-names(data())
+    #   updateCheckboxGroupInput(session, 'columnas', choices = vars)
+    # })  
     
-   conjunto3<-reactive({
-    if(is.null(input$con3)){
-      return(NULL)
-    } else{
-      as.vector(unlist(strsplit(input$con3,",")))
-    }
-   })   
-   
-   
+    
+    
 d<-reactive({
-  rbind(conjunto1(),conjunto2(),conjunto3())
+  w<-rbind(conjunto1(),conjunto2(),conjunto3())
+  # rownames(w)[1:length(c(input$con))]<-c(input$con)
+  
+  return(w[1:length(c(input$con)),])
   
 })
 
 
-
  output$op1<-renderPrint({
    
-   if(input$con=="con1"){
-     print(d()[1,])
-   } 
-   
- })
- 
-}
+   return(d())
+})
 
+}
 
 shinyApp(ui = ui, server = server)
