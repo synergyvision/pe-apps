@@ -58,45 +58,46 @@ server <- function(input, output,session) {
     if(is.null(input$con=="con1")){
       return(NULL)
     } else{
-      as.vector(unlist(strsplit(input$con1,",")))
+    as.vector(unlist(strsplit(input$con1,",")))
     }
+    
   })
   
-   conjunto2<-reactive({
-    if(is.null(input$con=="con2")){
-      return(NULL)
-    } else{
-      as.vector(unlist(strsplit(input$con2,",")))
-    }
-})
 
-    conjunto3<-reactive({
-      if(is.null(input$con=="con3")){
+    conjunto2<-reactive({
+     if(is.null(input$con=="con2")){
+      return(NULL)
+     } else{
+       as.vector(unlist(strsplit(input$con2,",")))
+     }
+ })
+ 
+     conjunto3<-reactive({
+       if(is.null(input$con=="con3")){
        return(NULL)
       } else{
-        as.vector(unlist(strsplit(input$con3,",")))
-      }
-     })
-
-    # observe({
-    #   vars<-names(data())
-    #   updateCheckboxGroupInput(session, 'columnas', choices = vars)
-    # })  
-    
-    
-    
-d<-reactive({
-  w<-rbind(conjunto1(),conjunto2(),conjunto3())
-  # rownames(w)[1:length(c(input$con))]<-c(input$con)
-  
-  return(w[1:length(c(input$con)),])
-  
-})
+         as.vector(unlist(strsplit(input$con3,",")))
+       }
+      })
+     
+      
+   d<-reactive({
+    w<-rbind(conjunto1(),conjunto2(),conjunto3())
+     row.names(w)<-c("con1","con2","con3")
+     return(w)
+     
+   })
 
 
  output$op1<-renderPrint({
    
-   return(d())
+   if(is.null(input$con)){
+     return(NULL)
+   } else{
+     #d()[c(input$con),]
+     union(d()[c(input$con),],d()[c(input$con),])
+   }
+   
 })
 
 }
