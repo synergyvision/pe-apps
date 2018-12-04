@@ -42,9 +42,9 @@ ui <- fluidPage(
       textInput(inputId = "con2", label = "Introducir el segundo conjunto",placeholder = "a,b,..."),
       
       
-      conditionalPanel(condition="input.con1",selectInput(inputId = "ope",label = "Operaciones de cojuntos",choices = c("Unión","Intersección","Diferencia","Complemento","Producto Cartesiano","Potencia"),
-                                                         selected = NULL),checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",
-                                                                   choices = c("Conjunto 1"="con1","Conjunto 2"="con2",selected=NULL)))
+      selectInput(inputId = "ope",label = "Operaciones de cojuntos",choices = c("Unión","Intersección","Diferencia","Complemento","Producto Cartesiano","Potencia"),
+                                                         selected = NULL),
+      checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",choices = c("Conjunto 1"="c1","Conjunto 2"="c2"),selected=NULL)
       
       ),
 
@@ -62,8 +62,8 @@ ui <- fluidPage(
 server <- function(input, output,session) {
   
   conjunto1<-reactive({
-    if(is.null(input$con=="con1")){
-      return(NULL)
+    if(is.null(input$con1)){
+      return()
     } else{
     as.vector(unlist(strsplit(input$con1,",")))
     }
@@ -72,8 +72,8 @@ server <- function(input, output,session) {
   
 
     conjunto2<-reactive({
-     if(is.null(input$con=="con2")){
-      return(NULL)
+     if(is.null(input$con2)){
+      return()
      } else{
        as.vector(unlist(strsplit(input$con2,",")))
      }
@@ -81,8 +81,8 @@ server <- function(input, output,session) {
  
       
     d<-reactive({
-     w<-rbind(conjunto1(),conjunto2())
-      row.names(w)<-c("con1","con2")
+      w<-rbind(conjunto1(),conjunto2())
+      row.names(w)<-c("c1","c2")
       return(w)
       
     })
@@ -91,57 +91,53 @@ server <- function(input, output,session) {
  output$op1<-renderPrint({
    
     if(is.null(input$con)){
-      return(NULL)
-    } else{
+      return()
+    }
+    else{
       if(input$ope=="Unión"){
         if(length(input$con)==1){
           union(d()[input$con[1],],d()[input$con[1],])
-        } else{
-      union(d()[input$con[1],],d()[input$con[2],])
         }
-      } else if(input$ope=="Intersección"){
+        else{
+          union(d()[input$con[1],],d()[input$con[2],])
+        }
+      } 
+      else if(input$ope=="Intersección"){
         if(length(input$con)==1){
           intersect(d()[input$con[1],],d()[input$con[1],])
-        } else{
+        }
+        else{
           intersect(d()[input$con[1],],d()[input$con[2],])
         }
       }
-        else if(input$ope=="Diferencia"){
-          if(length(input$con)==1){
+      else if(input$ope=="Diferencia"){
+        if(length(input$con)==1){
             setdiff(d()[input$con[1],],d()[input$con[1],])
-          } else{
+          }
+        else{
             #Diferencia Conjunto 1 - Conjunto 2
            setdiff(d()[input$con[1],],d()[input$con[2],])
-          }}
-        else if(input$ope=="Producto Cartesiano"){
-            
-            cartesian <- function(a, b) {
-              axb <- list()
-              k <- 1
-              for (i in a) {
-                for (j in b) {
-                  axb[[k]] <- c(i,j)
-                  k <- k + 1
-                }
-              }
-              return(axb)
-            }
-            
-            if(length(input$con)==1){
-              cartesian(d()[input$con[1],],d()[input$con[1],])
-            } else{
-              cartesian(d()[input$con[1],],d()[input$con[2],])
-              }
-        } else if(input$ope=="Potencia"){
-          if(length(input$con)==1){
-            powerSet(d()[input$con[1],])
-          } else{
-            powerSet(d()[input$con[2],])
-          }
         }
-       
-     }
-   
+      }
+      else if(input$ope=="Producto Cartesiano"){
+
+            if(length(input$con)==1){
+              unique(expand.grid(d()[input$con[1],],d()[input$con[1],]))
+            }
+            else{
+              unique(expand.grid(d()[input$con[1],],d()[input$con[2],]))
+              }
+      }
+      else if(input$ope=="Potencia"){
+        if(length(input$con)==1){
+            powerSet(d()[input$con[1],])
+          }
+        else{
+            return('Elija solo 1 conjunto')
+          }
+    }
+
+  }
 })
  
 output$plot<-renderPlot({
