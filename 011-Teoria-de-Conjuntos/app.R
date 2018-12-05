@@ -96,45 +96,99 @@ server <- function(input, output,session) {
     else{
       if(input$ope=="Unión"){
         if(length(input$con)==1){
-          union(d()[input$con[1],],d()[input$con[1],])
+          if(input$con=='c1'){
+            union(conjunto1(),conjunto1())
+          }
+          else if(input$con=='c2'){
+            union(conjunto2(),conjunto2())
+          }
         }
         else{
-          union(d()[input$con[1],],d()[input$con[2],])
+          union(conjunto1(),conjunto2())
         }
+        # if(length(input$con)==1){
+        #   union(d()[input$con[1],],d()[input$con[1],])
+        # }
+        # else{
+        #   union(d()[input$con[1],],d()[input$con[2],])
+        # }
       } 
       else if(input$ope=="Intersección"){
         if(length(input$con)==1){
-          intersect(d()[input$con[1],],d()[input$con[1],])
+          if(input$con=='c1'){
+            intersect(conjunto1(),conjunto1())
+          }
+          else if(input$con=='c2'){
+            intersect(conjunto2(),conjunto2())
+          }
         }
         else{
-          intersect(d()[input$con[1],],d()[input$con[2],])
+          intersect(conjunto1(),conjunto2())
         }
+        # if(length(input$con)==1){
+        #   intersect(d()[input$con[1],],d()[input$con[1],])
+        # }
+        # else{
+        #   intersect(d()[input$con[1],],d()[input$con[2],])
+        # }
       }
       else if(input$ope=="Diferencia"){
         if(length(input$con)==1){
-            setdiff(d()[input$con[1],],d()[input$con[1],])
+          if(input$con=='c1'){
+            setdiff(conjunto1(),conjunto1())
           }
-        else{
-            #Diferencia Conjunto 1 - Conjunto 2
-           setdiff(d()[input$con[1],],d()[input$con[2],])
+          else if(input$con=='c2'){
+            setdiff(conjunto2(),conjunto2())
+          }
         }
+        else{
+          setdiff(conjunto1(),conjunto2())
+        }
+        # if(length(input$con)==1){
+        #     setdiff(d()[input$con[1],],d()[input$con[1],])
+        #   }
+        # else{
+        #     #Diferencia Conjunto 1 - Conjunto 2
+        #    setdiff(d()[input$con[1],],d()[input$con[2],])
+        # }
       }
       else if(input$ope=="Producto Cartesiano"){
-
-            if(length(input$con)==1){
-              unique(expand.grid(d()[input$con[1],],d()[input$con[1],]))
-            }
-            else{
-              unique(expand.grid(d()[input$con[1],],d()[input$con[2],]))
-              }
+        if(length(input$con)==1){
+          if(input$con=='c1'){
+            a<-expand.grid(conjunto1(),conjunto1())
+            colnames(a)<-c('Conjunto 1','Conjunto 1')
+            return(a)
+          }
+          else if(input$con=='c2'){
+            a<-expand.grid(conjunto2(),conjunto2())
+            colnames(a)<-c('Conjunto 2','Conjunto 2')
+            return(a)
+          }
+        }
+        else{
+          a<-expand.grid(conjunto1(),conjunto2())
+          colnames(a)<-c('Conjunto 1','Conjunto 2')
+          return(a)
+        }
+            # if(length(input$con)==1){
+            #   unique(expand.grid(d()[input$con[1],],d()[input$con[1],]))
+            # }
+            # else{
+            #   unique(expand.grid(d()[input$con[1],],d()[input$con[2],]))
+            #   }
       }
       else if(input$ope=="Potencia"){
         if(length(input$con)==1){
-            powerSet(d()[input$con[1],])
+          if(input$con=='c1'){
+            powerSet(conjunto1())
           }
+          else if(input$con=='c2'){
+            powerSet(conjunto2())
+        }
+      }
         else{
-            return('Elija solo 1 conjunto')
-          }
+          return('Elija solo un grupo')
+        }
     }
 
   }
