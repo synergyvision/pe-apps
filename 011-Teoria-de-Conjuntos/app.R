@@ -41,11 +41,23 @@ ui <- fluidPage(
       textInput(inputId = "con1", label = "Introducir el primer conjunto",placeholder = "a,b,..."),
       textInput(inputId = "con2", label = "Introducir el segundo conjunto",placeholder = "a,b,..."),
       
-      
       selectInput(inputId = "ope",label = "Operaciones de cojuntos",choices = c("Unión","Intersección","Diferencia","Complemento","Producto Cartesiano","Potencia"),
                                                          selected = NULL),
-      checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",choices = c("Conjunto 1"="c1","Conjunto 2"="c2"),selected=NULL)
-      
+      conditionalPanel(condition = "input.ope=='Complemento'",
+                       textInput(inputId = "con3",
+                                 label = "Introducir Conjunto Universo",
+                                 placeholder = "a,b,...")),
+      checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",choices = c("Conjunto 1"="c1","Conjunto 2"="c2"),selected=NULL),
+      conditionalPanel(condition = "input.ope=='Diferencia'",
+                       selectInput(inputId = 'dif',
+                                   label='Tipo de diferencia',
+                                   choices = c('Conjunto 1 - Conjunto 2','Conjunto 2 - Conjunto 1'),
+                                   selected = NULL)),
+      conditionalPanel(condition = "input.ope=='Producto Cartesiano'",
+                       selectInput(inputId = 'pc',
+                                   label='Elija forma del producto',
+                                   choices = c('Conjunto 1 X Conjunto 2','Conjunto 2 X Conjunto 1'),
+                                   selected = NULL))
       ),
 
     mainPanel(
@@ -79,6 +91,13 @@ server <- function(input, output,session) {
      }
  })
  
+    conjuntou<-reactive({
+      if(is.null(input$con3)){
+        return()
+      } else{
+        as.vector(unlist(strsplit(input$con3,",")))
+      }
+    })
       
     d<-reactive({
       w<-rbind(conjunto1(),conjunto2())
@@ -106,12 +125,6 @@ server <- function(input, output,session) {
         else{
           union(conjunto1(),conjunto2())
         }
-        # if(length(input$con)==1){
-        #   union(d()[input$con[1],],d()[input$con[1],])
-        # }
-        # else{
-        #   union(d()[input$con[1],],d()[input$con[2],])
-        # }
       } 
       else if(input$ope=="Intersección"){
         if(length(input$con)==1){
@@ -125,12 +138,6 @@ server <- function(input, output,session) {
         else{
           intersect(conjunto1(),conjunto2())
         }
-        # if(length(input$con)==1){
-        #   intersect(d()[input$con[1],],d()[input$con[1],])
-        # }
-        # else{
-        #   intersect(d()[input$con[1],],d()[input$con[2],])
-        # }
       }
       else if(input$ope=="Diferencia"){
         if(length(input$con)==1){
@@ -142,15 +149,13 @@ server <- function(input, output,session) {
           }
         }
         else{
+          if(input$dif=='Conjunto 1 - Conjunto 2'){
           setdiff(conjunto1(),conjunto2())
+          }
+          else if(input$dif=='Conjunto 2 - Conjunto 1'){
+            setdiff(conjunto2(),conjunto1())
+          }
         }
-        # if(length(input$con)==1){
-        #     setdiff(d()[input$con[1],],d()[input$con[1],])
-        #   }
-        # else{
-        #     #Diferencia Conjunto 1 - Conjunto 2
-        #    setdiff(d()[input$con[1],],d()[input$con[2],])
-        # }
       }
       else if(input$ope=="Producto Cartesiano"){
         if(length(input$con)==1){
@@ -166,16 +171,17 @@ server <- function(input, output,session) {
           }
         }
         else{
+          if(input$pc=='Conjunto 1 X Conjunto 2'){
           a<-expand.grid(conjunto1(),conjunto2())
           colnames(a)<-c('Conjunto 1','Conjunto 2')
           return(a)
+          }
+          else if(input$pc=='Conjunto 2 X Conjunto 1'){
+            a<-expand.grid(conjunto2(),conjunto1())
+            colnames(a)<-c('Conjunto 2','Conjunto 1')
+            return(a)
+          }
         }
-            # if(length(input$con)==1){
-            #   unique(expand.grid(d()[input$con[1],],d()[input$con[1],]))
-            # }
-            # else{
-            #   unique(expand.grid(d()[input$con[1],],d()[input$con[2],]))
-            #   }
       }
       else if(input$ope=="Potencia"){
         if(length(input$con)==1){
@@ -190,7 +196,19 @@ server <- function(input, output,session) {
           return('Elija solo un grupo')
         }
     }
-
+    else if(input$ope=="Complemento"){
+      if(length(input$con)==1){
+        if(input$con=='c1'){
+          setdiff(conjuntou(),conjunto1())
+        }
+        else if(input$con=='c2'){
+         setdiff(conjuntou(),conjunto2())
+        }
+      }
+      else{
+        return('Elija solo un grupo')
+      }
+    }
   }
 })
  
