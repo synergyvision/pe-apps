@@ -1,2 +1,1 @@
-Ésta es una aplicación que demuestra cómo podemos calcular las distintas medidas de posición o orden manipulando el origen de los datos, como datos generados, datos cargados desde un archivo excel (.xlsx) y datos por default que representan los ejemplos del libro de probabilidades y estadística.
-
+Ésta es una aplicación que demuestra cómo podemos interactuar con las operaciones básicas de conjuntos manipulando el origen de éstos, también se pueden visualizar éstas operaciones con un diagrama de Venn.
