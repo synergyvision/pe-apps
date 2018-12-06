@@ -14,7 +14,7 @@ ensure_version("sets","1.0-18")
 ensure_version("RAM","1.2.1.7")
 ensure_version("rje","1.9")
 ensure_version("futile.logger","1.4.3")
-
+ensure_version("grid","3.4.3")
 
 library(shiny)
 library(shinydashboard)
@@ -27,7 +27,7 @@ library(sets)
 library(RAM)
 library(rje)
 library(futile.logger)
-
+library(grid)
 
 ui <- fluidPage(
   
@@ -215,6 +215,7 @@ output$plot<-renderPlot({
                fill = c("green", "blue"),
                cat.pos = c(0, 0),
                lab.cex=1.1,file = NULL,ext = NULL)
+    
     
   } else if(input$ope=="Diferencia"){
     a1<-d()[input$con[1],]
