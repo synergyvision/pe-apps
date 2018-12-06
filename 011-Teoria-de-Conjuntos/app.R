@@ -49,15 +49,17 @@ ui <- fluidPage(
                                  placeholder = "a,b,...")),
       checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",choices = c("Conjunto 1"="c1","Conjunto 2"="c2"),selected=NULL),
       conditionalPanel(condition = "input.ope=='Diferencia'",
+                       conditionalPanel(condition = "input.con.indexOf('c1')!=-1 & input.con.indexOf('c2')!=-1",
                        selectInput(inputId = 'dif',
                                    label='Tipo de diferencia',
                                    choices = c('Conjunto 1 - Conjunto 2','Conjunto 2 - Conjunto 1'),
-                                   selected = NULL)),
+                                   selected = NULL))),
       conditionalPanel(condition = "input.ope=='Producto Cartesiano'",
+                       conditionalPanel(condition = "input.con.indexOf('c1')!=-1 & input.con.indexOf('c2')!=-1",
                        selectInput(inputId = 'pc',
                                    label='Elija forma del producto',
                                    choices = c('Conjunto 1 X Conjunto 2','Conjunto 2 X Conjunto 1'),
-                                   selected = NULL))
+                                   selected = NULL)))
       ),
 
     mainPanel(
