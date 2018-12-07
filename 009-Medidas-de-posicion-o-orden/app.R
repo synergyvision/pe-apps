@@ -21,7 +21,7 @@ library(ggplot2)
 
 ui <- fluidPage(
   
-  titlePanel("Medidas de posición o orden"),
+  titlePanel("Medidas de posición u orden"),
   
   sidebarLayout(
     
