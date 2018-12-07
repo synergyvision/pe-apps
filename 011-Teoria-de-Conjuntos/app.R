@@ -215,37 +215,82 @@ server <- function(input, output,session) {
 })
  
 output$plot<-renderPlot({
+  # if(is.null(input$con)){
+  #   return(NULL)
+  # }
+  # else if(input$ope=="Unión"){
+  #   a<-d()[input$con[1],]
+  #   b<-d()[input$con[2],]
+  # 
+  #   group.venn(list(Conjunto1=a, Conjunto2=b), label=TRUE, 
+  #              fill = c("blue", "blue"),
+  #              cat.pos = c(0, 0),
+  #              lab.cex=1.1,file = NULL,ext = NULL)
+  #   
+  # } else if(input$ope=="Intersección"){
+  #   a1<-d()[input$con[1],]
+  #   b1<-d()[input$con[2],]
+  #   
+  #   group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE, 
+  #              fill = c("green", "blue"),
+  #              cat.pos = c(0, 0),
+  #              lab.cex=1.1,file = NULL,ext = NULL)
+  #   
+  #   
+  # } else if(input$ope=="Diferencia"){
+  #   a1<-d()[input$con[1],]
+  #   b1<-d()[input$con[2],]
+  #   
+  #   group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE, 
+  #              fill = c("green", "white"),
+  #              cat.pos = c(0, 0),
+  #              lab.cex=1.1,file = NULL,ext = NULL)
+  # }
   if(is.null(input$con)){
-    return(NULL)
+    return()
   }
-  else if(input$ope=="Unión"){
-    a<-d()[input$con[1],]
-    b<-d()[input$con[2],]
-  
-    group.venn(list(Conjunto1=a, Conjunto2=b), label=TRUE, 
-               fill = c("blue", "blue"),
-               cat.pos = c(0, 0),
-               lab.cex=1.1,file = NULL,ext = NULL)
-    
-  } else if(input$ope=="Intersección"){
-    a1<-d()[input$con[1],]
-    b1<-d()[input$con[2],]
-    
-    group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE, 
-               fill = c("green", "blue"),
-               cat.pos = c(0, 0),
-               lab.cex=1.1,file = NULL,ext = NULL)
-    
-    
-  } else if(input$ope=="Diferencia"){
-    a1<-d()[input$con[1],]
-    b1<-d()[input$con[2],]
-    
-    group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE, 
-               fill = c("green", "white"),
-               cat.pos = c(0, 0),
-               lab.cex=1.1,file = NULL,ext = NULL)
-  } 
+  else{
+    if(input$ope=="Unión"){
+      if(length(input$con)==1){
+        if(input$con=='c1'){
+          a<-union(conjunto1(),conjunto1())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else if(input$con=='c2'){
+          a<-union(conjunto2(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+      }
+      else{
+        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
+                   fill = c("blue", "blue"),
+                   cat.pos = c(0, 0),
+                   lab.cex=1.1,file = NULL,ext = NULL)
+      }
+    }
+    else if(input$ope=="Intersección"){
+      if(length(input$con)==1){
+        if(input$con=='c1'){
+          a<-intersect(conjunto1(),conjunto1())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else if(input$con=='c2'){
+          a<-intersect(conjunto2(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+      }
+      else{
+        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
+                   fill = c("green", "blue"),
+                   cat.pos = c(0, 0),
+                   lab.cex=1.1,file = NULL,ext = NULL)
+      }
+    }
+  }
 })
 
 }
