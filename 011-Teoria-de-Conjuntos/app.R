@@ -82,6 +82,7 @@ ui <- fluidPage(
 
 server <- function(input, output,session) {
   
+  
   conjunto1<-reactive({
     if(is.null(input$con1)){
       return()
@@ -275,6 +276,7 @@ output$plot<-renderPlot({
                    fill = c("blue", "blue"),
                    cat.pos = c(0, 0),
                    lab.cex=1.1,file = NULL,ext = NULL)
+        unlink("*.log")
       }
     }
     else if(input$ope=="Intersección"){
@@ -295,6 +297,7 @@ output$plot<-renderPlot({
                    fill = c("green", "blue"),
                    cat.pos = c(0, 0),
                    lab.cex=1.1,file = NULL,ext = NULL)
+        unlink("*.log")
       }
     }
   }
