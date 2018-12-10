@@ -272,11 +272,23 @@ output$plot<-renderPlot({
         }
       }
       else{
+        if(isTRUE(all(conjunto1()%in%conjunto2()))){
+          a<-paste(conjunto1(),collapse = ' ')
+          b<-paste(conjunto2(),collapse = ' ')
+          draw.pairwise.venn(length(conjunto2()),length(conjunto1()),length(intersect(conjunto2(),conjunto1())),fill=c('blue','blue'),cat.pos = 0,category = c(a,b),cat.dist = -0.06)
+        }
+        else if(isTRUE(all(conjunto2()%in%conjunto1()))){
+          a<-paste(conjunto1(),collapse = ' ')
+          b<-paste(conjunto2(),collapse = ' ')
+          draw.pairwise.venn(length(conjunto1()),length(conjunto2()),length(intersect(conjunto1(),conjunto2())),fill=c('blue','blue'),cat.pos = 0,category = c(b,a),cat.dist = -0.06)
+        }
+        else{
         group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
                    fill = c("blue", "blue"),
                    cat.pos = c(0, 0),
                    lab.cex=1.1,file = NULL,ext = NULL)
         unlink("*.log")
+        }
       }
     }
     else if(input$ope=="Intersección"){
