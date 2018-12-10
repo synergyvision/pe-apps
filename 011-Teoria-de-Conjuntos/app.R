@@ -15,6 +15,9 @@ ensure_version("RAM","1.2.1.7")
 ensure_version("rje","1.9")
 ensure_version("futile.logger","1.4.3")
 ensure_version("grid","3.4.3")
+ensure_version("VennDiagram","1.6.20")
+
+
 
 library(shiny)
 library(shinydashboard)
@@ -28,6 +31,10 @@ library(RAM)
 library(rje)
 library(futile.logger)
 library(grid)
+library(VennDiagram)
+
+
+
 
 ui <- fluidPage(
   
