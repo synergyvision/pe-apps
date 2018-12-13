@@ -170,24 +170,24 @@ server <- function(input, output,session) {
       else if(input$ope=="Producto Cartesiano"){
         if(length(input$con)==1){
           if(input$con=='c1'){
-            a<-expand.grid(conjunto1(),conjunto1())
+            a<-expand.grid(unique(conjunto1()),unique(conjunto1()))
             colnames(a)<-c('Conjunto 1','Conjunto 1')
             return(a)
           }
           else if(input$con=='c2'){
-            a<-expand.grid(conjunto2(),conjunto2())
+            a<-expand.grid(unique(conjunto2()),unique(conjunto2()))
             colnames(a)<-c('Conjunto 2','Conjunto 2')
             return(a)
           }
         }
         else{
           if(input$pc=='Conjunto 1 X Conjunto 2'){
-          a<-expand.grid(conjunto1(),conjunto2())
+          a<-expand.grid(unique(conjunto1()),unique(conjunto2()))
           colnames(a)<-c('Conjunto 1','Conjunto 2')
           return(a)
           }
           else if(input$pc=='Conjunto 2 X Conjunto 1'){
-            a<-expand.grid(conjunto2(),conjunto1())
+            a<-expand.grid(unique(conjunto2()),unique(conjunto1()))
             colnames(a)<-c('Conjunto 2','Conjunto 1')
             return(a)
           }
@@ -196,10 +196,10 @@ server <- function(input, output,session) {
       else if(input$ope=="Potencia"){
         if(length(input$con)==1){
           if(input$con=='c1'){
-            powerSet(conjunto1())
+            powerSet(unique(conjunto1()))
           }
           else if(input$con=='c2'){
-            powerSet(conjunto2())
+            powerSet(unique(conjunto2()))
         }
       }
         else{
@@ -272,15 +272,24 @@ output$plot<-renderPlot({
         }
       }
       else{
-        if(isTRUE(all(conjunto1()%in%conjunto2()))){
-          a<-paste(conjunto1(),collapse = ' ')
-          b<-paste(conjunto2(),collapse = ' ')
-          draw.pairwise.venn(length(conjunto2()),length(conjunto1()),length(intersect(conjunto2(),conjunto1())),fill=c('blue','blue'),cat.pos = 0,category = c(a,b),cat.dist = -0.06)
+        if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==FALSE){
+          a1<-unique(conjunto1())
+          b2<-unique(conjunto2())
+          a<-paste(a1,collapse = ' ')
+          b<-paste(b2,collapse = ' ')
+          draw.pairwise.venn(length(b2),length(a1),length(intersect(b2,a1)),fill=c('blue','blue'),cat.pos = 0,category = c(b,a),cat.dist = -0.04)
         }
-        else if(isTRUE(all(conjunto2()%in%conjunto1()))){
-          a<-paste(conjunto1(),collapse = ' ')
-          b<-paste(conjunto2(),collapse = ' ')
-          draw.pairwise.venn(length(conjunto1()),length(conjunto2()),length(intersect(conjunto1(),conjunto2())),fill=c('blue','blue'),cat.pos = 0,category = c(b,a),cat.dist = -0.06)
+        else if(all(conjunto2()%in%conjunto1())==TRUE & all(conjunto1()%in%conjunto2())==FALSE){
+          a1<-unique(conjunto1())
+          b2<-unique(conjunto2())
+          a<-paste(a1,collapse = ' ')
+          b<-paste(b2,collapse = ' ')
+          draw.pairwise.venn(length(a1),length(b2),length(intersect(a1,b2)),fill=c('blue','blue'),cat.pos = 0,category = c(a,b),cat.dist = -0.04)
+        }
+        else if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==TRUE){
+          a<-union(conjunto1(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
         }
         else{
         group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
