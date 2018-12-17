@@ -223,6 +223,134 @@ server <- function(input, output,session) {
 })
  
 output$plot<-renderPlot({
+  if(is.null(input$con)){
+    return()
+  }
+  else{
+    if(input$ope=="Unión"){
+      if(length(input$con)==1){
+        if(input$con=='c1'){
+          a<-union(conjunto1(),conjunto1())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else if(input$con=='c2'){
+          a<-union(conjunto2(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+      }
+      else{
+        if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==FALSE){
+          a1<-unique(conjunto1())
+          b2<-unique(conjunto2())
+          a<-paste(a1,collapse = ' ')
+          b<-paste(setdiff(b2,a1),collapse = ' ')
+          draw.pairwise.venn(length(b2),length(a1),length(intersect(b2,a1)),fill=c('blue','blue'),cat.pos = 0,category = c(b,a),cat.dist = -0.01)
+        }
+        else if(all(conjunto2()%in%conjunto1())==TRUE & all(conjunto1()%in%conjunto2())==FALSE){
+          a1<-unique(conjunto1())
+          b2<-unique(conjunto2())
+          a<-paste(setdiff(a1,b2),collapse = ' ')
+          b<-paste(b2,collapse = ' ')
+          draw.pairwise.venn(length(a1),length(b2),length(intersect(a1,b2)),fill=c('blue','blue'),cat.pos = 0,category = c(a,b),cat.dist = -0.01)
+        }
+        else if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==TRUE){
+          a<-union(conjunto1(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else{
+        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
+                   fill = c("blue", "blue"),
+                   cat.pos = c(0, 0),
+                   lab.cex=1.1,file = NULL,ext = NULL)
+        unlink("*.log")
+        }
+      }
+    }
+    else if(input$ope=="Intersección"){
+      if(length(input$con)==1){
+        if(input$con=='c1'){
+          a<-intersect(conjunto1(),conjunto1())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else if(input$con=='c2'){
+          a<-intersect(conjunto2(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+      }
+      else{
+        if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==FALSE){
+          a1<-unique(conjunto1())
+          b2<-unique(conjunto2())
+          a<-paste(a1,collapse = ' ')
+          b<-paste(setdiff(b2,a1),collapse = ' ')
+          draw.pairwise.venn(length(b2),length(a1),length(intersect(b2,a1)),fill=c('blue','green'),cat.pos = 0,category = c(b,a),cat.dist = -0.01)
+        }
+        else if(all(conjunto2()%in%conjunto1())==TRUE & all(conjunto1()%in%conjunto2())==FALSE){
+          a1<-unique(conjunto1())
+          b2<-unique(conjunto2())
+          a<-paste(setdiff(a1,b2),collapse = ' ')
+          b<-paste(b2,collapse = ' ')
+          draw.pairwise.venn(length(a1),length(b2),length(intersect(a1,b2)),fill=c('blue','green'),cat.pos = 0,category = c(a,b),cat.dist = -0.01)
+        }
+        else if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==TRUE){
+          a<-union(conjunto1(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else{
+        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
+                   fill = c("green", "blue"),
+                   cat.pos = c(0, 0),
+                   lab.cex=1.1,file = NULL,ext = NULL)
+        unlink("*.log")
+        }
+      }
+    }
+    else if(input$ope=='Diferencia'){
+      if(length(input$con)==1){
+        if(input$con=='c1'){
+          return()
+        }
+        else if(input$con=='c2'){
+          return()
+        }
+      }
+      else{
+        if(input$dif=='Conjunto 1 - Conjunto 2'){
+        a<-setdiff(conjunto1(),conjunto2())
+        a1<-paste(a,collapse = ' ')
+        draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else if(input$dif=='Conjunto 2 - Conjunto 1'){
+        a<-setdiff(conjunto2(),conjunto1())
+        a1<-paste(a,collapse = ' ')
+        draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+      }
+    }
+    else if(input$ope=='Complemento'){
+      if(length(input$con)==1){
+        if(input$con=='c1'){
+          a<-setdiff(conjuntou(),conjunto1())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+        else if(input$con=='c2'){
+          a<-setdiff(conjuntou(),conjunto2())
+          a1<-paste(a,collapse = ' ')
+          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
+        }
+      }
+      else{
+        return()
+      }
+    }
+  }
   # if(is.null(input$con)){
   #   return(NULL)
   # }
@@ -254,74 +382,6 @@ output$plot<-renderPlot({
   #              cat.pos = c(0, 0),
   #              lab.cex=1.1,file = NULL,ext = NULL)
   # }
-  if(is.null(input$con)){
-    return()
-  }
-  else{
-    if(input$ope=="Unión"){
-      if(length(input$con)==1){
-        if(input$con=='c1'){
-          a<-union(conjunto1(),conjunto1())
-          a1<-paste(a,collapse = ' ')
-          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
-        }
-        else if(input$con=='c2'){
-          a<-union(conjunto2(),conjunto2())
-          a1<-paste(a,collapse = ' ')
-          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
-        }
-      }
-      else{
-        if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==FALSE){
-          a1<-unique(conjunto1())
-          b2<-unique(conjunto2())
-          a<-paste(a1,collapse = ' ')
-          b<-paste(b2,collapse = ' ')
-          draw.pairwise.venn(length(b2),length(a1),length(intersect(b2,a1)),fill=c('blue','blue'),cat.pos = 0,category = c(b,a),cat.dist = -0.04)
-        }
-        else if(all(conjunto2()%in%conjunto1())==TRUE & all(conjunto1()%in%conjunto2())==FALSE){
-          a1<-unique(conjunto1())
-          b2<-unique(conjunto2())
-          a<-paste(a1,collapse = ' ')
-          b<-paste(b2,collapse = ' ')
-          draw.pairwise.venn(length(a1),length(b2),length(intersect(a1,b2)),fill=c('blue','blue'),cat.pos = 0,category = c(a,b),cat.dist = -0.04)
-        }
-        else if(all(conjunto1()%in%conjunto2())==TRUE & all(conjunto2()%in%conjunto1())==TRUE){
-          a<-union(conjunto1(),conjunto2())
-          a1<-paste(a,collapse = ' ')
-          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
-        }
-        else{
-        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
-                   fill = c("blue", "blue"),
-                   cat.pos = c(0, 0),
-                   lab.cex=1.1,file = NULL,ext = NULL)
-        unlink("*.log")
-        }
-      }
-    }
-    else if(input$ope=="Intersección"){
-      if(length(input$con)==1){
-        if(input$con=='c1'){
-          a<-intersect(conjunto1(),conjunto1())
-          a1<-paste(a,collapse = ' ')
-          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
-        }
-        else if(input$con=='c2'){
-          a<-intersect(conjunto2(),conjunto2())
-          a1<-paste(a,collapse = ' ')
-          draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
-        }
-      }
-      else{
-        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
-                   fill = c("green", "blue"),
-                   cat.pos = c(0, 0),
-                   lab.cex=1.1,file = NULL,ext = NULL)
-        unlink("*.log")
-      }
-    }
-  }
 })
 
 }
