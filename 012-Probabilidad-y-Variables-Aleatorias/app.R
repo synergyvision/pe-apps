@@ -44,6 +44,8 @@ ui <- fluidPage(
         column(width=12,imageOutput('imagen1'),style="text-align: center;")),
         conditionalPanel(condition = "input.monedas=='2'",column(width=6,imageOutput('imagen2')),
                          column(width=6,imageOutput('imagen3'))),
+        conditionalPanel(condition = "input.monedas=='3'",column(width=4,imageOutput('imagen4')),
+                         column(width=4,imageOutput('imagen5')),column(width=4,imageOutput('imagen6'))),
       verbatimTextOutput('hola'))
     )
   )
@@ -80,6 +82,36 @@ server <- function(input, output,session) {
       list(src='www/img/moneda2.jpg',height=200,width=200)
     }
   },deleteFile = FALSE)
+  
+  
+  output$imagen4<-renderImage({
+    if(prueba()[1]==1){
+      list(src='www/img/moneda1.jpg',height=200,width=200)
+    } else if(prueba()[1]==0){
+      list(src='www/img/moneda2.jpg',height=200,width=200)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen5<-renderImage({
+    if(prueba()[2]==1){
+      list(src='www/img/moneda1.jpg',height=200,width=200)
+    } else if(prueba()[2]==0){
+      list(src='www/img/moneda2.jpg',height=200,width=200)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen6<-renderImage({
+    if(prueba()[3]==1){
+      list(src='www/img/moneda1.jpg',height=200,width=200)
+    } else if(prueba()[3]==0){
+      list(src='www/img/moneda2.jpg',height=200,width=200)
+    }
+  },deleteFile = FALSE)
+  
+  
+  
+  
   
    output$hola<-renderPrint({
      return(prueba())
