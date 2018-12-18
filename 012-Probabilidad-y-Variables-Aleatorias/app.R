@@ -32,6 +32,7 @@ ui <- fluidPage(
   sidebarLayout(
     
     sidebarPanel(
+      radioButtons(inputId = 'monedas',label = HTML('Seleccione la cantidad <br/>de monedas a lanzar'),choices = c('1','2','3','4','5'),selected = '1'),
       numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de salir cara'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
       actionButton(inputId = 'boton',label='GO!')
       ),
