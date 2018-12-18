@@ -32,7 +32,8 @@ ui <- fluidPage(
   sidebarLayout(
     
     sidebarPanel(
-      actionButton('boton','GO!')
+      numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de que salga cara'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+      actionButton(inputId = 'boton',label='GO!')
       ),
 
     mainPanel(
@@ -48,7 +49,7 @@ ui <- fluidPage(
 
 server <- function(input, output,session) {
   prueba<-eventReactive(input$boton,{
-    rbinom(1,1,0.5)
+    rbinom(1,1,input$proba)
   })
   
   output$imagen<-renderImage({
