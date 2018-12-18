@@ -32,7 +32,7 @@ ui <- fluidPage(
   sidebarLayout(
     
     sidebarPanel(
-      numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de que salga cara'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+      numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de salir cara'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
       actionButton(inputId = 'boton',label='GO!')
       ),
 
