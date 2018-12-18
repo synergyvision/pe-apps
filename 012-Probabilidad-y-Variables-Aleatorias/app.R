@@ -40,7 +40,10 @@ ui <- fluidPage(
     mainPanel(
       
       fluidRow(
-        column(width=12,imageOutput('imagen'),style="text-align: center;"),
+        conditionalPanel(condition = "input.monedas=='1'",
+        column(width=12,imageOutput('imagen1'),style="text-align: center;")),
+        conditionalPanel(condition = "input.monedas=='2'",column(width=6,imageOutput('imagen2')),
+                         column(width=6,imageOutput('imagen3'))),
       verbatimTextOutput('hola'))
     )
   )
@@ -50,17 +53,34 @@ ui <- fluidPage(
 
 server <- function(input, output,session) {
   prueba<-eventReactive(input$boton,{
-    rbinom(1,1,input$proba)
+    rbinom(as.numeric(input$monedas),1,input$proba)
   })
   
-  output$imagen<-renderImage({
-    if(prueba()==1){
-    list(src='www/img/moneda1.jpg',height=200,width=200)
-    } else{
+  output$imagen1<-renderImage({
+      if(prueba()==1){
+      list(src='www/img/moneda1.jpg',height=200,width=200)
+      } else{
       list(src='www/img/moneda2.jpg',height=200,width=200)
       }
   },deleteFile = FALSE)
+  
 
+  output$imagen2<-renderImage({
+    if(prueba()[1]==1){
+      list(src='www/img/moneda1.jpg',height=200,width=200)
+    } else if(prueba()[1]==0){
+      list(src='www/img/moneda2.jpg',height=200,width=200)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen3<-renderImage({
+    if(prueba()[2]==1){
+      list(src='www/img/moneda1.jpg',height=200,width=200)
+    } else if(prueba()[2]==0){
+      list(src='www/img/moneda2.jpg',height=200,width=200)
+    }
+  },deleteFile = FALSE)
+  
    output$hola<-renderPrint({
      return(prueba())
    })
