@@ -37,8 +37,9 @@ ui <- fluidPage(
 
     mainPanel(
       
-      #imageOutput('imagen')
-      verbatimTextOutput('hola')
+      fluidRow(
+        column(width=12,imageOutput('imagen'),style="text-align: center;"),
+      verbatimTextOutput('hola'))
     )
   )
 )
@@ -50,11 +51,17 @@ server <- function(input, output,session) {
     rbinom(1,1,0.5)
   })
   
-  output$hola<-renderPrint({
-    return(prueba())
-  })
+  output$imagen<-renderImage({
+    if(prueba()==1){
+    list(src='www/img/moneda1.jpg',height=200,width=200)
+    } else{
+      list(src='www/img/moneda2.jpg',height=200,width=200)
+      }
+  },deleteFile = FALSE)
 
-  
+   output$hola<-renderPrint({
+     return(prueba())
+   })
   }
 
 
