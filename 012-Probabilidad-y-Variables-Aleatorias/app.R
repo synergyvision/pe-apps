@@ -32,7 +32,7 @@ ui <- fluidPage(
   sidebarLayout(
     
     sidebarPanel(
-      radioButtons(inputId = 'monedas',label = HTML('Seleccione la cantidad <br/>de monedas a lanzar'),choices = c('1','2','3','4','5'),selected = '1'),
+      radioButtons(inputId = 'monedas',label = HTML('Seleccione la cantidad <br/>de monedas a lanzar'),choices = c('1','2','3','4','5','6','7','8','9','10'),selected = '1'),
       numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de salir cara'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
       actionButton(inputId = 'boton',label='GO!')
       ),
@@ -49,6 +49,13 @@ ui <- fluidPage(
         conditionalPanel(condition = "input.monedas=='4'",column(width=5,offset = 1,imageOutput('imagen7',height = "200px")),
                          column(width=5,offset = 1,imageOutput('imagen8',height = "200px")),column(width=5,offset = 1,imageOutput('imagen9',height = "200px")),
                          column(width=5,offset = 1,imageOutput('imagen10',height = "200px"))),
+        conditionalPanel(condition = "input.monedas=='5'",column(width=4,imageOutput('imagen11',height = "200px")),
+                         column(width=4,imageOutput('imagen12',height = "200px")),column(width=4,imageOutput('imagen13',height = "200px")),
+                         column(width=5,offset = 1,imageOutput('imagen14',height = "200px")),column(width=5,offset = 1,imageOutput('imagen15',height = "200px"))),
+        conditionalPanel(condition = "input.monedas=='6'",column(width=4,imageOutput('imagen16',height = "200px")),
+                         column(width=4,imageOutput('imagen17',height = "200px")),column(width=4,imageOutput('imagen18',height = "200px")),
+                         column(width=4,imageOutput('imagen19',height = "200px")),column(width=4,imageOutput('imagen20',height = "200px")),
+                         column(width=4,imageOutput('imagen21',height = "200px"))),
       verbatimTextOutput('hola'))
     )
   )
@@ -144,6 +151,103 @@ server <- function(input, output,session) {
     if(prueba()[4]==1){
       list(src='www/img/moneda1.jpg',height=150,width=150)
     } else if(prueba()[4]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  # 5 lanzamientos
+  
+  output$imagen11<-renderImage({
+    if(prueba()[1]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[1]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen12<-renderImage({
+    if(prueba()[2]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[2]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen13<-renderImage({
+    if(prueba()[3]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[3]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen14<-renderImage({
+    if(prueba()[4]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[4]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen15<-renderImage({
+    if(prueba()[5]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[5]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  # 6 lanzamiento
+  
+  output$imagen16<-renderImage({
+    if(prueba()[1]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[1]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen17<-renderImage({
+    if(prueba()[2]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[2]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen18<-renderImage({
+    if(prueba()[3]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[3]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen19<-renderImage({
+    if(prueba()[4]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[4]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen20<-renderImage({
+    if(prueba()[5]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[5]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen21<-renderImage({
+    if(prueba()[6]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[6]==0){
       list(src='www/img/moneda2.jpg',height=150,width=150)
     }
   },deleteFile = FALSE)
