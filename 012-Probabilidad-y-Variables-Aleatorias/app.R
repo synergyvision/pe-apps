@@ -51,12 +51,21 @@ ui <- fluidPage(
                          column(width=5,offset = 1,imageOutput('imagen10',height = "200px"))),
         conditionalPanel(condition = "input.monedas=='5'",column(width=4,imageOutput('imagen11',height = "200px")),
                          column(width=4,imageOutput('imagen12',height = "200px")),column(width=4,imageOutput('imagen13',height = "200px")),
-                         column(width=5,offset = 1,imageOutput('imagen14',height = "200px")),column(width=5,offset = 1,imageOutput('imagen15',height = "200px"))),
+                         column(width=4,offset = 2,imageOutput('imagen14',height = "200px")),column(width=5,imageOutput('imagen15',height = "200px"))),
         conditionalPanel(condition = "input.monedas=='6'",column(width=4,imageOutput('imagen16',height = "200px")),
                          column(width=4,imageOutput('imagen17',height = "200px")),column(width=4,imageOutput('imagen18',height = "200px")),
                          column(width=4,imageOutput('imagen19',height = "200px")),column(width=4,imageOutput('imagen20',height = "200px")),
                          column(width=4,imageOutput('imagen21',height = "200px"))),
-      verbatimTextOutput('hola'))
+        conditionalPanel(condition = "input.monedas=='7'",column(width=3,imageOutput('imagen22',height = "200px")),
+                         column(width=3,imageOutput('imagen23',height = "200px")),column(width=3,imageOutput('imagen24',height = "200px")),
+                         column(width=3,imageOutput('imagen25',height = "200px")),column(width=2,offset = 2,imageOutput('imagen26',height = "200px")),
+                         column(width=3,offset=1,imageOutput('imagen27',height = "200px")),column(width=4,imageOutput('imagen28',height = "200px"))),
+        conditionalPanel(condition = "input.monedas=='8'",column(width=3,imageOutput('imagen29',height = "200px")),
+                         column(width=3,imageOutput('imagen30',height = "200px")),column(width=3,imageOutput('imagen31',height = "200px")),
+                         column(width=3,imageOutput('imagen32',height = "200px")),column(width=3,imageOutput('imagen33',height = "200px")),
+                         column(width=3,imageOutput('imagen34',height = "200px")),column(width=3,imageOutput('imagen35',height = "200px")),
+                         column(width=3,imageOutput('imagen36',height = "200px")))),
+      fluidRow(verbatimTextOutput('hola'))
     )
   )
 )
@@ -252,6 +261,135 @@ server <- function(input, output,session) {
     }
   },deleteFile = FALSE)
   
+  # 7 lanzamiento
+  
+  output$imagen22<-renderImage({
+    if(prueba()[1]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[1]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen23<-renderImage({
+    if(prueba()[2]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[2]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen24<-renderImage({
+    if(prueba()[3]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[3]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen25<-renderImage({
+    if(prueba()[4]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[4]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen26<-renderImage({
+    if(prueba()[5]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[5]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen27<-renderImage({
+    if(prueba()[6]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[6]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen28<-renderImage({
+    if(prueba()[7]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[7]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  # 8 lanzamiento
+  
+  output$imagen29<-renderImage({
+    if(prueba()[1]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[1]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen30<-renderImage({
+    if(prueba()[2]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[2]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen31<-renderImage({
+    if(prueba()[3]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[3]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen32<-renderImage({
+    if(prueba()[4]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[4]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen33<-renderImage({
+    if(prueba()[5]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[5]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  
+  output$imagen34<-renderImage({
+    if(prueba()[6]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[6]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen35<-renderImage({
+    if(prueba()[7]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[7]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
+  
+  output$imagen36<-renderImage({
+    if(prueba()[8]==1){
+      list(src='www/img/moneda1.jpg',height=150,width=150)
+    } else if(prueba()[8]==0){
+      list(src='www/img/moneda2.jpg',height=150,width=150)
+    }
+  },deleteFile = FALSE)
   
    output$hola<-renderPrint({
      return(prueba())
