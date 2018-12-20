@@ -67,18 +67,21 @@ ui <- fluidPage(
                          column(width=3,imageOutput('imagen36',height = "200px"))),
       conditionalPanel(condition = "input.monedas=='9'",column(width=2,imageOutput('imagen37',height = "200px")),
                        column(width=2,imageOutput('imagen38',height = "200px")),column(width=2,imageOutput('imagen39',height = "200px")),
-                       column(width=2,imageOutput('imagen40',height = "200px")),column(width=2,imageOutput('imagen41',height = "200px")),
-                       column(width=3,imageOutput('imagen42',height = "200px")),column(width=3,imageOutput('imagen43',height = "200px")),
-                       column(width=3,imageOutput('imagen44',height = "200px")),column(width=3,imageOutput('imagen45',height = "200px"))),
+                       column(width=2,imageOutput('imagen40',height = "200px")),column(width=3,imageOutput('imagen41',height = "200px")),
+                       column(width=2,offset=1,imageOutput('imagen42',height = "200px")),column(width=2,imageOutput('imagen43',height = "200px")),
+                       column(width=2,imageOutput('imagen44',height = "200px")),column(width=3,imageOutput('imagen45',height = "200px"))),
       conditionalPanel(condition = "input.monedas=='10'",column(width=2,imageOutput('imagen46',height = "200px")),
                        column(width=2,imageOutput('imagen47',height = "200px")),column(width=2,imageOutput('imagen48',height = "200px")),
-                       column(width=2,imageOutput('imagen49',height = "200px")),column(width=2,imageOutput('imagen50',height = "200px")),
-                       column(width=2,offset=1,imageOutput('imagen51',height = "200px")),column(width=2,imageOutput('imagen52',height = "200px")),
+                       column(width=2,imageOutput('imagen49',height = "200px")),column(width=3,imageOutput('imagen50',height = "200px")),
+                       column(width=2,imageOutput('imagen51',height = "200px")),column(width=2,imageOutput('imagen52',height = "200px")),
                        column(width=2,imageOutput('imagen53',height = "200px")),column(width=2,imageOutput('imagen54',height = "200px")),
-                       column(width=2,imageOutput('imagen55',height = "200px")))),
+                       column(width=3,imageOutput('imagen55',height = "200px")))),
       
       
-      fluidRow(verbatimTextOutput('hola'))
+      fluidRow(verbatimTextOutput('hola')),
+      hr(),
+      h3('Cantidad de caras:'),
+      fluidRow(verbatimTextOutput('ncaras'))
     )
   )
 )
@@ -571,6 +574,9 @@ server <- function(input, output,session) {
   
    output$hola<-renderPrint({
      return(prueba())
+   })
+   output$ncaras<-renderPrint({
+     sum(prueba())
    })
   }
 
