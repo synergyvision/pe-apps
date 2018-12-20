@@ -1,1 +1,0 @@
-Ésta es una aplicación que demuestra cómo podemos interactuar con las operaciones básicas de conjuntos manipulando el origen de éstos, también se pueden visualizar éstas operaciones con un diagrama de Venn.
