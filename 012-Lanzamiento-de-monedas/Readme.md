@@ -1,1 +1,1 @@
-Ésta es una aplicación que demuestra cómo podemos interactuar con las operaciones básicas de conjuntos manipulando el origen de éstos, también se pueden visualizar éstas operaciones con un diagrama de Venn.
+Ésta es una aplicación que demuestra cómo podemos interactuar con el lanzamiento de una moneda manipulando el número de lanzamiento y la probabilidad de salir cara.
