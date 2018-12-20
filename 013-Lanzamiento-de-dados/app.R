@@ -42,8 +42,8 @@ ui <- fluidPage(
       fluidRow(
         conditionalPanel(condition = "input.dados=='1'",
         column(width=12,imageOutput('imagen1',height = "300px"),style="text-align: center;"))),
-      #   conditionalPanel(condition = "input.monedas=='2'",column(width=6,imageOutput('imagen2',height = "300px")),
-      #                    column(width=6,imageOutput('imagen3',height = "300px"))),
+        conditionalPanel(condition = "input.dados=='2'",column(width=6,imageOutput('imagen2',height = "300px")),
+                         column(width=6,imageOutput('imagen3',height = "300px"))),
       #   conditionalPanel(condition = "input.monedas=='3'",column(width=4,imageOutput('imagen4',height = "300px")),
       #                    column(width=4,imageOutput('imagen5',height = "300px")),column(width=4,imageOutput('imagen6',height = "300px"))),
       #   conditionalPanel(condition = "input.monedas=='4'",column(width=5,offset = 1,imageOutput('imagen7',height = "200px")),
@@ -88,7 +88,7 @@ ui <- fluidPage(
 server <- function(input, output,session) {
   prueba<-eventReactive(input$boton,{
     # rbinom(as.numeric(input$monedas),1,input$proba)
-    sample(1:6,as.numeric(input$dados),prob = rep(1/6,6))
+    sample(1:6,as.numeric(input$dados),replace = TRUE,prob = rep(1/6,6))
   })
   
   #1 lanzamiento
@@ -108,23 +108,42 @@ server <- function(input, output,session) {
       }
   },deleteFile = FALSE)
   
-  # # 2 lanzamiento
-  # output$imagen2<-renderImage({
-  #   if(prueba()[1]==1){
-  #     list(src='www/img/moneda1.jpg',height=200,width=200)
-  #   } else if(prueba()[1]==0){
-  #     list(src='www/img/moneda2.jpg',height=200,width=200)
-  #   }
-  # },deleteFile = FALSE)
-  # 
-  # output$imagen3<-renderImage({
-  #   if(prueba()[2]==1){
-  #     list(src='www/img/moneda1.jpg',height=200,width=200)
-  #   } else if(prueba()[2]==0){
-  #     list(src='www/img/moneda2.jpg',height=200,width=200)
-  #   }
-  # },deleteFile = FALSE)
-  # 
+  # 2 lanzamiento
+  output$imagen2<-renderImage({
+    if(prueba()[1]==1){
+      list(src='www/img/dado1.png',height=200,width=200)
+    } else if(prueba()[1]==2){
+      list(src='www/img/dado2.png',height=200,width=200)
+    } else if(prueba()[1]==3){
+      list(src='www/img/dado3.png',height=200,width=200)
+    } else if(prueba()[1]==4){
+      list(src='www/img/dado4.png',height=200,width=200)
+    } else if(prueba()[1]==5){
+      list(src='www/img/dado5.png',height=200,width=200)
+    } else if(prueba()[1]==6){
+      list(src='www/img/dado6.png',height=200,width=200)
+    }
+  },deleteFile = FALSE)
+
+  output$imagen3<-renderImage({
+    if(is.na(prueba()[2])==TRUE){
+      list(src='')
+    }
+      else if(prueba()[2]==1){
+      list(src='www/img/dado1.png',height=200,width=200)
+    } else if(prueba()[2]==2){
+      list(src='www/img/dado2.png',height=200,width=200)
+    } else if(prueba()[2]==3){
+      list(src='www/img/dado3.png',height=200,width=200)
+    } else if(prueba()[2]==4){
+      list(src='www/img/dado4.png',height=200,width=200)
+    } else if(prueba()[2]==5){
+      list(src='www/img/dado5.png',height=200,width=200)
+    } else if(prueba()[2]==6){
+      list(src='www/img/dado6.png',height=200,width=200)
+    }
+  },deleteFile = FALSE)
+
   # # 3 lanzamientos
   # output$imagen4<-renderImage({
   #   if(prueba()[1]==1){
