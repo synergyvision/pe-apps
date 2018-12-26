@@ -36,8 +36,8 @@ ui <- fluidPage(
 
     mainPanel(
       withMathJax(),
-      conditionalPanel(condition = "input.distribucion=='Poisson'",h1(HTML("$$\\alpha+\\beta$$")))
-     
+      conditionalPanel(condition = "input.distribucion=='Poisson'",h1(HTML("$$\\alpha+\\beta$$"))),
+      conditionalPanel(condition = "input.distribucion=='Binomial'",h1(HTML("$$\\alpha^2$$")))
     )
   )
 )
