@@ -67,15 +67,15 @@ ui <- fluidPage(
                          column(width=3,imageOutput('imagen36',height = "200px"))),
       conditionalPanel(condition = "input.dados=='9'",column(width=2,imageOutput('imagen37',height = "200px")),
                        column(width=2,imageOutput('imagen38',height = "200px")),column(width=2,imageOutput('imagen39',height = "200px")),
-                       column(width=2,imageOutput('imagen40',height = "200px")),column(width=2,imageOutput('imagen41',height = "200px")),
-                       column(width=3,imageOutput('imagen42',height = "200px")),column(width=3,imageOutput('imagen43',height = "200px")),
-                       column(width=3,imageOutput('imagen44',height = "200px")),column(width=3,imageOutput('imagen45',height = "200px")))),
-      # conditionalPanel(condition = "input.monedas=='10'",column(width=2,imageOutput('imagen46',height = "200px")),
-      #                  column(width=2,imageOutput('imagen47',height = "200px")),column(width=2,imageOutput('imagen48',height = "200px")),
-      #                  column(width=2,imageOutput('imagen49',height = "200px")),column(width=2,imageOutput('imagen50',height = "200px")),
-      #                  column(width=2,offset=1,imageOutput('imagen51',height = "200px")),column(width=2,imageOutput('imagen52',height = "200px")),
-      #                  column(width=2,imageOutput('imagen53',height = "200px")),column(width=2,imageOutput('imagen54',height = "200px")),
-      #                  column(width=2,imageOutput('imagen55',height = "200px")))),
+                       column(width=2,imageOutput('imagen40',height = "200px")),column(width=3,imageOutput('imagen41',height = "200px")),
+                       column(width=2,offset = 1,imageOutput('imagen42',height = "200px")),column(width=2,imageOutput('imagen43',height = "200px")),
+                       column(width=2,imageOutput('imagen44',height = "200px")),column(width=3,imageOutput('imagen45',height = "200px"))),
+      conditionalPanel(condition = "input.dados=='10'",column(width=2,imageOutput('imagen46',height = "200px")),
+                       column(width=2,imageOutput('imagen47',height = "200px")),column(width=2,imageOutput('imagen48',height = "200px")),
+                       column(width=2,imageOutput('imagen49',height = "200px")),column(width=3,imageOutput('imagen50',height = "200px")),
+                       column(width=2,imageOutput('imagen51',height = "200px")),column(width=2,imageOutput('imagen52',height = "200px")),
+                       column(width=2,imageOutput('imagen53',height = "200px")),column(width=2,imageOutput('imagen54',height = "200px")),
+                       column(width=3,imageOutput('imagen55',height = "200px")))),
       # 
       # 
       fluidRow(verbatimTextOutput('hola'))
@@ -845,7 +845,6 @@ server <- function(input, output,session) {
      if(is.na(prueba()[4])==TRUE){
        list(src='')
      }
-     
      else if(prueba()[4]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[4]==2){
@@ -954,6 +953,198 @@ server <- function(input, output,session) {
      } else if(prueba()[9]==5){
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[9]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   # 10 lanzamiento
+   
+   output$imagen46<-renderImage({
+     if(prueba()[1]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[1]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[1]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[1]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[1]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[1]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     } 
+   },deleteFile = FALSE)
+   
+   
+   output$imagen47<-renderImage({
+     if(is.na(prueba()[2])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[2]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[2]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[2]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[2]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[2]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[2]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     } 
+   },deleteFile = FALSE)
+   
+   output$imagen48<-renderImage({
+     if(is.na(prueba()[3])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[3]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[3]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[3]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[3]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[3]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[3]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   output$imagen49<-renderImage({
+     if(is.na(prueba()[4])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[4]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[4]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[4]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[4]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[4]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[4]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   
+   output$imagen50<-renderImage({
+     if(is.na(prueba()[5])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[5]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[5]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[5]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[5]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[5]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[5]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   
+   output$imagen51<-renderImage({
+     if(is.na(prueba()[6])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[6]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[6]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[6]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[6]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[6]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[6]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   output$imagen52<-renderImage({
+     if(is.na(prueba()[7])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[7]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[7]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[7]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[7]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[7]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[7]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   output$imagen53<-renderImage({
+     if(is.na(prueba()[8])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[8]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[8]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[8]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[8]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[8]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[8]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   output$imagen54<-renderImage({
+     if(is.na(prueba()[9])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[9]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[9]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[9]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[9]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[9]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[9]==6){
+       list(src='www/img/dado6.png',height=150,width=150)
+     }
+   },deleteFile = FALSE)
+   
+   output$imagen55<-renderImage({
+     if(is.na(prueba()[10])==TRUE){
+       list(src='')
+     }
+     else if(prueba()[10]==1){
+       list(src='www/img/dado1.png',height=150,width=150)
+     } else if(prueba()[10]==2){
+       list(src='www/img/dado2.png',height=150,width=150)
+     } else if(prueba()[10]==3){
+       list(src='www/img/dado3.png',height=150,width=150)
+     } else if(prueba()[10]==4){
+       list(src='www/img/dado4.png',height=150,width=150)
+     } else if(prueba()[10]==5){
+       list(src='www/img/dado5.png',height=150,width=150)
+     } else if(prueba()[10]==6){
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
