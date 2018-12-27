@@ -3,13 +3,13 @@ ensure_version <- function(pkg, ver = "0.0") {
     install.packages(pkg)
 }
 
-ensure_version("shiny", "1.1.0")
-ensure_version("readxl", "1.1.0")
-ensure_version("shinydasboard", "0.7.0")
-ensure_version("psych", "1.8.4")
-ensure_version("modeest", "2.1")
+ensure_version("shiny", "1.2.0")
+ensure_version("readxl", "1.2.0")
+ensure_version("shinydasboard", "0.7.1")
+ensure_version("psych", "1.8.10")
+#ensure_version("modeest", "2.3.2")
 ensure_version("matrixStats", "0.54.0")
-ensure_version("ggplot2","3.0.0")
+ensure_version("ggplot2","3.1.0")
 
 
 
@@ -18,7 +18,7 @@ library(shiny)
 library(shinydashboard)
 library(readxl)
 library(psych)
-library(modeest)
+#library(modeest)
 library(matrixStats)
 library(ggplot2)
 
@@ -31,12 +31,13 @@ ui <- fluidPage(
   sidebarLayout(
     
     sidebarPanel(
+      
       selectInput(inputId = 'distribucion',label = HTML('Seleccione la distribución deseada'),choices = c('Bernoulli','Binomial','Geométrica','Hipergeométrica','Multinomial','Poisson','Binomial negativa'),selected = NULL)
       ),
 
     mainPanel(
-      withMathJax(),
-      conditionalPanel(condition = "input.distribucion=='Poisson'",h1(HTML("$$\\alpha+\\beta$$"))),
+     withMathJax(),
+      conditionalPanel(condition = "input.distribucion=='Poisson'",h1(HTML('$$\\alpha+\\beta$$'))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",h1(HTML("$$\\alpha^2$$")))
     )
   )
