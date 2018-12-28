@@ -36,12 +36,9 @@ ui <- fluidPage(
       ),
 
     mainPanel(
-<<<<<<< HEAD
-      
-=======
->>>>>>> 81ebaa7477c203a0ee0f8ac9064d3ac1b70cd9f5
+
       withMathJax(),
-      conditionalPanel(condition = "input.distribucion=='Bernoulli'",h1(HTML("$$\\alpha$$"))),
+       conditionalPanel(condition = "input.distribucion=='Bernoulli'",includeMarkdown("bernoulli.Rmd")),
       conditionalPanel(condition = "input.distribucion=='Binomial'",fluidRow(h1(HTML("$$\\alpha^2$$"))),
                        h3('Funcion de densidad'),fluidRow(h1(HTML("$$f(x)=x$$")))),
       conditionalPanel(condition = "input.distribucion=='Geométrica'",h1(HTML("$$\\alpha+\\epsilon$$"))),

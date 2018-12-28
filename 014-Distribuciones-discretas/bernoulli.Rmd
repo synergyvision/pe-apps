@@ -1,0 +1,30 @@
+## Función de Densidad
+
+$$
+f(x)=p(X=x)=p^x(1-p)^{1-x}
+$$
+
+
+## Función de Distribución
+
+$$
+ F(x) = \left\{
+	       \begin{array}{ll}
+		 0      & \mathrm{si\ } x < 0 \\
+		 q & \mathrm{si\ } 0 \le x \le 1 \\
+		 1     & \mathrm{si\ }  x \ge 1
+	       \end{array}
+	     \right.
+$$
+
+## Media
+
+$$
+E[X]=p
+$$
+
+## Varianza
+
+$$
+Var[X]=p(1-p)
+$$
