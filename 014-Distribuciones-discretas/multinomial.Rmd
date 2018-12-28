@@ -1,0 +1,24 @@
+## Función de Densidad
+
+$$
+f(x_1,x_2,x_3,...x_r)= \frac{n!}{x_1!x_2!...x_r!}p_1^{x_1}p_2^{x_2}...p_r^{x_r}
+$$
+
+
+## Función de Distribución
+
+$$
+ F(x) = p(X \le x)
+$$
+
+## Media
+
+$$
+E[X_i]= np_i
+$$
+
+## Varianza
+
+$$
+Var[X_i]=np_i(1-p_i)
+$$
