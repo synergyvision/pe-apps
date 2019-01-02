@@ -46,8 +46,8 @@ ui <- fluidPage(
                        h3('Media'),fluidRow(h1(HTML("$$\\mathbb{E[x]}=\\displaystyle \\frac{1}{p}$$")))),
       conditionalPanel(condition = "input.distribucion=='Hipergeométrica'",includeMarkdown("hipergeometrica.Rmd")),
       conditionalPanel(condition = "input.distribucion=='Multinomial'",includeMarkdown("multinomial.Rmd")),
-      conditionalPanel(condition = "input.distribucion=='Poisson'",h1(HTML("$$\\alpha+\\beta$$"))),
-      conditionalPanel(condition = "input.distribucion=='Binomial negativa'",h1(HTML("$$\\alpha^2+\\beta$$")))
+      conditionalPanel(condition = "input.distribucion=='Poisson'",includeMarkdown("poisson.Rmd")),
+      conditionalPanel(condition = "input.distribucion=='Binomial negativa'",includeMarkdown("binonegativa.Rmd"))
     )
   )
 )

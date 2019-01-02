@@ -1,0 +1,25 @@
+## Función de Densidad
+
+$$
+f(x) = p(X=x)= {x-1\choose k-1}(1-p)^{x-k}p^k
+$$
+
+
+## Función de Distribución
+
+$$
+ F(x) = p(X \le x)
+$$
+
+## Media
+
+$$
+E[X]= \frac{k(1-p)}{p}
+$$
+
+## Varianza
+
+$$
+Var[X]=\frac{k(1-p)}{p^2}
+$$
+
