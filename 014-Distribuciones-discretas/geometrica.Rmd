@@ -1,0 +1,24 @@
+## Función de Densidad
+
+$$
+f(x)=(1-p)^{x-1} p
+$$
+
+
+## Función de Distribución
+
+$$
+F(x) = 1- (1-p)^{x+1}
+$$
+
+## Media
+
+$$
+\mathbb{E[\mathcal{X}]}=\displaystyle \frac{1}{p}
+$$
+
+## Varianza
+
+$$
+\mathbb{V}[\mathcal{X}] = \displaystyle \frac{1-p}{p^2}
+$$

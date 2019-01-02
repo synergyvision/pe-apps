@@ -1,0 +1,24 @@
+## Función de Densidad
+
+$$
+f(x)={n \choose x}p^x(1-p)^{n-x}
+$$
+
+
+## Función de Distribución
+
+$$
+F(x) = p(X \leq x)
+$$
+
+## Media
+
+$$
+\mathbb{E[\mathcal{X}]}=np
+$$
+
+## Varianza
+
+$$
+\mathbb{V}[\mathcal{X}] = np(1-p)
+$$
