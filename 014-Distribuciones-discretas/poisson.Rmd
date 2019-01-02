@@ -1,0 +1,25 @@
+## Función de Densidad
+
+$$
+f(x)= \frac{\lambda^x}{x!}e^{-\lambda}
+$$
+
+
+## Función de Distribución
+
+$$
+ F(x) = p(X \le x)
+$$
+
+## Media
+
+$$
+E[X]= \lambda
+$$
+
+## Varianza
+
+$$
+Var[X]=\lambda
+$$
+
