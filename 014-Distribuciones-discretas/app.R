@@ -37,19 +37,21 @@ ui <- fluidPage(
 
       withMathJax(),
       conditionalPanel(condition = "input.distribucion=='Bernoulli'",tabsetPanel(type = "pills", id="pri",tabPanel('Características',includeMarkdown("bernoulli.Rmd")),
-                                                                                 tabPanel('Cálculos',br(),br(),"prueba"))),
+                                                                                 tabPanel('Cálculos',br(),br(),selectInput(inputId = 'ber',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)
+                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
-                                                                                tabPanel('Cálculos',br(),br(),"prueba"))),
+                                                                                tabPanel('Cálculos',br(),br(),selectInput(inputId = 'bin',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)
+                                                                                ))),
       conditionalPanel(condition = "input.distribucion=='Geométrica'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeMarkdown("geometrica.Rmd")),
-                                                                                  tabPanel('Cálculos',br(),br(),"prueba"))),
+                                                                                  tabPanel('Cálculos',br(),br(),selectInput(inputId = 'geo',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
       conditionalPanel(condition = "input.distribucion=='Hipergeométrica'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeMarkdown("hipergeometrica.Rmd")),
-                                                                                       tabPanel('Cálculos',br(),br(),"prueba"))),
+                                                                                       tabPanel('Cálculos',br(),br(),selectInput(inputId = 'hip',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
       conditionalPanel(condition = "input.distribucion=='Multinomial'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeMarkdown("multinomial.Rmd")),
-                                                                                   tabPanel('Cálculos',br(),br(),"prueba"))),
+                                                                                   tabPanel('Cálculos',br(),br(),selectInput(inputId = 'mult',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
       conditionalPanel(condition = "input.distribucion=='Poisson'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeMarkdown("poisson.Rmd")),
-                                                                               tabPanel('Cálculos',br(),br(),"prueba"))),
+                                                                               tabPanel('Cálculos',br(),br(),selectInput(inputId = 'poi',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
       conditionalPanel(condition = "input.distribucion=='Binomial negativa'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeMarkdown("binonegativa.Rmd")),
-                                                                                         tabPanel('Cálculos',br(),br(),"prueba")))
+                                                                                         tabPanel('Cálculos',br(),br(),selectInput(inputId = 'binega',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL))))
     )
   )
 )
