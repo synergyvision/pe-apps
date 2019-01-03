@@ -36,7 +36,8 @@ ui <- fluidPage(
     mainPanel(
 
       withMathJax(),
-       conditionalPanel(condition = "input.distribucion=='Bernoulli'",includeMarkdown("bernoulli.Rmd")),
+      conditionalPanel(condition = "input.distribucion=='Bernoulli'",tabBox(width = 12,title = "",id="tab1",tabPanel('Características de la distribución',includeMarkdown("bernoulli.Rmd")),
+                                                                            tabPanel('Cálculo función de densidad por rango',br(),br(),"prueba"))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",includeMarkdown("binomial.Rmd")),
       conditionalPanel(condition = "input.distribucion=='Geométrica'",includeMarkdown("geometrica.Rmd")),
       conditionalPanel(condition = "input.distribucion=='Hipergeométrica'",includeMarkdown("hipergeometrica.Rmd")),
