@@ -36,20 +36,20 @@ ui <- fluidPage(
     mainPanel(
 
       withMathJax(),
-      conditionalPanel(condition = "input.distribucion=='Bernoulli'",tabBox(width = 12,title = "",id="tab1",tabPanel('Características',includeMarkdown("bernoulli.Rmd")),
-                                                                            tabPanel('Cálculos',br(),br(),"prueba"))),
-      conditionalPanel(condition = "input.distribucion=='Binomial'",tabBox(width=12,title="",id="tab2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
-                       tabPanel('Cálculos',br(),br(),"prueba"))),
-      conditionalPanel(condition = "input.distribucion=='Geométrica'",tabBox(width=12,title="",id="tab3",tabPanel("Características",includeMarkdown("geometrica.Rmd")),
-                                                                             tabPanel('Cálculos',br(),br(),"prueba"))),
-      conditionalPanel(condition = "input.distribucion=='Hipergeométrica'",tabBox(width=12,title="",id="tab4",tabPanel("Características",includeMarkdown("hipergeometrica.Rmd")),
+      conditionalPanel(condition = "input.distribucion=='Bernoulli'",tabsetPanel(type = "pills", id="pri",tabPanel('Características',includeMarkdown("bernoulli.Rmd")),
+                                                                                 tabPanel('Cálculos',br(),br(),"prueba"))),
+      conditionalPanel(condition = "input.distribucion=='Binomial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
+                                                                                tabPanel('Cálculos',br(),br(),"prueba"))),
+      conditionalPanel(condition = "input.distribucion=='Geométrica'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeMarkdown("geometrica.Rmd")),
                                                                                   tabPanel('Cálculos',br(),br(),"prueba"))),
-      conditionalPanel(condition = "input.distribucion=='Multinomial'",tabBox(width=12,title="",id="tab5",tabPanel("Características",includeMarkdown("multinomial.Rmd")),
-                                                                              tabPanel('Cálculos',br(),br(),"prueba"))),
-      conditionalPanel(condition = "input.distribucion=='Poisson'",tabBox(width=12,title="",id="tab6",tabPanel("Características",includeMarkdown("poisson.Rmd")),
-                                                                          tabPanel('Cálculos',br(),br(),"prueba"))),
-      conditionalPanel(condition = "input.distribucion=='Binomial negativa'",tabBox(width=12,title="",id="tab7",tabPanel("Características",includeMarkdown("binonegativa.Rmd")),
-      tabPanel('Cálculos',br(),br(),"prueba")))
+      conditionalPanel(condition = "input.distribucion=='Hipergeométrica'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeMarkdown("hipergeometrica.Rmd")),
+                                                                                       tabPanel('Cálculos',br(),br(),"prueba"))),
+      conditionalPanel(condition = "input.distribucion=='Multinomial'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeMarkdown("multinomial.Rmd")),
+                                                                                   tabPanel('Cálculos',br(),br(),"prueba"))),
+      conditionalPanel(condition = "input.distribucion=='Poisson'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeMarkdown("poisson.Rmd")),
+                                                                               tabPanel('Cálculos',br(),br(),"prueba"))),
+      conditionalPanel(condition = "input.distribucion=='Binomial negativa'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeMarkdown("binonegativa.Rmd")),
+                                                                                         tabPanel('Cálculos',br(),br(),"prueba")))
     )
   )
 )
