@@ -38,10 +38,12 @@ ui <- fluidPage(
       withMathJax(),
       conditionalPanel(condition = "input.distribucion=='Bernoulli'",tabsetPanel(type = "pills", id="pri",tabPanel('Características',includeMarkdown("bernoulli.Rmd")),
                                                                                  tabPanel('Cálculos',br(),br(),selectInput(inputId = 'ber',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
-                                                                                 conditionalPanel(condition = "input.ber=='Función de Densidad'",column(width=5,numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>del éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+                                                                                 conditionalPanel(condition = "input.ber=='Función de Densidad'",column(width=5,numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
                                                                                                   numericInput(inputId = 'valor',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px')),
                                                                                                   column(width=6,br(),br(),verbatimTextOutput("bernoulli"))),
-                                                                                 conditionalPanel(condition = "input.ber=='Función de Distribución'",'hola2')))),
+                                                                                 conditionalPanel(condition = "input.ber=='Función de Distribución'",column(width=5,numericInput(inputId = 'proba1',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+                                                                                                                                                            numericInput(inputId = 'valor1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px')),
+                                                                                                  column(width=6,br(),br(),verbatimTextOutput("bernoulli1")))))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
                                                                                 tabPanel('Cálculos',br(),br(),selectInput(inputId = 'bin',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)
                                                                                 ))),
@@ -66,11 +68,16 @@ server <- function(input, output,session) {
   output$bernoulli<-renderText({
     n<-input$valor
     p<-input$proba
-    resultado<-paste("f(",n,") = P(X = ",n,") = ", dbinom(n,1,p))
+    resultado<-paste("f(",n,") = P(X =",n,") = ", dbinom(n,1,p))
     return(resultado)
   })
   
-  # dbinom(input$valor,1,input$proba)
+  output$bernoulli1<-renderText({
+    n1<-input$valor1
+    p1<-input$proba1
+    resultado1<-paste("F(",n1,") = P(X <=",n1,") = ", pbinom(n1,1,p1))
+    return(resultado1)
+  })
   
   }
 
