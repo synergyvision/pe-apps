@@ -46,7 +46,7 @@ ui <- fluidPage(
                                                                                                   numericInput(inputId = 'valor1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px'))
                                                                                  ),
                                                                                  conditionalPanel(condition = "input.ber=='Función de Densidad'",column(width=7,br(),verbatimTextOutput("bernoulli"),plotOutput("dens1"))),
-                                                                                 conditionalPanel(condition = "input.ber=='Función de Distribución'",br(),column(width=7,verbatimTextOutput("bernoulli1")))
+                                                                                 conditionalPanel(condition = "input.ber=='Función de Distribución'",column(width=7,verbatimTextOutput("bernoulli1"),plotOutput("dist1")))
                                                                                  ))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
                                                                                 tabPanel('Cálculos',br(),br(),selectInput(inputId = 'bin',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)
@@ -77,7 +77,11 @@ server <- function(input, output,session) {
   })
   
   output$dens1<-renderPlot({
+    if(input$valor==1){
     data<-data.frame(x=c(input$valor,1-input$valor),pro1=c(input$proba,1-input$proba))
+    } else{
+      data<-data.frame(x=c(input$valor,1-input$valor),pro1=c(1-input$proba,input$proba))
+    }
     f<-ggplot(data, mapping = aes(x,pro1))+geom_point(colour="blue",size=5)+
       labs( title = "Densidad Bernoulli",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
@@ -89,6 +93,18 @@ server <- function(input, output,session) {
     p1<-input$proba1
     resultado1<-paste("F(",n1,") = P(X <=",n1,") = ", pbinom(n1,1,p1))
     return(resultado1)
+  })
+  
+  output$dist1<-renderPlot({
+    if(input$valor1==1){
+      data1<-data.frame(x=c(input$valor1,1-input$valo1r),pro1=c(input$proba1,1-input$proba1))
+    } else{
+      data1<-data.frame(x=c(input$valor1,1-input$valor1),pro1=c(1-input$proba1,input$proba1))
+    }
+    f1<-ggplot(data1, mapping = aes(x,pro1))+ stat_ecdf(geom = "step", colour="blue")+
+      labs( title = "Distribución Bernoulli",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
   })
   
   }
