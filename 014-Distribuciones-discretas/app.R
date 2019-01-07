@@ -74,8 +74,8 @@ server <- function(input, output,session) {
   })
   
   output$dens1<-renderPlot({
-    data<-data.frame(x=c(input$proba,1-input$proba),pro1=c(input$proba,1-input$proba))
-    f<-ggplot(data, mapping = aes(x,pro1))+geom_point(colour="blue")+
+    data<-data.frame(x=c(input$valor,1-input$valor),pro1=c(input$proba,1-input$proba))
+    f<-ggplot(data, mapping = aes(x,pro1))+geom_point(colour="blue",size=5)+
       labs( title = "Densidad Bernoulli",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f)
