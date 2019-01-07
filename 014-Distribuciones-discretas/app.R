@@ -40,7 +40,7 @@ ui <- fluidPage(
                                                                                  tabPanel('Cálculos',br(),br(),selectInput(inputId = 'ber',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                  conditionalPanel(condition = "input.ber=='Función de Densidad'",column(width=5,numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
                                                                                                   numericInput(inputId = 'valor',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px')),
-                                                                                                  column(width=6,br(),br(),verbatimTextOutput("bernoulli"))),
+                                                                                                  column(width=7,verbatimTextOutput("bernoulli"),plotOutput("dens1"))),
                                                                                  conditionalPanel(condition = "input.ber=='Función de Distribución'",column(width=5,numericInput(inputId = 'proba1',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
                                                                                                                                                             numericInput(inputId = 'valor1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px')),
                                                                                                   column(width=6,br(),br(),verbatimTextOutput("bernoulli1")))))),
@@ -70,6 +70,14 @@ server <- function(input, output,session) {
     p<-input$proba
     resultado<-paste("f(",n,") = P(X =",n,") = ", dbinom(n,1,p))
     return(resultado)
+  })
+  
+  output$dens1<-renderPlot({
+    data<-data.frame(x=c(input$proba,1-input$proba),pro1=c(input$proba,1-input$proba))
+    f<-ggplot(data, mapping = aes(x,pro1))+geom_point(colour="blue")+
+      labs( title = "Densidad Bernoulli",
+            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+    return(f)
   })
   
   output$bernoulli1<-renderText({
