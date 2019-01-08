@@ -103,10 +103,11 @@ server <- function(input, output,session) {
       data1<-data.frame(x=c(input$valor1,1-input$valor1),pro1=c(1-input$proba1,input$proba1))
     }
     
-    #data1<-data.frame(x=c(0,1),pro1=c(1-input$proba1,1))
-    f1<-ggplot(data1, aes(x=data1[,1],y=data1[,2]))+geom_bar(stat = "identity", color="black",fill="Blue", alpha=0.5)+
-      labs( title = "Distribución Bernoulli",
-            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    f1<-ggplot(data1, aes(x=data1[,1],y=data1[,2]))+
+        geom_segment(aes(x=0,y=1-input$proba1,xend=1,yend=1-input$proba1),size=1,color="blue")+geom_segment(aes(x=1,y=1,xend=1.3,yend=1),size=1,color="blue")+geom_segment(aes(x=1,y=1-input$proba1,xend=1,yend=1),size=1,color="blue")+
+        labs( title = "Distribución Bernoulli",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )+
+      scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f1)
   })
   
