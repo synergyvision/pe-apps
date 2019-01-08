@@ -96,12 +96,8 @@ server <- function(input, output,session) {
   })
   
   output$dist1<-renderPlot({
-    if(input$valor1==1){
-      data1<-data.frame(x=c(input$valor1,1-input$valo1r),pro1=c(input$proba1,1-input$proba1))
-    } else{
-      data1<-data.frame(x=c(input$valor1,1-input$valor1),pro1=c(1-input$proba1,input$proba1))
-    }
-    f1<-ggplot(data1, mapping = aes(x,pro1))+ stat_ecdf(geom = "step", colour="blue")+
+    data1<-data.frame(x=c(0,1),pro1=c(1-input$proba1,1))
+    f1<-ggplot(data1, mapping = aes(x,pro1))+geom_line(colour="blue", stat='ecdf')+
       labs( title = "Distribución Bernoulli",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
