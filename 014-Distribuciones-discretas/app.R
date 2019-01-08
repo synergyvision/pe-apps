@@ -43,10 +43,14 @@ ui <- fluidPage(
                                                                                                   numericInput(inputId = 'valor',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px')),
                                                                                  conditionalPanel(condition = "input.ber=='Función de Distribución'",
                                                                                                   numericInput(inputId = 'proba1',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
-                                                                                                  numericInput(inputId = 'valor1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px'))
+                                                                                                  numericInput(inputId = 'valor1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=1,step=1,value = 1,width = '150px')),
+                                                                                 conditionalPanel(condition = "input.ber=='Cuantiles'",
+                                                                                                  numericInput(inputId = 'proba2',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+                                                                                                  numericInput(inputId = 'valor2',label = HTML('Inserte probabilidad &alpha; para el cálculo del <br/> cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px'))
                                                                                  ),
-                                                                                 conditionalPanel(condition = "input.ber=='Función de Densidad'",column(width=7,br(),verbatimTextOutput("bernoulli"),plotOutput("dens1"))),
-                                                                                 conditionalPanel(condition = "input.ber=='Función de Distribución'",column(width=7,verbatimTextOutput("bernoulli1"),plotOutput("dist1")))
+                                                                                 conditionalPanel(condition = "input.ber=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("bernoulli"),plotOutput("dens1"))),
+                                                                                 conditionalPanel(condition = "input.ber=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("bernoulli1"),plotOutput("dist1"))),
+                                                                                 conditionalPanel(condition = "input.ber=='Cuantiles'",column(align='center',width=6,br(),br(),br(),br(),br(),br(),verbatimTextOutput("bernoulli2")))
                                                                                  ))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
                                                                                 tabPanel('Cálculos',br(),br(),selectInput(inputId = 'bin',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)
@@ -109,6 +113,10 @@ server <- function(input, output,session) {
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )+
       scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f1)
+  })
+  
+  output$bernoulli2<-renderText({
+    qbinom(p=input$valor2,size = 1,prob = input$proba2,lower.tail = TRUE)
   })
   
   }
