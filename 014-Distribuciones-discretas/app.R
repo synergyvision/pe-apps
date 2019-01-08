@@ -84,7 +84,8 @@ server <- function(input, output,session) {
     }
     f<-ggplot(data, mapping = aes(x,pro1))+geom_point(colour="blue",size=5)+
       labs( title = "Densidad Bernoulli",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)", caption = "http://synergy.vision/" )+
+      scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f)
   })
   
