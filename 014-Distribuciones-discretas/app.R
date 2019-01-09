@@ -156,8 +156,8 @@ server <- function(input, output,session) {
   })
   
   output$densbin<-renderPlot({
-    data3<-data.frame(bin=dbinom(1:input$valorbin,input$ensayobin,input$probabin))
-    f3<-ggplot(data3,aes(x=1:length(bin),y=bin))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data3$bin))+
+    data3<-data.frame(bin=dbinom(0:input$valorbin,input$ensayobin,input$probabin))
+    f3<-ggplot(data3,aes(x=0:length(bin),y=bin))+geom_point(colour='blue')+scale_x_continuous(breaks = 0:length(data3$bin))+
       labs( title = "funcion densidad",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f3)
