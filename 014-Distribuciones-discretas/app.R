@@ -61,9 +61,19 @@ ui <- fluidPage(
                                                                                 conditionalPanel(condition = "input.bin=='Función de Densidad'",
                                                                                                  numericInput(inputId = 'probabin',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
                                                                                                  numericInput(inputId = 'ensayobin',label = HTML('Elija la cantidad de ensayos <i>n</i>'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                 numericInput(inputId = 'valorbin',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px'))
+                                                                                                 numericInput(inputId = 'valorbin',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px')),
+                                                                                conditionalPanel(condition = "input.bin=='Función de Distribución'",
+                                                                                                 numericInput(inputId = 'probabin1',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+                                                                                                 numericInput(inputId = 'ensayobin1',label = HTML('Elija la cantidad de ensayos <i>n</i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                 numericInput(inputId = 'valorbin1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px')),
+                                                                                conditionalPanel(condition = "input.bin=='Cuantiles'",
+                                                                                                 numericInput(inputId = 'probabin2',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+                                                                                                 numericInput(inputId = 'ensayobin2',label = HTML('Elija la cantidad de ensayos <i>n</i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                 numericInput(inputId = 'valorbin2',label = HTML('Inserte probabilidad &alpha; para el cálculo del <br/> cuantil'),min=0,max=1,step=0.1,value = 1,width = '150px'))
                                                                                 ),
-                                                                                conditionalPanel(condition = "input.bin=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("binomial"),plotOutput("densbin")))
+                                                                                conditionalPanel(condition = "input.bin=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("binomial"),plotOutput("densbin"))),
+                                                                                conditionalPanel(condition = "input.bin=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("binomial1"),plotOutput("densbin1"))),
+                                                                                conditionalPanel(condition = "input.bin=='Cuantiles'",column(align='center',width=6,br(),br(),br(),br(),br(),br(),verbatimTextOutput("binomial2")))
                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Geométrica'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeMarkdown("geometrica.Rmd")),
                                                                                   tabPanel('Cálculos',br(),br(),selectInput(inputId = 'geo',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
@@ -156,11 +166,33 @@ server <- function(input, output,session) {
   })
   
   output$densbin<-renderPlot({
-    data3<-data.frame(bin=dbinom(0:input$valorbin,input$ensayobin,input$probabin))
-    f3<-ggplot(data3,aes(x=0:length(bin),y=bin))+geom_point(colour='blue')+scale_x_continuous(breaks = 0:length(data3$bin))+
-      labs( title = "funcion densidad",
+    data3<-data.frame(bin=dbinom(1:input$valorbin,input$ensayobin,input$probabin))
+    f3<-ggplot(data3,aes(x=1:length(bin),y=bin))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:length(data3$bin))+
+      labs( title = "Densidad Bernoulli",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f3)
+  })
+  
+  output$binomial1<-renderText({
+    x<-input$valorbin1
+    n<-input$ensayobin1
+    p<-input$probabin1
+    resultado3<-paste("F(",x,") = P(X <=",x,") = ", pbinom(x,n,p,lower.tail = T))
+    return(resultado3)
+  })
+  
+  output$densbin1<-renderPlot({
+    data3<-data.frame(bin=pbinom(1:input$valorbin1,input$ensayobin1,input$probabin1))
+    f3<-ggplot(data3,aes(x=1:length(bin),y=bin))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:length(data3$bin))+
+      labs( title = "Distribución Bernoulli",
+            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+    return(f3)
+  })
+  
+  output$binomial2<-renderText({
+    #qbinom(p=input$valor2,size = 1,prob = input$proba2,lower.tail = TRUE)
+    w<-paste("x = ", qbinom(p=input$valorbin2,size = input$ensayobin2,prob = input$probabin2,lower.tail = TRUE))
+    return(w)
   })
   
   }
