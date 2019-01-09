@@ -57,7 +57,13 @@ ui <- fluidPage(
                                                                                  conditionalPanel(condition = "input.ber=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("bernoulli3"),plotOutput("dens2")))
                                                                                  ))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
-                                                                                tabPanel('Cálculos',br(),br(),selectInput(inputId = 'bin',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)
+                                                                                tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'bin',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                                conditionalPanel(condition = "input.bin=='Función de Densidad'",
+                                                                                                 numericInput(inputId = 'probabin',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+                                                                                                 numericInput(inputId = 'ensayobin',label = HTML('Elija la cantidad de ensayos <i>n</i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                 numericInput(inputId = 'valorbin',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px'))
+                                                                                ),
+                                                                                conditionalPanel(condition = "input.bin=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("binomial"),plotOutput("densbin")))
                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Geométrica'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeMarkdown("geometrica.Rmd")),
                                                                                   tabPanel('Cálculos',br(),br(),selectInput(inputId = 'geo',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
@@ -125,9 +131,38 @@ server <- function(input, output,session) {
     return(w)
   })
   
-  output$bernoulli3<-renderPrint({
+  muestraber<-reactive({
     rbinom(n=input$valor3,size=1,prob=input$proba3)
   })
+  
+  output$bernoulli3<-renderPrint({
+    return(muestraber())
+  })
+  
+  output$dens2<-renderPlot({
+    data2<-data.frame(x1=muestraber())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x1))+
+      labs( title = "Muestra aleatoria",
+           x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
+  
+  output$binomial<-renderText({
+    x<-input$valorbin
+    n<-input$ensayobin
+    p<-input$probabin
+    resultado2<-paste("f(",x,") = P(X =",x,") = ", dbinom(x,n,p))
+    return(resultado2)
+  })
+  
+  output$densbin<-renderPlot({
+    data3<-data.frame(bin=dbinom(1:input$valorbin,input$ensayobin,input$probabin))
+    f3<-ggplot(data3,aes(x=1:length(bin),y=bin))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data3$bin))+
+      labs( title = "funcion densidad",
+            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+    return(f3)
+  })
+  
   }
 
 
