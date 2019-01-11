@@ -69,11 +69,17 @@ ui <- fluidPage(
                                                                                 conditionalPanel(condition = "input.bin=='Cuantiles'",
                                                                                                  numericInput(inputId = 'probabin2',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
                                                                                                  numericInput(inputId = 'ensayobin2',label = HTML('Elija la cantidad de ensayos <i>n</i>'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                 numericInput(inputId = 'valorbin2',label = HTML('Inserte probabilidad &alpha; para el cálculo del <br/> cuantil'),min=0,max=1,step=0.1,value = 1,width = '150px'))
+                                                                                                 numericInput(inputId = 'valorbin2',label = HTML('Inserte probabilidad &alpha; para el cálculo del <br/> cuantil'),min=0,max=1,step=0.1,value = 1,width = '150px')),
+                                                                                conditionalPanel(condition = "input.bin=='Muestra Aleatoria'",
+                                                                                                 numericInput(inputId = 'probabin3',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
+                                                                                                 numericInput(inputId = 'valorbin3',label = HTML('Inserte el número de muestra deseado'),min=0,max=200,step=1,value = 10,width = '150px'),
+                                                                                                 numericInput(inputId = 'ensayobin3',label = HTML('Elija la cantidad de ensayos <i>n</i>'),min=0,max=100,step=1,value = 1,width = '150px')
+                                                                                                 )
                                                                                 ),
                                                                                 conditionalPanel(condition = "input.bin=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("binomial"),plotOutput("densbin"))),
                                                                                 conditionalPanel(condition = "input.bin=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("binomial1"),plotOutput("densbin1"))),
-                                                                                conditionalPanel(condition = "input.bin=='Cuantiles'",column(align='center',width=6,br(),br(),br(),br(),br(),br(),verbatimTextOutput("binomial2")))
+                                                                                conditionalPanel(condition = "input.bin=='Cuantiles'",column(align='center',width=6,br(),br(),br(),br(),br(),br(),verbatimTextOutput("binomial2"))),
+                                                                                conditionalPanel(condition = "input.bin=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("binomial3"),plotOutput("densbin2")))
                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Geométrica'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeMarkdown("geometrica.Rmd")),
                                                                                   tabPanel('Cálculos',br(),br(),selectInput(inputId = 'geo',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
@@ -195,6 +201,31 @@ server <- function(input, output,session) {
     w<-paste("x = ", qbinom(p=input$valorbin2,size = input$ensayobin2,prob = input$probabin2,lower.tail = TRUE))
     return(w)
   })
+  
+  muestraber1<-reactive({
+    rbinom(n=input$valorbin3,size=input$ensayobin3,prob=input$probabin3)
+  })
+  
+  output$binomial3<-renderPrint({
+    return(muestraber1())
+  })
+  
+  output$densbin2<-renderPlot({
+    data5<-data.frame(x1=muestraber1())
+    f5<-ggplot(data5,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data5$x1))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f5)
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   }
 
