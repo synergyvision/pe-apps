@@ -88,7 +88,7 @@ ui <- fluidPage(
                                                                                                                     numericInput(inputId = 'valorgeo',label = HTML('Elija la cantidad de ensayos para obtener el primer éxito <i>n</i>'),min=1,max=100,step=1,value = 1,width = '150px')),
                                                                                   conditionalPanel(condition = "input.geo=='Función de Distribución'",
                                                                                                                     numericInput(inputId = 'probageo1',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
-                                                                                                                    numericInput(inputId = 'valorgeo1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px')),
+                                                                                                                    numericInput(inputId = 'valorgeo1',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=1,max=100,step=1,value = 1,width = '150px')),
                                                                                   conditionalPanel(condition = "input.geo=='Cuantiles'",
                                                                                                                     numericInput(inputId = 'probageo2',label=HTML('Elija la probabilidad <br/>de éxito'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
                                                                                                                     numericInput(inputId = 'valorgeo2',label = HTML('Inserte probabilidad &alpha; para el cálculo del <br/> cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
@@ -102,7 +102,8 @@ ui <- fluidPage(
                                                                                   conditionalPanel(condition = "input.geo=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("geometrica3"),plotOutput("densgeo2")))
                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Hipergeométrica'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeMarkdown("hipergeometrica.Rmd")),
-                                                                                       tabPanel('Cálculos',br(),br(),selectInput(inputId = 'hip',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
+                                                                                       tabPanel('Cálculos',br(),br(),selectInput(inputId = 'hip',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)
+                                                                                  ))),
       conditionalPanel(condition = "input.distribucion=='Multinomial'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeMarkdown("multinomial.Rmd")),
                                                                                    tabPanel('Cálculos',br(),br(),selectInput(inputId = 'mult',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
       conditionalPanel(condition = "input.distribucion=='Poisson'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeMarkdown("poisson.Rmd")),
@@ -254,27 +255,27 @@ server <- function(input, output,session) {
   output$geometrica1<-renderText({
     x<-input$valorgeo1
     p<-input$probageo1
-    resultado5<-paste("F(",x,") = P(X <=",x,") = ", pgeom(x,p,lower.tail = T))
+    resultado5<-paste("F(",x,") = P(X <=",x,") = ", pgeom(x-1,p,lower.tail = T))
     return(resultado5)
   })
   
   output$densgeo1<-renderPlot({
-    data6<-data.frame(bin=pgeom(0:input$valorgeo1,input$probageo1))
-    f6<-ggplot(data6,aes(x=0:(length(bin)-1),y=bin))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:length(data6$bin)-1)+
+    data6<-data.frame(geom=pgeom(0:(input$valorgeo1-1),input$probageo1))
+    f6<-ggplot(data6,aes(x=1:length(geom),y=geom))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 1:length(data6$geom))+
       labs( title = "Distribución Geométrica",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )+
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )+
       scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f6)
   })
   
   output$geometrica2<-renderText({
     
-    w<-paste("x = ", qgeom(p=input$valorgeo2,prob = input$probageo2,lower.tail = TRUE))
+    w<-paste("x = ", qgeom(p=input$valorgeo2,prob = input$probageo2,lower.tail = TRUE)+1)
     return(w)
   })
   
   muestraber3<-reactive({
-    rgeom(n=input$valorgeo3,prob=input$probageo3)
+    rgeom(n=input$valorgeo3,prob=input$probageo3)+1
   })
   
   output$geometrica3<-renderPrint({
