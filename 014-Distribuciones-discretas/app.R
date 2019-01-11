@@ -168,7 +168,7 @@ server <- function(input, output,session) {
   output$densbin<-renderPlot({
     data3<-data.frame(bin=dbinom(0:input$valorbin,input$ensayobin,input$probabin))
     f3<-ggplot(data3,aes(x=0:(length(bin)-1),y=bin))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data3$bin)-1))+
-      labs( title = "Densidad Bernoulli",
+      labs( title = "Densidad Binomial",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f3)
   })
@@ -183,10 +183,11 @@ server <- function(input, output,session) {
   
   output$densbin1<-renderPlot({
     data3<-data.frame(bin=pbinom(0:input$valorbin1,input$ensayobin1,input$probabin1))
-    f3<-ggplot(data3,aes(x=0:(length(bin)-1),y=bin))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:length(data3$bin))+
-      labs( title = "Distribución Bernoulli",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
-    return(f3)
+    f4<-ggplot(data3,aes(x=0:(length(bin)-1),y=bin))+geom_step()+scale_x_continuous(breaks = 0:length(data3$bin)-1)+
+      labs( title = "Distribución Binomial",
+            x = "x", y = "f(x)", caption = "http://synergy.vision/" )+
+      scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
+    return(f4)
   })
   
   output$binomial2<-renderText({
