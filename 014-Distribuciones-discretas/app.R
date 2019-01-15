@@ -25,7 +25,7 @@ library(ggplot2)
 
 ui <- fluidPage(
   
-  titlePanel("Distribuciones discretas"),
+  titlePanel("Distribuciones Discretas"),
   sidebarLayout(
     
     sidebarPanel(
@@ -135,9 +135,21 @@ ui <- fluidPage(
                                                                                tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'poi',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                conditionalPanel(condition = "input.poi=='Función de Densidad'",
                                                                                                 numericInput(inputId = 'valorpoi',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                numericInput(inputId = 'valorpoi2',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px'))                                     
+                                                                                                numericInput(inputId = 'valorpoi2',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px')),
+                                                                               conditionalPanel(condition = "input.poi=='Función de Distribución'",
+                                                                                                numericInput(inputId = 'valorpoi3',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorpoi4',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px')),
+                                                                               conditionalPanel(condition = "input.poi=='Cuantiles'",
+                                                                                                numericInput(inputId = 'valorpoi5',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorpoi6',label = HTML('Seleccione el valor de la probabilidad que le corresponde al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                               conditionalPanel(condition = "input.poi=='Muestra Aleatoria'",
+                                                                                                numericInput(inputId = 'valorpoi7',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorpoi8',label = HTML('Seleccione el número de muestra deseado'),min=0,max=200,step=1,value = 5,width = '150px'))
                                                                                ),
-                                                                               conditionalPanel(condition = "input.poi=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("dispoison"),plotOutput("denspoi")))
+                                                                               conditionalPanel(condition = "input.poi=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("dispoison"),plotOutput("denspoi"))),
+                                                                               conditionalPanel(condition = "input.poi=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("dispoison1"),plotOutput("denspoi1"))),
+                                                                               conditionalPanel(condition = "input.poi=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("dispoison2"))),
+                                                                               conditionalPanel(condition = "input.poi=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("dispoison3"),plotOutput("denspoi2")))
                                                                                         ))),
       conditionalPanel(condition = "input.distribucion=='Binomial negativa'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeMarkdown("binonegativa.Rmd")),
                                                                                          tabPanel('Cálculos',br(),br(),selectInput(inputId = 'binega',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL))))
@@ -385,8 +397,9 @@ server <- function(input, output,session) {
     return(f10)
   })
   
+  
   output$dispoison<-renderText({
-    x<-input$valorpoi2
+    x<-input$valorpoi
     p<-input$valorpoi
     resultado10<-paste("f(",x,") = P(X =",x,") = ", dpois(x,p))
     return(resultado10)
@@ -398,6 +411,47 @@ server <- function(input, output,session) {
       labs( title = "Densidad Poisson",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f11)
+  })
+  
+  output$dispoison1<-renderText({
+    p<-input$valorpoi3
+    x<-input$valorpoi4
+    resultado11<-paste("F(",x,") = P(X <=",x,") = ", ppois(x,p))
+    return(resultado11)
+  })
+  
+  output$denspoi1<-renderPlot({
+    data12<-data.frame(poi=ppois(0:input$valorpoi4,input$valorpoi3))
+    f12<-ggplot(data12,aes(x=0:(length(poi)-1),y=poi))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:(length(data12$poi)-1))+
+      labs( title = "Distribución Poisson",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f12)
+  })
+  
+  output$dispoison2<-renderText({
+    p<-input$valorpoi5
+    x<-input$valorpoi6
+    resultado11<-paste("x = ", qpois(x,p))
+    return(resultado11)
+  })
+  
+  muestraber5<-reactive({
+    p<-input$valorpoi7
+    n<-input$valorpoi8
+    
+    rpois(n,p)
+  })
+  
+  output$dispoison3<-renderPrint({
+    return(muestraber5())
+  })
+  
+  output$denspoi2<-renderPlot({
+    data13<-data.frame(x1=muestraber5())
+    f13<-ggplot(data13,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data13$x1))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f13)
   })
   
   
