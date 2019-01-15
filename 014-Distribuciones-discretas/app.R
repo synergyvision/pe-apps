@@ -130,7 +130,14 @@ ui <- fluidPage(
                                                                                        conditionalPanel(condition = "input.hip=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("hiper3"),plotOutput("denship2")))
                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Multinomial'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeMarkdown("multinomial.Rmd")),
-                                                                                   tabPanel('Cálculos',br(),br(),selectInput(inputId = 'mult',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
+                                                                                   tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'mult',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                                                                        conditionalPanel(condition = "input.mult=='Función de Densidad'",
+                                                                                                                                         textInput(inputId = "vector", label = "Introducir el vector de probabilidades",placeholder = "0.1,0.2,..."),
+                                                                                                                                         textInput(inputId = "vector1", label = "Introducir el número de ensayos de cada experimento",placeholder = "1,2,..."),
+                                                                                                                                         textInput(inputId = "vector2", label = "Introducir los valores al cual se le quiere calcular la probabilidad",placeholder = "0,1,2,..."))
+                                                                                   ),
+                                                                                   conditionalPanel(condition = "input.mult=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("multin"),plotOutput("densmulti")))
+                                                                                            ))),
       conditionalPanel(condition = "input.distribucion=='Poisson'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeMarkdown("poisson.Rmd")),
                                                                                tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'poi',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                conditionalPanel(condition = "input.poi=='Función de Densidad'",
