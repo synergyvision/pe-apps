@@ -132,7 +132,13 @@ ui <- fluidPage(
       conditionalPanel(condition = "input.distribucion=='Multinomial'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeMarkdown("multinomial.Rmd")),
                                                                                    tabPanel('Cálculos',br(),br(),selectInput(inputId = 'mult',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
       conditionalPanel(condition = "input.distribucion=='Poisson'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeMarkdown("poisson.Rmd")),
-                                                                               tabPanel('Cálculos',br(),br(),selectInput(inputId = 'poi',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
+                                                                               tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'poi',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                               conditionalPanel(condition = "input.poi=='Función de Densidad'",
+                                                                                                numericInput(inputId = 'valorpoi',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorpoi2',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px'))                                     
+                                                                               ),
+                                                                               conditionalPanel(condition = "input.poi=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("dispoison"),plotOutput("denspoi")))
+                                                                                        ))),
       conditionalPanel(condition = "input.distribucion=='Binomial negativa'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeMarkdown("binonegativa.Rmd")),
                                                                                          tabPanel('Cálculos',br(),br(),selectInput(inputId = 'binega',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL))))
     )
@@ -343,7 +349,7 @@ server <- function(input, output,session) {
   
   output$denship1<-renderPlot({
     data9<-data.frame(hiper1=phyper(0:input$valorhip8,input$valorhip6,input$valorhip7,input$valorhip5))
-    f9<-ggplot(data9,aes(x=0:(length(hiper1)-1),y=hiper1))+geom_point(colour='blue',size=2)+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:(length(data9$hiper1)-1))+
+    f9<-ggplot(data9,aes(x=0:(length(hiper1)-1),y=hiper1))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:(length(data9$hiper1)-1))+
       labs( title = "Distribución hipergeometrica",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f9)
@@ -379,7 +385,20 @@ server <- function(input, output,session) {
     return(f10)
   })
   
+  output$dispoison<-renderText({
+    x<-input$valorpoi2
+    p<-input$valorpoi
+    resultado10<-paste("f(",x,") = P(X =",x,") = ", dpois(x,p))
+    return(resultado10)
+  })
   
+  output$denspoi<-renderPlot({
+    data11<-data.frame(poi=ppois(0:input$valorpoi2,input$valorpoi))
+    f11<-ggplot(data11,aes(x=0:(length(poi)-1),y=poi))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data11$poi)-1))+
+      labs( title = "Densidad Poisson",
+            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+    return(f11)
+  })
   
   
   
