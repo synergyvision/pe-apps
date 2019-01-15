@@ -393,7 +393,7 @@ server <- function(input, output,session) {
   })
   
   output$denspoi<-renderPlot({
-    data11<-data.frame(poi=ppois(0:input$valorpoi2,input$valorpoi))
+    data11<-data.frame(poi=dpois(0:input$valorpoi2,input$valorpoi))
     f11<-ggplot(data11,aes(x=0:(length(poi)-1),y=poi))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data11$poi)-1))+
       labs( title = "Densidad Poisson",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
