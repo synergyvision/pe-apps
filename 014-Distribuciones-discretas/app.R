@@ -107,9 +107,27 @@ ui <- fluidPage(
                                                                                                         numericInput(inputId = 'valorhip',label = HTML('Tamaño de la muestra'),min=0,max=100,step=1,value = 0,width = '150px'),
                                                                                                         numericInput(inputId = 'valorhip2',label = HTML('Elementos con característica <i>I</i>'),min=0,max=100,step=1,value = 0,width = '150px'),
                                                                                                         numericInput(inputId = 'valorhip3',label = HTML('Elementos con característica <i>II</i>'),min=0,max=100,step=1,value = 0,width = '150px'),
-                                                                                                        numericInput(inputId = 'valorhip4',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 0,width = '150px'))
+                                                                                                        numericInput(inputId = 'valorhip4',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 0,width = '150px')),
+                                                                                       conditionalPanel(condition = "input.hip=='Función de Distribución'",
+                                                                                                        numericInput(inputId = 'valorhip5',label = HTML('Tamaño de la muestra'),min=0,max=100,step=1,value = 0,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip6',label = HTML('Elementos con característica <i>I</i>'),min=0,max=100,step=1,value = 0,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip7',label = HTML('Elementos con característica <i>II</i>'),min=0,max=100,step=1,value = 0,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip8',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 0,width = '150px')),
+                                                                                       conditionalPanel(condition = "input.hip=='Cuantiles'",
+                                                                                                        numericInput(inputId = 'valorhip9',label = HTML('Tamaño de la muestra'),min=0,max=100,step=1,value = 0,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip10',label = HTML('Elementos con característica <i>I</i>'),min=0,max=100,step=1,value = 0,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip11',label = HTML('Elementos con característica <i>II</i>'),min=0,max=100,step=1,value = 0,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip12',label = HTML('Seleccione la probabilidad que le corresponde al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                       conditionalPanel(condition = "input.hip=='Muestra Aleatoria'",
+                                                                                                        numericInput(inputId = 'valorhip13',label = HTML('Tamaño de la muestra'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip14',label = HTML('Elementos con característica <i>I</i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip15',label = HTML('Elementos con característica <i>II</i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                        numericInput(inputId = 'valorhip16',label = HTML('Seleccione el número de muestra deseado'),min=1,max=100,step=1,value = 1,width = '150px'))
                                                                                        ),
-                                                                                       conditionalPanel(condition = "input.hip=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("hiper"),plotOutput("denship")))    
+                                                                                       conditionalPanel(condition = "input.hip=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("hiper"),plotOutput("denship"))),
+                                                                                       conditionalPanel(condition = "input.hip=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("hiper1"),plotOutput("denship1"))),
+                                                                                       conditionalPanel(condition = "input.hip=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("hiper2"))),
+                                                                                       conditionalPanel(condition = "input.hip=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("hiper3"),plotOutput("denship2")))
                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Multinomial'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeMarkdown("multinomial.Rmd")),
                                                                                    tabPanel('Cálculos',br(),br(),selectInput(inputId = 'mult',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL)))),
@@ -313,6 +331,57 @@ server <- function(input, output,session) {
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f8)
   })
+  
+  output$hiper1<-renderText({
+    x<-input$valorhip8
+    m<-input$valorhip6
+    n<-input$valorhip7
+    k<-input$valorhip5
+    resultado7<-paste("F(",x,") = P(X <=",x,") = ", phyper(x,m,n,k))
+    return(resultado7)
+  })
+  
+  output$denship1<-renderPlot({
+    data9<-data.frame(hiper1=phyper(0:input$valorhip8,input$valorhip6,input$valorhip7,input$valorhip5))
+    f9<-ggplot(data9,aes(x=0:(length(hiper1)-1),y=hiper1))+geom_point(colour='blue',size=2)+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:(length(data9$hiper1)-1))+
+      labs( title = "Distribución hipergeometrica",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f9)
+  })
+  
+  output$hiper2<-renderText({
+    k<-input$valorhip9
+    m<-input$valorhip10
+    n<-input$valorhip11
+    p<-input$valorhip12
+    resultado7<-paste("x = ", qhyper(p,m,n,k))
+    return(resultado7)
+  })
+  
+  muestraber4<-reactive({
+    k<-input$valorhip13
+    m<-input$valorhip14
+    n<-input$valorhip15
+    N<-input$valorhip16
+    
+    rhyper(N,m,n,k)
+  })
+  
+  output$hiper3<-renderPrint({
+    return(muestraber4())
+  })
+  
+  output$denship2<-renderPlot({
+    data10<-data.frame(x1=muestraber4())
+    f10<-ggplot(data10,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data10$x1))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f10)
+  })
+  
+  
+  
+  
   
   }
 
