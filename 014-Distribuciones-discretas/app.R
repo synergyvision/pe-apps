@@ -308,8 +308,8 @@ server <- function(input, output,session) {
   
   output$denship<-renderPlot({
     data8<-data.frame(hiper=dhyper(0:input$valorhip4,input$valorhip2,input$valorhip3,input$valorhip))
-    f8<-ggplot(data8,aes(x=0:(length(hiper)-1),y=hiper))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:length(data8$hiper))+
-      labs( title = "Densidad geometrica",
+    f8<-ggplot(data8,aes(x=0:(length(hiper)-1),y=hiper))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data8$hiper)-1))+
+      labs( title = "Densidad hipergeometrica",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f8)
   })
