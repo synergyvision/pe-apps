@@ -133,7 +133,6 @@ ui <- fluidPage(
                                                                                    tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'mult',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                                                         conditionalPanel(condition = "input.mult=='Función de Densidad'",
                                                                                                                                          textInput(inputId = "vector", label = "Introducir el vector de probabilidades",placeholder = "0.1,0.2,..."),
-                                                                                                                                         textInput(inputId = "vector1", label = "Introducir el número de ensayos de cada experimento",placeholder = "1,2,..."),
                                                                                                                                          textInput(inputId = "vector2", label = "Introducir los valores al cual se le quiere calcular la probabilidad",placeholder = "0,1,2,..."))
                                                                                    ),
                                                                                    conditionalPanel(condition = "input.mult=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("multin"),plotOutput("densmulti")))
@@ -459,6 +458,33 @@ server <- function(input, output,session) {
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
     return(f13)
+  })
+  
+  v1<-reactive({
+    if(is.null(input$vector2)){
+      return()
+    } else{
+      as.numeric(unlist(strsplit(input$vector2,",")))
+    }
+  })
+  
+  
+  v3<-reactive({
+    if(is.null(input$vector)){
+      return()
+    } else{
+      as.numeric(unlist(strsplit(input$vector,",")))
+    }
+  })
+  
+  
+  
+  output$multin<-renderText({
+    z1<-v1()
+    z3<-v3()
+    x<-paste(z1,collapse = ",")
+    resultado12<-paste("f(",x,") = P(X =",x,") = ",dmultinom(x=z1,prob=z3))
+    return(resultado12)
   })
   
   
