@@ -166,7 +166,7 @@ ui <- fluidPage(
       conditionalPanel(condition = "input.distribucion=='Binomial negativa'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeMarkdown("binonegativa.Rmd")),
                                                                                          tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'binega',label = HTML('Seleccione la distribución deseada'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                                   conditionalPanel(condition = "input.binega=='Función de Densidad'",
-                                                                                                                   numericInput(inputId = 'valorbine',label = HTML('Inserte el valor al cual se le quiere calcular la probabilidad de éxito'),min=0,max=100,step=1,value = 10,width = '150px'),
+                                                                                                                   numericInput(inputId = 'valorbine',label = HTML('Inserte el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 10,width = '150px'),
                                                                                                                    numericInput(inputId = 'valorbine1',label = HTML('Seleccione la cantidad de éxito'),min=0,max=100,step=1,value = 5,width = '150px'),
                                                                                                                    numericInput(inputId = 'valorbine2',label = HTML('Inserte la probabilidad de que ocurra un éxito'),min=0,max=1,step=0.1,value = 0.5,width = '150px'))),
                                                                                                   # conditionalPanel(condition = "input.poi=='Función de Distribución'",
@@ -549,9 +549,10 @@ server <- function(input, output,session) {
     x<-input$valorbine
     k<-input$valorbine1
     p<-input$valorbine2
-    data15<-data.frame(binega=dnbinom(1:(x-k),k,p))
-    f15<-ggplot(data15,aes(x=1:length(binega),y=binega))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = k:x)+
-      labs( title = "Densidad Poisson",
+    data15<-data.frame(binega=dnbinom(0:(x-k),k,p))
+    data16<-data.frame(hola=k,mundo=x)
+    f15<-ggplot(data15,aes(x=data16$hola:data16$mundo,y=binega))+geom_point(colour='blue',size=2)+
+      labs( title = "Densidad Binomial negativa",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f15)
   })
