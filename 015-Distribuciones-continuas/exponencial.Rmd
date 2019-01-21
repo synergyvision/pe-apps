@@ -1,0 +1,34 @@
+## Función de Densidad
+
+$$
+f(x)= \left\{
+	       \begin{array}{ll}
+		 \lambda\displaystyle e^{-\lambda x}      & \mathrm{si\ } x \geq 0 \\
+		 0     & \mathrm{si\ } x < 0  
+	       \end{array}
+	     \right.
+$$
+
+
+## Función de Distribución
+
+$$
+ F(x) = \left\{
+	       \begin{array}{ll}
+		 1-\displaystyle e^{-\lambda x}      & \mathrm{si\ } x \geq 0 \\
+		 0     & \mathrm{si\ } x < 0  
+	       \end{array}
+	     \right.
+$$
+
+## Media
+
+$$
+E[X]= \displaystyle \frac{1}{\lambda}
+$$
+
+## Varianza
+
+$$
+Var[X]= \displaystyle \frac{1}{\lambda^2}
+$$

@@ -36,13 +36,13 @@ ui <- fluidPage(
     mainPanel(
 
       withMathJax(),
-      conditionalPanel(condition = "input.distribucion=='Uniforme'",tabsetPanel(type = "pills", id="pri",tabPanel('Características'),
+      conditionalPanel(condition = "input.distribucion=='Uniforme'",tabsetPanel(type = "pills", id="pri",tabPanel('Características',includeMarkdown("uniforme.Rmd")),
                                                                                  tabPanel('Cálculos',br(),br()))),
-      conditionalPanel(condition = "input.distribucion=='Exponencial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características"),
+      conditionalPanel(condition = "input.distribucion=='Exponencial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("exponencial.Rmd")),
                                                                                 tabPanel('Cálculos',br(),br()))),
-      conditionalPanel(condition = "input.distribucion=='Gamma'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características"),
+      conditionalPanel(condition = "input.distribucion=='Gamma'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeMarkdown("gamma.Rmd")),
                                                                                   tabPanel('Cálculos',br(),br()))),
-      conditionalPanel(condition = "input.distribucion=='Beta'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características"),
+      conditionalPanel(condition = "input.distribucion=='Beta'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeMarkdown("beta.Rmd")),
                                                                                        tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Chi-cuadrado'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características"),
                                                                                    tabPanel('Cálculos',br(),br()))),

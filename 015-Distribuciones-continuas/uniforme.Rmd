@@ -1,0 +1,36 @@
+## Función de Densidad
+
+$$
+f(x)= \left\{
+	       \begin{array}{ll}
+		 \displaystyle \frac{1}{b-a}      & \mathrm{si\ } a \leq x \leq b \\
+		  & \\
+		     0 & \mathrm{\text{en otro caso.}}  
+	       \end{array}
+	     \right.
+$$
+
+
+## Función de Distribución
+
+$$
+ F(x) = \left\{
+	       \begin{array}{ll}
+		 0      & \mathrm{si\ } x < a \\
+		 \displaystyle \frac{x-a}{b-a} & \mathrm{si\ } a \le x \le b \\
+		 0     & \mathrm{si\ }  x > b
+	       \end{array}
+	     \right.
+$$
+
+## Media
+
+$$
+E[X]= \displaystyle \frac{b+a}{2}
+$$
+
+## Varianza
+
+$$
+Var[X]= \displaystyle \frac{(b-a)^2}{12}
+$$
