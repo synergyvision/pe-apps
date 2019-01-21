@@ -1,0 +1,33 @@
+## Función de Densidad
+
+$$
+f(x) = \left\{
+\begin{array}{ll}
+\displaystyle \frac{1}{\Gamma\left(\frac{n}{2}\right) 2^{\frac{n}{2}}} x^{\frac{n}{2}-1} e^{-\frac{x}{2}} & \mathrm{si\ } x > 0\\
+0 & \mathrm{si\ } x \leq 0
+\end{array}
+\right.
+$$
+
+
+## Función de Distribución
+
+$$
+f(x) = \left\{\begin{array}{ll}
+   B\left(x,\frac{n}{2},2\right) & \mathrm{si\ } x > 0 \\
+		 0 & \mathrm{si\ } x \leq 0
+	       \end{array}
+	     \right.
+$$
+
+## Valor esperado
+
+$$
+E[X]=n
+$$
+
+## Varianza
+
+$$
+Var[X]=2n
+$$

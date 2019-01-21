@@ -44,7 +44,7 @@ ui <- fluidPage(
                                                                                   tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Beta'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeMarkdown("beta.Rmd")),
                                                                                        tabPanel('Cálculos',br(),br()))),
-      conditionalPanel(condition = "input.distribucion=='Chi-cuadrado'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características"),
+      conditionalPanel(condition = "input.distribucion=='Chi-cuadrado'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeMarkdown('Chi-cuadrado.Rmd')),
                                                                                    tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Fisher-Snedecor'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características"),
                                                                                tabPanel('Cálculos',br(),br()))),
