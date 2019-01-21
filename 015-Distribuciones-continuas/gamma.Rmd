@@ -1,0 +1,34 @@
+## Función de Densidad
+
+$$
+f(x)= \left\{
+	       \begin{array}{ll}
+		 \displaystyle \frac{x^{\alpha-1}e^{-\frac{x}{\beta}}}{\beta^{\alpha}\Gamma(\alpha)}      & \mathrm{si\ } x \geq 0 \\
+		 0     & \mathrm{si\ } x < 0  
+	       \end{array}
+	     \right.
+$$
+
+
+## Función de Distribución
+
+$$
+ F(x) = \left\{
+	       \begin{array}{ll}
+		 \displaystyle I(\alpha,\frac{x}{\beta})      & \mathrm{si\ } x \geq 0 \\
+		 0     & \mathrm{si\ } x < 0  
+	       \end{array}
+	     \right.
+$$
+
+## Media
+
+$$
+E[X]= \beta\alpha
+$$
+
+## Varianza
+
+$$
+Var[X]= \alpha\beta^2
+$$
