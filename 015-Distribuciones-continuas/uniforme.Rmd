@@ -3,8 +3,8 @@
 $$
 f(x)= \left\{
 	       \begin{array}{ll}
-		 \displaystyle \frac{1}{b-a}      & \mathrm{si\ } a \leq x \leq b \\
-		  & \\
+		 \displaystyle \frac{1}{b-a}  &  \mathrm{si\ }   a\le x \le b \\
+		                              &                                 \\
 		     0 & \mathrm{\text{en otro caso.}}  
 	       \end{array}
 	     \right.
