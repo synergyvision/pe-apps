@@ -36,7 +36,7 @@ ui <- fluidPage(
     mainPanel(
 
       withMathJax(),
-      conditionalPanel(condition = "input.distribucion=='Uniforme'",tabsetPanel(type = "pills", id="pri",tabPanel('Características'),
+      conditionalPanel(condition = "input.distribucion=='Uniforme'",tabsetPanel(type = "pills", id="pri",tabPanel('Características',includeMarkdown('Chi-cuadrado.Rmd')),
                                                                                  tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Exponencial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características"),
                                                                                 tabPanel('Cálculos',br(),br()))),
