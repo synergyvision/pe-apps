@@ -1,1 +1,1 @@
-Ésta es una aplicación que demuestra cómo podemos interactuar con el lanzamiento de un dado manipulando el número de lanzamiento.
+Ésta es una aplicación que demuestra cómo podemos interactuar con las diferentes distribuciones discretas manipulando sus parámetros.
