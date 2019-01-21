@@ -168,17 +168,23 @@ ui <- fluidPage(
                                                                                                   conditionalPanel(condition = "input.binega=='Función de Densidad'",
                                                                                                                    numericInput(inputId = 'valorbine',label = HTML('Inserte el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 10,width = '150px'),
                                                                                                                    numericInput(inputId = 'valorbine1',label = HTML('Seleccione la cantidad de éxito'),min=0,max=100,step=1,value = 5,width = '150px'),
-                                                                                                                   numericInput(inputId = 'valorbine2',label = HTML('Inserte la probabilidad de que ocurra un éxito'),min=0,max=1,step=0.1,value = 0.5,width = '150px'))),
-                                                                                                  # conditionalPanel(condition = "input.poi=='Función de Distribución'",
-                                                                                                  #                  numericInput(inputId = 'valorpoi3',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                  #                  numericInput(inputId = 'valorpoi4',label = HTML('Seleccione el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 1,width = '150px')),
-                                                                                                  # conditionalPanel(condition = "input.poi=='Cuantiles'",
-                                                                                                  #                  numericInput(inputId = 'valorpoi5',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                  #                  numericInput(inputId = 'valorpoi6',label = HTML('Seleccione el valor de la probabilidad que le corresponde al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
-                                                                                                  # conditionalPanel(condition = "input.poi=='Muestra Aleatoria'",
-                                                                                                  #                  numericInput(inputId = 'valorpoi7',label = HTML('Inserte el parámetro &lambda;'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                  #                  numericInput(inputId = 'valorpoi8',label = HTML('Seleccione el número de muestra deseado'),min=0,max=200,step=1,value = 5,width = '150px'))
-                                                                                                  conditionalPanel(condition = "input.binega=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("disbinega"),plotOutput("densbinega")))
+                                                                                                                   numericInput(inputId = 'valorbine2',label = HTML('Inserte la probabilidad de que ocurra un éxito'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                                   conditionalPanel(condition = "input.binega=='Función de Distribución'",
+                                                                                                                    numericInput(inputId = 'valorbine3',label = HTML('Inserte el valor al cual se le quiere calcular la probabilidad'),min=0,max=100,step=1,value = 10,width = '150px'),
+                                                                                                                    numericInput(inputId = 'valorbine4',label = HTML('Seleccione la cantidad de éxito'),min=0,max=100,step=1,value = 5,width = '150px'),
+                                                                                                                    numericInput(inputId = 'valorbine5',label = HTML('Inserte la probabilidad de que ocurra un éxito'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                                   conditionalPanel(condition = "input.binega=='Cuantiles'",
+                                                                                                                    numericInput(inputId = 'valorbine6',label = HTML('Inserte la probabilidad del cuantil deseado'),min=0,max=1,step=0.1,value = 0.5,width = '150px'),
+                                                                                                                    numericInput(inputId = 'valorbine7',label = HTML('Seleccione la cantidad de éxito'),min=0,max=100,step=1,value = 5,width = '150px'),
+                                                                                                                    numericInput(inputId = 'valorbine8',label = HTML('Inserte la probabilidad de que ocurra un éxito'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                                   conditionalPanel(condition = "input.binega=='Muestra Aleatoria'",
+                                                                                                                    numericInput(inputId = 'valorbine9',label = HTML('Inserte el tamaño de muestra deseado'),min=0,max=200,step=1,value = 10,width = '150px'),
+                                                                                                                    numericInput(inputId = 'valorbine10',label = HTML('Seleccione la cantidad de éxito'),min=0,max=100,step=1,value = 5,width = '150px'),
+                                                                                                                    numericInput(inputId = 'valorbine11',label = HTML('Inserte la probabilidad de que ocurra un éxito'),min=0,max=1,step=0.1,value = 0.5,width = '150px'))),
+                                                                                                  conditionalPanel(condition = "input.binega=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("disbinega"),plotOutput("densbinega"))),
+                                                                                                  conditionalPanel(condition = "input.binega=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("disbinega1"),plotOutput("densbinega1"))),
+                                                                                                  conditionalPanel(condition = "input.binega=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("disbinega2"))),
+                                                                                                  conditionalPanel(condition = "input.binega=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("disbinega3"),plotOutput("densbinega2")))
                                                                                                   )))
     )
   )
@@ -555,6 +561,57 @@ server <- function(input, output,session) {
       labs( title = "Densidad Binomial negativa",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f15)
+  })
+  
+  output$disbinega1<-renderText({
+    x<-input$valorbine3
+    k<-input$valorbine4
+    p<-input$valorbine5
+    resultado16<-paste("F(",x,") = P(X <=",x,") = ", pnbinom(x-k,size = k,prob=p,lower.tail = TRUE))
+    return(resultado16)
+  })
+  
+  output$densbinega1<-renderPlot({
+    x<-input$valorbine3
+    k<-input$valorbine4
+    p<-input$valorbine5
+    data16<-data.frame(binega=pnbinom(0:(x-k),k,p,lower.tail = TRUE))
+    # data17<-data.frame(hola=k,mundo=x)
+    f16<-ggplot(data16,aes(x=k:x,y=binega))+geom_step(colour='blue',size=1)+
+      labs( title = "Distribución Binomial negativa",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f16)
+  })
+  
+  output$disbinega2<-renderText({
+    x<-input$valorbine6
+    k<-input$valorbine7
+    p<-input$valorbine8
+    resultado18<-paste("x = ", qnbinom(x,k,p,lower.tail = TRUE)+k)
+    return(resultado18)
+  })
+  
+  
+  muestraber7<-reactive({
+    N<-input$valorbine9
+    k<-input$valorbine10
+    p<-input$valorbine11
+    
+    r<-rnbinom(n=N,size=k,prob = p)
+    r+k
+    
+  })
+  
+  output$disbinega3<-renderPrint({
+    return(muestraber7())
+  })
+  
+  output$densbinega2<-renderPlot({
+    data17<-data.frame(x2=muestraber7())
+    f17<-ggplot(data17,mapping=aes(x=1:length(x2),y=x2))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data17$x2))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f17)
   })
   
   
