@@ -15,7 +15,7 @@ $$
 $$
 f(x) = \left\{\begin{array}{ll}
    B\left(x,\frac{n}{2},2\right) & \mathrm{si\ } x > 0 \\
-		 0 & \mathrm{si\ } x \leq 0
+		 0                 & \mathrm{si\ } x \leq 0
 	       \end{array}
 	     \right.
 $$

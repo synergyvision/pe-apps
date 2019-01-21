@@ -10,10 +10,12 @@ ensure_version("psych", "1.8.10")
 #ensure_version("modeest", "2.3.2")
 ensure_version("matrixStats", "0.54.0")
 ensure_version("ggplot2","3.1.0")
+ensure_version("knitr","1.21")
+ensure_version("latex2exp","0.4.0")
 
 
-
-
+library(knitr)
+library(latex2exp)
 library(shiny)
 library(shinydashboard)
 library(readxl)
