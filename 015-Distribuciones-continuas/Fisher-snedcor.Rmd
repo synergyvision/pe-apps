@@ -1,0 +1,29 @@
+## Función de Densidad
+
+$$
+f(x) = \left\{
+\begin{array}{ll}
+\frac{\Gamma(\frac{n_1}{2}+\frac{n_2}{2})}{\Gamma(\frac{n_1}{2})\Gamma(\frac{n_2}{2})} \left(\frac{n_1}{n_2}\right)^\frac{n_1}{2} \left(1+\frac{n_1x}{n_2}\right)^{-\frac{n_1+n_2}{2}} x^{\frac{n_1}{2}-1} & \mathrm{si\ } x > 0\\
+0 & \mathrm{si\ } x \leq 0
+\end{array}
+\right.
+$$
+
+
+## Función de Distribución
+
+$$
+F(x) = P(X\leq x)
+$$
+
+## Valor esperado
+
+$$
+E[X]= \displaystyle \frac{n_2}{n_2 -2}
+$$
+
+## Varianza
+
+$$
+Var[X]= \displaystyle \frac{2n_2^2(n_1 +n_2-2)}{(n_2-4)(n_2-2)^2n_1}
+$$

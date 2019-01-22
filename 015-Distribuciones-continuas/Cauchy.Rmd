@@ -1,0 +1,24 @@
+## Función de Densidad
+
+$$
+f(x) = \displaystyle \frac{\beta}{\pi [\beta^2 + (x-\alpha)^2]}
+$$
+
+
+## Función de Distribución
+
+$$
+F(x) = \displaystyle \frac{1}{\pi} \arctan\left(\frac{x-\alpha}{\beta}\right) +\frac{1}{2}
+$$
+
+## Valor esperado
+
+$$
+E[X]= \text{no definida}
+$$
+
+## Varianza
+
+$$
+Var[X]= \text{no definida}
+$$

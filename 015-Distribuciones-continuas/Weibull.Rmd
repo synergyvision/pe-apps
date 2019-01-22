@@ -1,0 +1,33 @@
+## Función de Densidad
+
+$$
+f(x) = \left\{
+\begin{array}{ll}
+\displaystyle \frac{\beta}{\alpha}\left(\frac{x}{\alpha}\right)^{\beta-1} e^{-(\frac{x}{\alpha})^\beta}  & \mathrm{si\ } x \geq 0\\
+0 & \mathrm{si\ } x < 0
+\end{array}
+\right.
+$$
+
+
+## Función de Distribución
+
+$$
+F(x) = \left\{\begin{array}{ll}
+   1-e^{-\left(\frac{x}{\alpha}\right)^\beta} & \mathrm{si\ } x \geq 0 \\
+		 0                 & \mathrm{si\ } x < 0
+	       \end{array}
+	     \right.
+$$
+
+## Valor esperado
+
+$$
+E[X]=\alpha \Gamma\left(1+\frac{1}{\beta}\right)
+$$
+
+## Varianza
+
+$$
+Var[X]= \alpha^2\left[ \Gamma\left(1+\frac{2}{\beta}\right)- \Gamma^2\left(1+\frac{1}{\beta}\right)\right]
+$$
