@@ -59,7 +59,13 @@ ui <- fluidPage(
                                                                                           conditionalPanel(condition = "input.uni=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("unif3"),plotOutput("dens3")))
                                                                                           ))),
       conditionalPanel(condition = "input.distribucion=='Exponencial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeHTML("exponencial.html")),
-                                                                                tabPanel('Cálculos',br(),br()))),
+                                                                                tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'exp',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                                          conditionalPanel(condition = "input.exp=='Función de Densidad'",
+                                                                                                           numericInput(inputId = 'lambda',label = HTML('Seleccione el valor del parámetro &lambda;'),min=0,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                           numericInput(inputId = 'valorexp',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 1,width = '150px'))
+                                                                                                                     ),
+                                                                                         conditionalPanel(condition = "input.exp=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("expo"),plotOutput("densex")))
+                                                                                         ))),
       conditionalPanel(condition = "input.distribucion=='Gamma'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeHTML("gamma.html")),
                                                                                   tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Beta'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeHTML("beta.html")),
@@ -143,7 +149,7 @@ server <- function(input, output,session) {
     l<-input$rangouni3[1]
     u<-input$rangouni3[2]
     
-    runif(x,l,u)
+    round(runif(x,l,u),2)
   })
   
   output$unif3<-renderPrint({
@@ -158,9 +164,31 @@ server <- function(input, output,session) {
     return(f2)
   })
   
+  output$expo<-renderText({
+    x<-input$valorexp
+    l<-input$lambda
+    resultado<-paste("f(",x,") = ", dexp(x,l))
+    return(resultado)
+  })
   
-  
-  
+  output$densex<-renderPlot({
+    x1<-input$valorexp
+    
+    l<-input$lambda
+    x <- seq(0,50,0.01)
+    hx <- dexp(x,l)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dexp(x1,l)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad exponencial',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
   
   
   
