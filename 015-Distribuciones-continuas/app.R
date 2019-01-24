@@ -62,9 +62,13 @@ ui <- fluidPage(
                                                                                 tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'exp',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                           conditionalPanel(condition = "input.exp=='Función de Densidad'",
                                                                                                            numericInput(inputId = 'lambda',label = HTML('Seleccione el valor del parámetro &lambda;'),min=0,max=50,step=0.1,value = 1,width = '150px'),
-                                                                                                           numericInput(inputId = 'valorexp',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 1,width = '150px'))
+                                                                                                           numericInput(inputId = 'valorexp',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 1,width = '150px')),
+                                                                                          conditionalPanel(condition = "input.exp=='Función de Distribución'",
+                                                                                                           numericInput(inputId = 'lambda1',label = HTML('Seleccione el valor del parámetro &lambda;'),min=0,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                           numericInput(inputId = 'valorexp1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=50,step=0.1,value = 1,width = '150px'))
                                                                                                                      ),
-                                                                                         conditionalPanel(condition = "input.exp=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("expo"),plotOutput("densex")))
+                                                                                         conditionalPanel(condition = "input.exp=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("expo"),plotOutput("densex"))),
+                                                                                         conditionalPanel(condition = "input.exp=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("expo1"),plotOutput("densex1")))
                                                                                          ))),
       conditionalPanel(condition = "input.distribucion=='Gamma'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeHTML("gamma.html")),
                                                                                   tabPanel('Cálculos',br(),br()))),
@@ -189,6 +193,26 @@ server <- function(input, output,session) {
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
+  
+  output$expo1<-renderText({
+    x<-input$valorexp1
+    l<-input$lambda1
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pexp(x,rate = l))
+    return(resultado1)
+  })
+  
+  #revisar
+  output$denssex1<-renderPlot({
+    x<-input$valorexp1
+    l<-input$lambda1
+    data1<-data.frame(exp=pexp(0:x,rate=l,lower.tail = TRUE))
+    
+    f1<-ggplot(data1,aes(x=0:x,y=exp))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
   
   
   
