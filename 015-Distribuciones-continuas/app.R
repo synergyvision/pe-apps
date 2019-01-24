@@ -42,9 +42,21 @@ ui <- fluidPage(
                                                                                  tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'uni',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                           conditionalPanel(condition = "input.uni=='Función de Densidad'",
                                                                                                            sliderInput('rangouni',label = 'Parámetros [a,b]',min = -40,max=40,value=c(0,1),step = 1,width = '300px'),
-                                                                                                           numericInput(inputId = 'valor',label = HTML('Seleccione el valor de la función de densidad'),min=-40,max=40,step=1,value = 1,width = '150px'))
+                                                                                                           numericInput(inputId = 'valor',label = HTML('Seleccione el valor de la función de densidad'),min=-40,max=40,step=1,value = 1,width = '150px')),
+                                                                                          conditionalPanel(condition = "input.uni=='Función de Distribución'",
+                                                                                                           sliderInput('rangouni1',label = 'Parámetros [a,b]',min = -40,max=40,value=c(0,1),step = 1,width = '300px'),
+                                                                                                           numericInput(inputId = 'valor1',label = HTML('Seleccione el valor de la función de distribución'),min=-40,max=40,step=1,value = 1,width = '150px')),
+                                                                                          conditionalPanel(condition = "input.uni=='Cuantiles'",
+                                                                                                           sliderInput('rangouni2',label = 'Parámetros [a,b]',min = -40,max=40,value=c(0,1),step = 1,width = '300px'),
+                                                                                                           numericInput(inputId = 'valor2',label = HTML('Seleccione la probabilidad del cuantil deseado'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                          conditionalPanel(condition = "input.uni=='Muestra Aleatoria'",
+                                                                                                           sliderInput('rangouni3',label = 'Parámetros [a,b]',min = -40,max=40,value=c(0,1),step = 1,width = '300px'),
+                                                                                                           numericInput(inputId = 'valor3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=0,max=100,step=1,value = 10,width = '150px'))
                                                                                           ),
-                                                                                          conditionalPanel(condition = "input.uni=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("unif"),plotOutput("dens1")))
+                                                                                          conditionalPanel(condition = "input.uni=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("unif"),plotOutput("dens1"))),
+                                                                                          conditionalPanel(condition = "input.uni=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("unif1"),plotOutput("dens2"))),
+                                                                                          conditionalPanel(condition = "input.uni=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("unif2"))),
+                                                                                          conditionalPanel(condition = "input.uni=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("unif3"),plotOutput("dens3")))
                                                                                           ))),
       conditionalPanel(condition = "input.distribucion=='Exponencial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeHTML("exponencial.html")),
                                                                                 tabPanel('Cálculos',br(),br()))),
@@ -98,6 +110,61 @@ server <- function(input, output,session) {
     return(f)
   })
 
+  output$unif1<-renderText({
+    x<-input$valor1
+    l<-input$rangouni1[1]
+    u<-input$rangouni1[2]
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", punif(x,l,u))
+    return(resultado1)
+  })
+  
+  output$dens2<-renderPlot({
+    x<-input$valor1
+    l<-input$rangouni1[1]
+    u<-input$rangouni1[2]
+    data1<-data.frame(uni=punif(l:x,l,u,lower.tail = TRUE))
+    
+    f1<-ggplot(data1,aes(x=l:x,y=uni))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
+  output$unif2<-renderText({
+    x<-input$valor2
+    l<-input$rangouni2[1]
+    u<-input$rangouni2[2]
+    resultado2<-paste("x = ", qunif(x,l,u))
+    return(resultado2)
+  })
+  
+  muestra<-reactive({
+    x<-input$valor3
+    l<-input$rangouni3[1]
+    u<-input$rangouni3[2]
+    
+    runif(x,l,u)
+  })
+  
+  output$unif3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$dens3<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
+  
+  
+  
+  
+  
+  
+  
+  
   }
 
 
