@@ -83,9 +83,24 @@ ui <- fluidPage(
                                                                                             conditionalPanel(condition = "input.gam=='Función de Densidad'",
                                                                                                              numericInput(inputId = 'alpha',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
                                                                                                              numericInput(inputId = 'beta',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
-                                                                                                             numericInput(inputId = 'valorgamm',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 1,width = '150px'))
+                                                                                                             numericInput(inputId = 'valorgamm',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 1,width = '150px')),
+                                                                                            conditionalPanel(condition = "input.gam=='Función de Distribución'",
+                                                                                                             numericInput(inputId = 'alpha1',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'beta1',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'valorgamm1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=50,step=0.1,value = 1,width = '150px')),
+                                                                                            conditionalPanel(condition = "input.gam=='Cuantiles'",
+                                                                                                             numericInput(inputId = 'alpha2',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'beta2',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'valorgamm2',label = HTML('Seleccione el valor de la probabilidad del cuantil'),min=0,max=1,step=0.1,value = 1,width = '150px')),
+                                                                                            conditionalPanel(condition = "input.gam=='Muestra Aleatoria'",
+                                                                                                             numericInput(inputId = 'alpha3',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'beta3',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'valorgamm3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=100,step=1,value = 10,width = '150px'))
                                                                                                                        ),
-                                                                                           conditionalPanel(condition = "input.gam=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("gamma"),plotOutput("densgam")))
+                                                                                           conditionalPanel(condition = "input.gam=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("gamma"),plotOutput("densgam"))),
+                                                                                           conditionalPanel(condition = "input.gam=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("gamma1"),plotOutput("densgam1"))),
+                                                                                           conditionalPanel(condition = "input.gam=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("gamma2"))),
+                                                                                           conditionalPanel(condition = "input.gam=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("gamma3"),plotOutput("densgam2")))
                                                                                            ))),
       conditionalPanel(condition = "input.distribucion=='Beta'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeHTML("beta.html")),
                                                                                        tabPanel('Cálculos',br(),br()))),
@@ -282,6 +297,61 @@ server <- function(input, output,session) {
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
+  
+  output$gamma1<-renderText({
+    x<-input$valorgamm1
+    
+    alpha<-input$alpha1
+    beta<-input$beta1
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pgamma(x,shape = alpha,scale = beta))
+    return(resultado1)
+  })
+  
+
+  output$densgam1<-renderPlot({
+    x<-input$valorgamm1
+    
+    alpha<-input$alpha1
+    beta<-input$beta1
+    
+    data1<-data.frame(gam=pgamma(0:x,shape = alpha,scale = beta,lower.tail = TRUE))
+    
+    f1<-ggplot(data1,aes(x=0:x,y=gam))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
+  
+  output$gamma2<-renderText({
+    x<-input$valorgamm2
+    alpha<-input$alpha2
+    beta<-input$beta2
+    
+    resultado2<-paste("x = ", qgamma(x,shape = alpha,scale = beta))
+    return(resultado2)
+  })
+  
+  muestra<-reactive({
+    x<-input$valorgamm3
+    alpha<-input$alpha3
+    beta<-input$beta3
+    round(rgamma(x,shape = alpha,scale = beta),2)
+  })
+  
+  output$gamma3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$densgam2<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
+  
+  
   
   
   
