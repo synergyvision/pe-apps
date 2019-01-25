@@ -107,9 +107,24 @@ ui <- fluidPage(
                                                                                                 conditionalPanel(condition = "input.bet=='Función de Densidad'",
                                                                                                                  numericInput(inputId = 'alphab',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
                                                                                                                  numericInput(inputId = 'betab',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
-                                                                                                                 numericInput(inputId = 'valorbeta',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=1,step=0.1,value = 0.5,width = '150px'))
+                                                                                                                 numericInput(inputId = 'valorbeta',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                                conditionalPanel(condition = "input.bet=='Función de Distribución'",
+                                                                                                                 numericInput(inputId = 'alphab1',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'betab1',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'valorbeta1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                                conditionalPanel(condition = "input.bet=='Cuantiles'",
+                                                                                                                 numericInput(inputId = 'alphab2',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'betab2',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'valorbeta2',label = HTML('Seleccione el valor de la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                                conditionalPanel(condition = "input.bet=='Muestra Aleatoria'",
+                                                                                                                 numericInput(inputId = 'alphab3',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'betab3',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'valorbeta3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=0,max=100,step=1,value = 10,width = '150px'))
                                                                                                                             ),
-                                                                                                conditionalPanel(condition = "input.bet=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fbeta"),plotOutput("densfbeta")))
+                                                                                                conditionalPanel(condition = "input.bet=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fbeta"),plotOutput("densfbeta"))),
+                                                                                                conditionalPanel(condition = "input.bet=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("fbeta1"),plotOutput("densfbeta1"))),
+                                                                                                conditionalPanel(condition = "input.bet=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fbeta2"))),
+                                                                                                conditionalPanel(condition = "input.bet=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fbeta3"),plotOutput("densfbeta2")))
                                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Chi-cuadrado'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeHTML('Chi-cuadrado.html')),
                                                                                    tabPanel('Cálculos',br(),br()))),
@@ -385,6 +400,61 @@ server <- function(input, output,session) {
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
+  
+  output$fbeta1<-renderText({
+    x<-input$valorbeta1
+    alpha<-input$alphab1
+    beta<-input$betab1
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pbeta(x,shape1 = alpha,shape2 = beta))
+    return(resultado1)
+  })
+  
+  
+  output$densfbeta1<-renderPlot({
+    x<-input$valorbeta1
+    alpha<-input$alphab1
+    beta<-input$betab1
+    
+    data1<-data.frame(beta=pbeta(seq(0,x,0.1),shape1 = alpha,shape2 = beta,lower.tail = TRUE))
+    
+    f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=beta))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
+  
+  output$fbeta2<-renderText({
+    x<-input$valorbeta2
+    alpha<-input$alphab2
+    beta<-input$betab2
+    
+    resultado2<-paste("x = ", qbeta(x,shape1 = alpha,shape2 = beta))
+    return(resultado2)
+  })
+  
+  muestra<-reactive({
+    x<-input$valorbeta3
+    alpha<-input$alphab3
+    beta<-input$betab3
+    round(rbeta(x,shape1 = alpha,shape2 = beta),2)
+  })
+  
+  output$fbeta3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$densfbeta2<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
+  
+  
+  
+  
   
   
   
