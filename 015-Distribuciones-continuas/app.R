@@ -79,7 +79,14 @@ ui <- fluidPage(
                                                                                          conditionalPanel(condition = "input.exp=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("expo3"),plotOutput("densex2")))
                                                                                          ))),
       conditionalPanel(condition = "input.distribucion=='Gamma'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeHTML("gamma.html")),
-                                                                                  tabPanel('Cálculos',br(),br()))),
+                                                                                  tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'gam',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                                            conditionalPanel(condition = "input.gam=='Función de Densidad'",
+                                                                                                             numericInput(inputId = 'alpha',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'beta',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                             numericInput(inputId = 'valorgamm',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 1,width = '150px'))
+                                                                                                                       ),
+                                                                                           conditionalPanel(condition = "input.gam=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("gamma"),plotOutput("densgam")))
+                                                                                           ))),
       conditionalPanel(condition = "input.distribucion=='Beta'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeHTML("beta.html")),
                                                                                        tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Chi-cuadrado'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeHTML('Chi-cuadrado.html')),
@@ -248,7 +255,33 @@ server <- function(input, output,session) {
     return(f2)
   })
   
+  output$gamma<-renderText({
+    x<-input$valorgamm
+    alpha<-input$alpha
+    beta<-input$beta
+    resultado<-paste("f(",x,") = ", dgamma(x,shape = alpha,scale = beta))
+    return(resultado)
+  })
   
+  output$densgam<-renderPlot({
+    x1<-input$valorgamm
+    
+    alpha<-input$alpha
+    beta<-input$beta
+    x <- seq(0,50,0.01)
+    hx <- dgamma(x,shape = alpha,scale = beta)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dgamma(x1,shape = alpha,scale = beta)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad gamma',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
   
   
   
