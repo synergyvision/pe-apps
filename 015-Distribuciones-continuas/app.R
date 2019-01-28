@@ -148,7 +148,14 @@ ui <- fluidPage(
                                                                                    conditionalPanel(condition = "input.chi=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fchi3"),plotOutput("denschi2")))
                                                                                             ))),
       conditionalPanel(condition = "input.distribucion=='Fisher-Snedecor'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeHTML('Fisher-snedcor.html')),
-                                                                               tabPanel('Cálculos',br(),br()))),
+                                                                               tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'fish',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                               conditionalPanel(condition = "input.fish=='Función de Densidad'",
+                                                                                                numericInput(inputId = 'dfisher1',label = HTML('Seleccione los grados de libertad <i>n<sub>1</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'dfisher2',label = HTML('Seleccione los grados de libertad <i>n<sub>2</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorfish',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px'))
+                                                                                                                    ),
+                                                                               conditionalPanel(condition = "input.fish=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fisher"),plotOutput("densfi")))
+                                                                                        ))),
       conditionalPanel(condition = "input.distribucion=='t-Student'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeHTML('t-Student.html')),
                                                                                          tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Weibull'",tabsetPanel(type = "pills", id="pri8",tabPanel("Características",includeHTML('Weibull.html')),
@@ -550,7 +557,35 @@ server <- function(input, output,session) {
     return(f2)
   })
   
+  output$fisher<-renderText({
+    x<-input$valorfish
+    gl1<-input$dfisher1
+    gl2<-input$dfisher2
+    
+    resultado<-paste("f(",x,") = ", df(x,df1=gl1,df2=gl2))
+    return(resultado)
+  })
   
+  output$densfi<-renderPlot({
+    x1<-input$valorfish
+    
+    gl1<-input$dfisher1
+    gl2<-input$dfisher2
+    
+    x <- seq(0,30,0.01)
+    hx <- df(x,df1=gl1,df2 = gl2)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = df(x1,df1=gl1,df2=gl2)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Fisher',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
   
   
   }
