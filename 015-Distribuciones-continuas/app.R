@@ -152,9 +152,24 @@ ui <- fluidPage(
                                                                                conditionalPanel(condition = "input.fish=='Función de Densidad'",
                                                                                                 numericInput(inputId = 'dfisher1',label = HTML('Seleccione los grados de libertad <i>n<sub>1</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
                                                                                                 numericInput(inputId = 'dfisher2',label = HTML('Seleccione los grados de libertad <i>n<sub>2</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                numericInput(inputId = 'valorfish',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px'))
+                                                                                                numericInput(inputId = 'valorfish',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                               conditionalPanel(condition = "input.fish=='Función de Distribución'",
+                                                                                                numericInput(inputId = 'dfisher3',label = HTML('Seleccione los grados de libertad <i>n<sub>1</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'dfisher4',label = HTML('Seleccione los grados de libertad <i>n<sub>2</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorfish1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                               conditionalPanel(condition = "input.fish=='Cuantiles'",
+                                                                                                numericInput(inputId = 'dfisher5',label = HTML('Seleccione los grados de libertad <i>n<sub>1</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'dfisher6',label = HTML('Seleccione los grados de libertad <i>n<sub>2</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorfish2',label = HTML('Seleccione la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                               conditionalPanel(condition = "input.fish=='Muestra Aleatoria'",
+                                                                                                numericInput(inputId = 'dfisher7',label = HTML('Seleccione los grados de libertad <i>n<sub>1</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'dfisher8',label = HTML('Seleccione los grados de libertad <i>n<sub>2</sub></i>'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                numericInput(inputId = 'valorfish3',label = HTML('Seleccione el tamaño de la muestra asociada'),min=0,max=100,step=1,value = 10,width = '150px'))
                                                                                                                     ),
-                                                                               conditionalPanel(condition = "input.fish=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fisher"),plotOutput("densfi")))
+                                                                               conditionalPanel(condition = "input.fish=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fisher"),plotOutput("densfi"))),
+                                                                               conditionalPanel(condition = "input.fish=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("fisher1"),plotOutput("densfi1"))),
+                                                                               conditionalPanel(condition = "input.fish=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fisher2"))),
+                                                                               conditionalPanel(condition = "input.fish=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fisher3"),plotOutput("densfi2")))
                                                                                         ))),
       conditionalPanel(condition = "input.distribucion=='t-Student'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeHTML('t-Student.html')),
                                                                                          tabPanel('Cálculos',br(),br()))),
@@ -586,6 +601,71 @@ server <- function(input, output,session) {
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
+  
+  output$fisher1<-renderText({
+    x<-input$valorfish1
+    g1<-input$dfisher3
+    g2<-input$dfisher4
+    
+    
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pf(x,df1=g1,df2 = g2))
+    return(resultado1)
+  })
+  
+  
+  output$densfi1<-renderPlot({
+    x<-input$valorfish1
+    g1<-input$dfisher3
+    g2<-input$dfisher4
+    
+    data1<-data.frame(fi=pf(0:x,df1=g1,df2 = g2))
+    
+    f1<-ggplot(data1,aes(x=0:x,y=fi))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
+  
+  output$fisher2<-renderText({
+    x<-input$valorfish2
+    g1<-input$dfisher5
+    g2<-input$dfisher6
+    
+    resultado2<-paste("x = ", qf(x,df1=g1,df2 = g2))
+    return(resultado2)
+  })
+  
+  muestra<-reactive({
+    x<-input$valorfish3
+    g1<-input$dfisher7
+    g2<-input$dfisher8
+    round(rf(x,df1=g1,df2 = g2),2)
+  })
+  
+  output$fisher3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$densfi2<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   }
