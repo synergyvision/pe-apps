@@ -130,9 +130,22 @@ ui <- fluidPage(
                                                                                    tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'chi',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                    conditionalPanel(condition = "input.chi=='Función de Densidad'",
                                                                                                     numericInput(inputId = 'df',label = HTML('Seleccione los grados de libertad'),min=0,max=100,step=1,value = 1,width = '150px'),
-                                                                                                    numericInput(inputId = 'valorchi',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px'))
+                                                                                                    numericInput(inputId = 'valorchi',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                                   conditionalPanel(condition = "input.chi=='Función de Distribución'",
+                                                                                                    numericInput(inputId = 'df1',label = HTML('Seleccione los grados de libertad'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                    numericInput(inputId = 'valorchi1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                                   conditionalPanel(condition = "input.chi=='Cuantiles'",
+                                                                                                    numericInput(inputId = 'df2',label = HTML('Seleccione los grados de libertad'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                    numericInput(inputId = 'valorchi2',label = HTML('Seleccione la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                   conditionalPanel(condition = "input.chi=='Muestra Aleatoria'",
+                                                                                                    numericInput(inputId = 'df3',label = HTML('Seleccione los grados de libertad'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                    numericInput(inputId = 'valorchi3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=200,step=1,value = 10,width = '150px'))
+                                                                                   
                                                                                                                         ),
-                                                                                   conditionalPanel(condition = "input.chi=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fchi"),plotOutput("denschi")))
+                                                                                   conditionalPanel(condition = "input.chi=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fchi"),plotOutput("denschi"))),
+                                                                                   conditionalPanel(condition = "input.chi=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("fchi1"),plotOutput("denschi1"))),
+                                                                                   conditionalPanel(condition = "input.chi=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fchi2"))),
+                                                                                   conditionalPanel(condition = "input.chi=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fchi3"),plotOutput("denschi2")))
                                                                                             ))),
       conditionalPanel(condition = "input.distribucion=='Fisher-Snedecor'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeHTML('Fisher-snedcor.html')),
                                                                                tabPanel('Cálculos',br(),br()))),
@@ -487,6 +500,55 @@ server <- function(input, output,session) {
   })
   
   
+  output$fchi1<-renderText({
+    x<-input$valorchi1
+    g<-input$df1
+    
+   
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pchisq(x,df=g))
+    return(resultado1)
+  })
+  
+  
+  output$denschi1<-renderPlot({
+    x<-input$valorchi1
+    g<-input$df1
+    
+    data1<-data.frame(chi=pchisq(0:x,df=g))
+    
+    f1<-ggplot(data1,aes(x=0:x,y=chi))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
+  
+  output$fchi2<-renderText({
+    x<-input$valorchi2
+    g<-input$df2
+    
+    resultado2<-paste("x = ", qchisq(x,df=g))
+    return(resultado2)
+  })
+  
+  
+  muestra<-reactive({
+    x<-input$valorchi3
+    g<-input$df3
+    round(rchisq(x,df=g),2)
+  })
+  
+  output$fchi3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$denschi2<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
   
   
   
