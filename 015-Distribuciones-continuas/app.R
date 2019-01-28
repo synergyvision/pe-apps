@@ -127,7 +127,13 @@ ui <- fluidPage(
                                                                                                 conditionalPanel(condition = "input.bet=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fbeta3"),plotOutput("densfbeta2")))
                                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Chi-cuadrado'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeHTML('Chi-cuadrado.html')),
-                                                                                   tabPanel('Cálculos',br(),br()))),
+                                                                                   tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'chi',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                                   conditionalPanel(condition = "input.chi=='Función de Densidad'",
+                                                                                                    numericInput(inputId = 'df',label = HTML('Seleccione los grados de libertad'),min=0,max=100,step=1,value = 1,width = '150px'),
+                                                                                                    numericInput(inputId = 'valorchi',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px'))
+                                                                                                                        ),
+                                                                                   conditionalPanel(condition = "input.chi=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fchi"),plotOutput("denschi")))
+                                                                                            ))),
       conditionalPanel(condition = "input.distribucion=='Fisher-Snedecor'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeHTML('Fisher-snedcor.html')),
                                                                                tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='t-Student'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeHTML('t-Student.html')),
@@ -452,7 +458,33 @@ server <- function(input, output,session) {
     return(f2)
   })
   
+  output$fchi<-renderText({
+    x<-input$valorchi
+    gl<-input$df
+    
+    resultado<-paste("f(",x,") = ", dchisq(x,df=gl))
+    return(resultado)
+  })
   
+  output$denschi<-renderPlot({
+    x1<-input$valorchi
+    
+    gl<-input$df
+    
+    x <- seq(0,100,0.01)
+    hx <- dchisq(x,df=gl)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dchisq(x1,df=gl)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Chi-Cuadrado',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
   
   
   
