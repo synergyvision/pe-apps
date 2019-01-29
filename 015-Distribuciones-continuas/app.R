@@ -221,9 +221,24 @@ ui <- fluidPage(
                                                                               conditionalPanel(condition = "input.cau=='Función de Densidad'",
                                                                                                numericInput(inputId = 'alphacau',label = HTML('Seleccione el valor del parámetro &alpha;'),min=-20,max=20,step=0.1,value = 1,width = '150px'),
                                                                                                numericInput(inputId = 'betacau',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
-                                                                                               numericInput(inputId = 'valorcau',label = HTML('Seleccione el valor de la función de densidad'),min=-20,max=20,step=0.1,value = 0.5,width = '150px')) 
+                                                                                               numericInput(inputId = 'valorcau',label = HTML('Seleccione el valor de la función de densidad'),min=-20,max=20,step=0.1,value = 0,width = '150px')),
+                                                                              conditionalPanel(condition = "input.cau=='Función de Distribución'",
+                                                                                               numericInput(inputId = 'alphacau1',label = HTML('Seleccione el valor del parámetro &alpha;'),min=-20,max=20,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'betacau1',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'valorcau1',label = HTML('Seleccione el valor de la función de distribución'),min=-20,max=20,step=0.1,value = 10,width = '150px')),
+                                                                              conditionalPanel(condition = "input.cau=='Cuantiles'",
+                                                                                               numericInput(inputId = 'alphacau2',label = HTML('Seleccione el valor del parámetro &alpha;'),min=-20,max=20,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'betacau2',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'valorcau2',label = HTML('Seleccione el valor de la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                              conditionalPanel(condition = "input.cau=='Muestra Aleatoria'",
+                                                                                               numericInput(inputId = 'alphacau3',label = HTML('Seleccione el valor del parámetro &alpha;'),min=-20,max=20,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'betacau3',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'valorcau3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=100,step=1,value = 10,width = '150px'))
                                                                               ),
-                                                                              conditionalPanel(condition = "input.cau=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("cauy"),plotOutput("denscau")))
+                                                                              conditionalPanel(condition = "input.cau=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("cauy"),plotOutput("denscau"))),
+                                                                              conditionalPanel(condition = "input.cau=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("cauy1"),plotOutput("denscau1"))),
+                                                                              conditionalPanel(condition = "input.cau=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("cauy2"))),
+                                                                              conditionalPanel(condition = "input.cau=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("cauy3"),plotOutput("denscau2")))
                                                                                        )))
     )
   )
@@ -884,11 +899,65 @@ server <- function(input, output,session) {
     f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
       geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
       geom_segment(aes(x = x1, y =0 , xend = x1,
-                       yend = dcauchy(x,location = alpha,scale=beta)),
+                       yend = dcauchy(x1,location = alpha,scale=beta)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Cauchy',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
+  })
+  
+  output$cauy1<-renderText({
+    x<-input$valorcau1
+    alpha<-input$alphacau1
+    beta<-input$betacau1
+    
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pcauchy(x,location = alpha,scale = beta))
+    return(resultado1)
+  })
+  
+  
+  output$denscau1<-renderPlot({
+    x<-input$valorcau1
+    alpha<-input$alphacau1
+    beta<-input$betacau1
+    
+    data1<-data.frame(cau=pcauchy(seq(0,x,0.1),location = alpha,scale = beta))
+    
+    f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=cau))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
+  output$cauy2<-renderText({
+    x<-input$valorcau2
+    alpha<-input$alphacau2
+    beta<-input$betacau2
+    
+    
+    resultado2<-paste("x = ", qcauchy(x,location = alpha,scale = beta))
+    return(resultado2)
+  })
+  
+  
+  muestra<-reactive({
+    x<-input$valorcau3
+    alpha<-input$alphacau3
+    beta<-input$betacau3
+    
+    round(rcauchy(x,location = alpha,scale = beta),2)
+  })
+  
+  output$cauy3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$denscau2<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
   })
   
   
