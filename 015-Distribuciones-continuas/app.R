@@ -217,7 +217,14 @@ ui <- fluidPage(
                                                                                          conditionalPanel(condition = "input.wei=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("weib3"),plotOutput("denswei2")))
                                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Cauchy'",tabsetPanel(type = "pills", id="pri9",tabPanel("Características",includeHTML('Cauchy.html')),
-                                                                              tabPanel('Cálculos',br(),br())))
+                                                                              tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'cau',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                              conditionalPanel(condition = "input.cau=='Función de Densidad'",
+                                                                                               numericInput(inputId = 'alphacau',label = HTML('Seleccione el valor del parámetro &alpha;'),min=-20,max=20,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'betacau',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                               numericInput(inputId = 'valorcau',label = HTML('Seleccione el valor de la función de densidad'),min=-20,max=20,step=0.1,value = 0.5,width = '150px')) 
+                                                                              ),
+                                                                              conditionalPanel(condition = "input.cau=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("cauy"),plotOutput("denscau")))
+                                                                                       )))
     )
   )
 )
@@ -854,7 +861,35 @@ server <- function(input, output,session) {
     return(f2)
   })
   
+  output$cauy<-renderText({
+    x<-input$valorcau
+    alpha<-input$alphacau
+    beta<-input$betacau
+    
+    resultado<-paste("f(",x,") = ", dcauchy(x,location = alpha,scale=beta))
+    return(resultado)
+  })
   
+  output$denscau<-renderPlot({
+    x1<-input$valorcau
+    
+    alpha<-input$alphacau
+    beta<-input$betacau
+    
+    x <- seq(-20,20,0.01)
+    hx <- dcauchy(x,location = alpha,scale=beta)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dcauchy(x,location = alpha,scale=beta)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Cauchy',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
   
   
   }
