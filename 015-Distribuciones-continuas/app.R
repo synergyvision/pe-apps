@@ -175,9 +175,22 @@ ui <- fluidPage(
                                                                                          tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 't',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                          conditionalPanel(condition = "input.t=='Función de Densidad'",
                                                                                                           numericInput(inputId = 'dft',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
-                                                                                                          numericInput(inputId = 'valort',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px'))
+                                                                                                          numericInput(inputId = 'valort',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                                         conditionalPanel(condition = "input.t=='Función de Distribución'",
+                                                                                                          numericInput(inputId = 'dft1',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
+                                                                                                          numericInput(inputId = 'valort1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                                         conditionalPanel(condition = "input.t=='Cuantiles'",
+                                                                                                          numericInput(inputId = 'dft2',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
+                                                                                                          numericInput(inputId = 'valort2',label = HTML('Seleccione el valor de la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                         conditionalPanel(condition = "input.t=='Muestra Aleatoria'",
+                                                                                                          numericInput(inputId = 'dft3',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
+                                                                                                          numericInput(inputId = 'valort3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=100,step=1,value = 10,width = '150px'))
                                                                                                           ),
-                                                                                         conditionalPanel(condition = "input.t=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("student"),plotOutput("denst")))
+                                                                                         conditionalPanel(condition = "input.t=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("student"),plotOutput("denst"))),
+                                                                                         conditionalPanel(condition = "input.t=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("student1"),plotOutput("denst1"))),
+                                                                                         conditionalPanel(condition = "input.t=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("student2"))),
+                                                                                         conditionalPanel(condition = "input.t=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("student3"),plotOutput("denst2")))
+                                                                                         
                                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Weibull'",tabsetPanel(type = "pills", id="pri8",tabPanel("Características",includeHTML('Weibull.html')),
                                                                                          tabPanel('Cálculos',br(),br()))),
@@ -689,11 +702,53 @@ server <- function(input, output,session) {
     return(f)
   })
   
+  output$student1<-renderText({
+    x<-input$valort1
+    g<-input$dft1
+    
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pt(x,df=g))
+    return(resultado1)
+  })
   
   
+  output$denst1<-renderPlot({
+    x<-input$valort1
+    g<-input$dft1
+    
+    data1<-data.frame(t=pt(0:x,df=g))
+    
+    f1<-ggplot(data1,aes(x=0:x,y=t))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
   
   
+  output$student2<-renderText({
+    x<-input$valort2
+    g<-input$dft2
+    
+    resultado2<-paste("x = ", qt(x,df=g))
+    return(resultado2)
+  })
   
+  muestra<-reactive({
+    x<-input$valort3
+    g<-input$dft3
+    round(rt(x,df=g),2)
+  })
+
+  output$student3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$denst2<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
   
   
   
