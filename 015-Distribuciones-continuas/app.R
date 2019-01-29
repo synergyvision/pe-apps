@@ -172,7 +172,13 @@ ui <- fluidPage(
                                                                                conditionalPanel(condition = "input.fish=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fisher3"),plotOutput("densfi2")))
                                                                                         ))),
       conditionalPanel(condition = "input.distribucion=='t-Student'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeHTML('t-Student.html')),
-                                                                                         tabPanel('Cálculos',br(),br()))),
+                                                                                         tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 't',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                                         conditionalPanel(condition = "input.t=='Función de Densidad'",
+                                                                                                          numericInput(inputId = 'dft',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
+                                                                                                          numericInput(inputId = 'valort',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px'))
+                                                                                                          ),
+                                                                                         conditionalPanel(condition = "input.t=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("student"),plotOutput("denst")))
+                                                                                                  ))),
       conditionalPanel(condition = "input.distribucion=='Weibull'",tabsetPanel(type = "pills", id="pri8",tabPanel("Características",includeHTML('Weibull.html')),
                                                                                          tabPanel('Cálculos',br(),br()))),
       conditionalPanel(condition = "input.distribucion=='Cauchy'",tabsetPanel(type = "pills", id="pri9",tabPanel("Características",includeHTML('Cauchy.html')),
@@ -655,7 +661,33 @@ server <- function(input, output,session) {
     return(f2)
   })
   
+  output$student<-renderText({
+    x<-input$valort
+    gl<-input$dft
+    
+    resultado<-paste("f(",x,") = ", dt(x,df=gl))
+    return(resultado)
+  })
   
+  output$denst<-renderPlot({
+    x1<-input$valort
+
+    gl<-input$dft
+
+    x <- seq(-6,6,0.01)
+    hx <- dt(x,df=gl)
+
+    dat<-data.frame(x,hx)
+
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dt(x1,df=gl)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad t-Student',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
   
   
   
