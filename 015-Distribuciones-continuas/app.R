@@ -175,10 +175,10 @@ ui <- fluidPage(
                                                                                          tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 't',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                          conditionalPanel(condition = "input.t=='Función de Densidad'",
                                                                                                           numericInput(inputId = 'dft',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
-                                                                                                          numericInput(inputId = 'valort',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                                                          numericInput(inputId = 'valort',label = HTML('Seleccione el valor de la función de densidad'),min=-50,max=50,step=0.1,value = 1,width = '150px')),
                                                                                          conditionalPanel(condition = "input.t=='Función de Distribución'",
                                                                                                           numericInput(inputId = 'dft1',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
-                                                                                                          numericInput(inputId = 'valort1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=100,step=0.1,value = 1,width = '150px')),
+                                                                                                          numericInput(inputId = 'valort1',label = HTML('Seleccione el valor de la función de distribución'),min=-50,max=50,step=0.1,value = 1,width = '150px')),
                                                                                          conditionalPanel(condition = "input.t=='Cuantiles'",
                                                                                                           numericInput(inputId = 'dft2',label = HTML('Seleccione los grados de libertad'),min=1,max=100,step=1,value = 3,width = '150px'),
                                                                                                           numericInput(inputId = 'valort2',label = HTML('Seleccione el valor de la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
@@ -193,7 +193,14 @@ ui <- fluidPage(
                                                                                          
                                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Weibull'",tabsetPanel(type = "pills", id="pri8",tabPanel("Características",includeHTML('Weibull.html')),
-                                                                                         tabPanel('Cálculos',br(),br()))),
+                                                                                         tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'wei',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
+                                                                                         conditionalPanel(condition = "input.wei=='Función de Densidad'",
+                                                                                                          numericInput(inputId = 'alphaw',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                          numericInput(inputId = 'betaw',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                          numericInput(inputId = 'valorwei',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 0.5,width = '150px'))
+                                                                                                                              ),
+                                                                                         conditionalPanel(condition = "input.wei=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("weib"),plotOutput("denswei")))
+                                                                                                  ))),
       conditionalPanel(condition = "input.distribucion=='Cauchy'",tabsetPanel(type = "pills", id="pri9",tabPanel("Características",includeHTML('Cauchy.html')),
                                                                               tabPanel('Cálculos',br(),br())))
     )
@@ -715,9 +722,9 @@ server <- function(input, output,session) {
     x<-input$valort1
     g<-input$dft1
     
-    data1<-data.frame(t=pt(0:x,df=g))
+    data1<-data.frame(t=pt(-6:x,df=g))
     
-    f1<-ggplot(data1,aes(x=0:x,y=t))+geom_line(colour='blue',size=1)+
+    f1<-ggplot(data1,aes(x=-6:x,y=t))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Uniforme",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
@@ -748,6 +755,36 @@ server <- function(input, output,session) {
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
     return(f2)
+  })
+  
+  output$weib<-renderText({
+    x<-input$valorwei
+    alpha<-input$alphaw
+    beta<-input$betaw
+    
+    resultado<-paste("f(",x,") = ", dweibull(x,shape=beta,scale=alpha))
+    return(resultado)
+  })
+  
+  output$denswei<-renderPlot({
+    x1<-input$valorwei
+    
+    alpha<-input$alphaw
+    beta<-input$betaw
+    
+    x <- seq(0,10,0.01)
+    hx <- dweibull(x,shape=beta,scale=alpha)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dweibull(x1,shape=beta,scale=alpha)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Weibull',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
   })
   
   
