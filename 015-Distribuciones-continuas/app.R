@@ -197,9 +197,24 @@ ui <- fluidPage(
                                                                                          conditionalPanel(condition = "input.wei=='Función de Densidad'",
                                                                                                           numericInput(inputId = 'alphaw',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
                                                                                                           numericInput(inputId = 'betaw',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
-                                                                                                          numericInput(inputId = 'valorwei',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 0.5,width = '150px'))
+                                                                                                          numericInput(inputId = 'valorwei',label = HTML('Seleccione el valor de la función de densidad'),min=0,max=50,step=0.1,value = 0.5,width = '150px')),
+                                                                                         conditionalPanel(condition = "input.wei=='Función de Distribución'",
+                                                                                                          numericInput(inputId = 'alphaw1',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                          numericInput(inputId = 'betaw1',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 5,width = '150px'),
+                                                                                                          numericInput(inputId = 'valorwei1',label = HTML('Seleccione el valor de la función de distribución'),min=0,max=50,step=0.1,value = 3,width = '150px')),
+                                                                                         conditionalPanel(condition = "input.wei=='Cuantiles'",
+                                                                                                          numericInput(inputId = 'alphaw2',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                          numericInput(inputId = 'betaw2',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 5,width = '150px'),
+                                                                                                          numericInput(inputId = 'valorwei2',label = HTML('Seleccione el valor de la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                                                                                         conditionalPanel(condition = "input.wei=='Muestra Aleatoria'",
+                                                                                                          numericInput(inputId = 'alphaw3',label = HTML('Seleccione el valor del parámetro &alpha;'),min=0.1,max=50,step=0.1,value = 1,width = '150px'),
+                                                                                                          numericInput(inputId = 'betaw3',label = HTML('Seleccione el valor parámetro &beta;'),min=0.1,max=50,step=0.1,value = 5,width = '150px'),
+                                                                                                          numericInput(inputId = 'valorwei3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=100,step=1,value = 10,width = '150px'))
                                                                                                                               ),
-                                                                                         conditionalPanel(condition = "input.wei=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("weib"),plotOutput("denswei")))
+                                                                                         conditionalPanel(condition = "input.wei=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("weib"),plotOutput("denswei"))),
+                                                                                         conditionalPanel(condition = "input.wei=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("weib1"),plotOutput("denswei1"))),
+                                                                                         conditionalPanel(condition = "input.wei=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("weib2"))),
+                                                                                         conditionalPanel(condition = "input.wei=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("weib3"),plotOutput("denswei2")))
                                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Cauchy'",tabsetPanel(type = "pills", id="pri9",tabPanel("Características",includeHTML('Cauchy.html')),
                                                                               tabPanel('Cálculos',br(),br())))
@@ -787,7 +802,57 @@ server <- function(input, output,session) {
     return(f)
   })
   
+  output$weib1<-renderText({
+    x<-input$valorwei1
+    alpha<-input$alphaw1
+    beta<-input$betaw1
+    
+    resultado1<-paste("F(",x,") = P(X <=",x,") = ", pweibull(x,shape = beta,scale = alpha))
+    return(resultado1)
+  })
   
+  
+  output$denswei1<-renderPlot({
+    x<-input$valorwei1
+    alpha<-input$alphaw1
+    beta<-input$betaw1
+    
+    data1<-data.frame(wei=pweibull(seq(0,x,0.1),shape = beta,scale = alpha))
+    
+    f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=wei))+geom_line(colour='blue',size=1)+
+      labs( title = "Distribución Uniforme",
+            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+    return(f1)
+  })
+  
+  output$weib2<-renderText({
+    x<-input$valorwei2
+    alpha<-input$alphaw2
+    beta<-input$betaw2
+    
+    resultado2<-paste("x = ", qweibull(x,shape = beta,scale = alpha))
+    return(resultado2)
+  })
+  
+  muestra<-reactive({
+    x<-input$valorwei3
+    alpha<-input$alphaw3
+    beta<-input$betaw3
+    
+    round(rweibull(x,shape = beta,scale = alpha),2)
+  })
+  
+  output$weib3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$denswei2<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
   
   
   
