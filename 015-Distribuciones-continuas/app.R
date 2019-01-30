@@ -361,9 +361,9 @@ server <- function(input, output,session) {
   output$densex1<-renderPlot({
     x<-input$valorexp1
     l<-input$lambda1
-    data1<-data.frame(exp=pexp(0:x,rate=l,lower.tail = TRUE))
+    data1<-data.frame(exp=pexp(seq(0,x,0.1),rate=l,lower.tail = TRUE))
     
-    f1<-ggplot(data1,aes(x=0:x,y=exp))+geom_line(colour='blue',size=1)+
+    f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=exp))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Uniforme",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
@@ -440,9 +440,9 @@ server <- function(input, output,session) {
     alpha<-input$alpha1
     beta<-input$beta1
     
-    data1<-data.frame(gam=pgamma(0:x,shape = alpha,scale = beta,lower.tail = TRUE))
+    data1<-data.frame(gam=pgamma(seq(0,x,0.1),shape = alpha,scale = beta,lower.tail = TRUE))
     
-    f1<-ggplot(data1,aes(x=0:x,y=gam))+geom_line(colour='blue',size=1)+
+    f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=gam))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Uniforme",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
@@ -599,9 +599,9 @@ server <- function(input, output,session) {
     x<-input$valorchi1
     g<-input$df1
     
-    data1<-data.frame(chi=pchisq(0:x,df=g))
+    data1<-data.frame(chi=pchisq(seq(0,x,0.1),df=g))
     
-    f1<-ggplot(data1,aes(x=0:x,y=chi))+geom_line(colour='blue',size=1)+
+    f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=chi))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Uniforme",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
@@ -681,9 +681,9 @@ server <- function(input, output,session) {
     g1<-input$dfisher3
     g2<-input$dfisher4
     
-    data1<-data.frame(fi=pf(0:x,df1=g1,df2 = g2))
+    data1<-data.frame(fi=pf(seq(0,x,0.1),df1=g1,df2 = g2))
     
-    f1<-ggplot(data1,aes(x=0:x,y=fi))+geom_line(colour='blue',size=1)+
+    f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=fi))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Uniforme",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
@@ -759,9 +759,9 @@ server <- function(input, output,session) {
     x<-input$valort1
     g<-input$dft1
     
-    data1<-data.frame(t=pt(-6:x,df=g))
+    data1<-data.frame(t=pt(seq(-6,x,0.1),df=g))
     
-    f1<-ggplot(data1,aes(x=-6:x,y=t))+geom_line(colour='blue',size=1)+
+    f1<-ggplot(data1,aes(x=seq(-6,x,0.1),y=t))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Uniforme",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
