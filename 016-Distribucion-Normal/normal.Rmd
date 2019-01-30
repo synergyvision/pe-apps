@@ -1,0 +1,34 @@
+## Función de Densidad
+
+$$
+f(x)=\displaystyle \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(x - \mu)^2}{2 \sigma^2}} \quad, \forall x \in \mathbb{R}
+$$
+Cuando $\sigma = 1$ y $\mu=0$ se tiene la Distribución Normal estándar
+
+$$
+f(x)=\displaystyle \frac{1}{\sqrt{2 \pi}} e^{-\frac{x^2}{2}} \quad, \forall x \in \mathbb{R}
+$$
+
+## Función de Distribución
+
+$$
+ F_{\mathcal{X}}(x) = P(\mathcal{X} \leq x) =\Phi(x) = \displaystyle \frac{1}{\sqrt{2\pi\sigma^2}}\int_{-\infty}^x  e^{-\frac{(t-\mu)^2} {2\sigma^2}} dt
+$$
+Si hacemos $\mathcal{Z}=\displaystyle \frac{\mathcal{X}-\mu}{\sigma}$ y $z=\displaystyle \frac{x-\mu}{\sigma}$ tenemos:
+
+$$
+F_{\mathcal{Z}}(z)=P(\mathcal{Z} \leq z) = \Phi(z) = \displaystyle \frac{1}{\sqrt{2 \pi}}\int_{-\infty}^z  e^{-\frac{t^2} {2}} dt
+$$
+Es decir cualquier variable aleatoria $\mathcal{X}\sim N(\mu,\sigma)$ con distribución acumulada en $x$ $F_\mathcal{X}(x)$, tiene la misma que una variable aleatoria normal estándar $\mathcal{Z}\sim N(0,1)$ en $z=\frac{x-\mu}{\sigma}$, $F_\mathcal{Z}(z)$
+
+## Media
+
+$$
+E[X]=\mu
+$$
+
+## Varianza
+
+$$
+Var[X]=\sigma^2
+$$

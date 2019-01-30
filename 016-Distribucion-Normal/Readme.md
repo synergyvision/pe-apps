@@ -1,0 +1,1 @@
+Ésta es una aplicación que muestra cómo podemos interactuar con la Distribución Normal manipulando sus parámetros.
