@@ -364,7 +364,7 @@ server <- function(input, output,session) {
     data1<-data.frame(exp=pexp(seq(0,x,0.1),rate=l,lower.tail = TRUE))
     
     f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=exp))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución Exponencial",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
@@ -443,7 +443,7 @@ server <- function(input, output,session) {
     data1<-data.frame(gam=pgamma(seq(0,x,0.1),shape = alpha,scale = beta,lower.tail = TRUE))
     
     f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=gam))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución Gamma",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
@@ -522,7 +522,7 @@ server <- function(input, output,session) {
     data1<-data.frame(beta=pbeta(seq(0,x,0.1),shape1 = alpha,shape2 = beta,lower.tail = TRUE))
     
     f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=beta))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución Beta",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
@@ -602,7 +602,7 @@ server <- function(input, output,session) {
     data1<-data.frame(chi=pchisq(seq(0,x,0.1),df=g))
     
     f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=chi))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución Chi-cuadrado",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
@@ -684,7 +684,7 @@ server <- function(input, output,session) {
     data1<-data.frame(fi=pf(seq(0,x,0.1),df1=g1,df2 = g2))
     
     f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=fi))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución Fisher",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
@@ -762,7 +762,7 @@ server <- function(input, output,session) {
     data1<-data.frame(t=pt(seq(-6,x,0.1),df=g))
     
     f1<-ggplot(data1,aes(x=seq(-6,x,0.1),y=t))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución T-student",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
@@ -842,7 +842,7 @@ server <- function(input, output,session) {
     data1<-data.frame(wei=pweibull(seq(0,x,0.1),shape = beta,scale = alpha))
     
     f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=wei))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución Weibull",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
@@ -924,7 +924,7 @@ server <- function(input, output,session) {
     data1<-data.frame(cau=pcauchy(seq(0,x,0.1),location = alpha,scale = beta))
     
     f1<-ggplot(data1,aes(x=seq(0,x,0.1),y=cau))+geom_line(colour='blue',size=1)+
-      labs( title = "Distribución Uniforme",
+      labs( title = "Distribución Cauchy",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
