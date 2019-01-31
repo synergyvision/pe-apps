@@ -39,12 +39,16 @@ ui <- fluidPage(
                                         numericInput(inputId = 'valor1',label = HTML('Seleccione el valor de la función de distribución'),min=-50,max=50,step=0.1,value = 5,width = '150px')),
                        conditionalPanel(condition = "input.nor=='Comparación de Medias'",
                                         numericInput(inputId = 'mu_1',label = HTML('Seleccione el valor del parámetro &mu1;'),min=-10,max=10,step=0.1,value = 0,width = '150px'),
-                                        numericInput(inputId = 'mu_2',label = HTML('Seleccione el valor del parámetro &mu2;'),min=-10,max=10,step=0.1,value = 3,width = '150px'))
+                                        numericInput(inputId = 'mu_2',label = HTML('Seleccione el valor del parámetro &mu2;'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
+                       conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",
+                                        numericInput(inputId = 'va_1',label = HTML('Seleccione el valor del parámetro &sigma1;'),min=-10,max=10,step=0.1,value = 1,width = '150px'),
+                                        numericInput(inputId = 'va_2',label = HTML('Seleccione el valor del parámetro &sigma2;'),min=-10,max=10,step=0.1,value = 3,width = '150px'))
                                         
               ),
               conditionalPanel(condition = "input.nor=='Función de Densidad'",column(width=7,align='center',br(),verbatimTextOutput("norm"),plotOutput("densnor"))),
               conditionalPanel(condition = "input.nor=='Función de Distribución'",column(width=6,align='center',br(),verbatimTextOutput("norm1"),plotOutput("densnor1"))),
-              conditionalPanel(condition = "input.nor=='Comparación de Medias'",column(width=6,align='center',br(),plotOutput("densnor2")))
+              conditionalPanel(condition = "input.nor=='Comparación de Medias'",column(width=6,align='center',br(),plotOutput("densnor2"))),
+              conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",column(width=6,align='center',br(),plotOutput("densnor3")))
                        ))
 )
 
@@ -107,7 +111,7 @@ server <- function(input, output,session) {
   
   #revisar
   output$densnor2<-renderPlot({
-  x<-seq(-10,10,0.1)
+  x<-seq(-15,15,0.01)
   y1 <- dnorm(x,mean=input$mu_1, sd=1)
   y2 <- dnorm(x,mean=input$mu_2, sd=1)
   
@@ -120,10 +124,31 @@ server <- function(input, output,session) {
     geom_segment(aes(x = input$mu_2, y =0 , xend = input$mu_2,
                      yend = y2),linetype="dashed",colour="red")+
     geom_area(mapping = aes(x,y2), fill = "red",alpha = .2)+
-    labs(title = TeX('Medias de la distribución Normal'),
+    labs(title = 'Medias de la distribución Normal',
          x = "x", y = "f(x)")+
     theme(plot.title = element_text(size = rel(1.3),hjust = 0.5))
   })
+  
+  output$densnor3<-renderPlot({
+    x<-seq(-15,15,0.01)
+    y1 <- dnorm(x,mean=0, sd=input$va_1)
+    y2 <- dnorm(x,mean=0, sd=input$va_2)
+    
+    dat<-data.frame(x,y1,y2)
+    ggplot(data=dat, mapping = aes(x,y1))+geom_line(aes(colour = I("yellow")))+
+      geom_area(mapping = aes(x,y1), fill = "yellow",alpha = .2)+
+      # geom_segment(aes(x = input$mu_1, y =0 , xend = input$mu_1,
+      #                  yend = y1),linetype="dashed",colour="yellow")+
+      geom_line(data=dat, aes(x,y2,colour = I("red")))+
+      # geom_segment(aes(x = input$mu_2, y =0 , xend = input$mu_2,
+      #                  yend = y2),linetype="dashed",colour="red")+
+      geom_area(mapping = aes(x,y2), fill = "red",alpha = .2)+
+      labs(title = 'Varianzas de la distribución Normal',
+           x = "x", y = "f(x)")+
+      theme(plot.title = element_text(size = rel(1.3),hjust = 0.5)) 
+  })
+  
+  
   
   
   
