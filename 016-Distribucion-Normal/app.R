@@ -42,13 +42,23 @@ ui <- fluidPage(
                                         numericInput(inputId = 'mu_2',label = HTML('Seleccione el valor del parámetro &mu2;'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
                        conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",
                                         numericInput(inputId = 'va_1',label = HTML('Seleccione el valor del parámetro &sigma1;'),min=-10,max=10,step=0.1,value = 1,width = '150px'),
-                                        numericInput(inputId = 'va_2',label = HTML('Seleccione el valor del parámetro &sigma2;'),min=-10,max=10,step=0.1,value = 3,width = '150px'))
+                                        numericInput(inputId = 'va_2',label = HTML('Seleccione el valor del parámetro &sigma2;'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
+                       conditionalPanel(condition = "input.nor=='Cuantiles'",
+                                        numericInput(inputId = 'mu2',label = HTML('Seleccione el valor del parámetro &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
+                                        numericInput(inputId = 'sigma2',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
+                                        numericInput(inputId = 'valor2',label = HTML('Seleccione la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
+                       conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",
+                                        numericInput(inputId = 'mu3',label = HTML('Seleccione el valor del parámetro &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
+                                        numericInput(inputId = 'sigma3',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
+                                        numericInput(inputId = 'valor3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=200,step=1,value = 20,width = '150px'))
                                         
               ),
               conditionalPanel(condition = "input.nor=='Función de Densidad'",column(width=7,align='center',br(),verbatimTextOutput("norm"),plotOutput("densnor"))),
               conditionalPanel(condition = "input.nor=='Función de Distribución'",column(width=6,align='center',br(),verbatimTextOutput("norm1"),plotOutput("densnor1"))),
               conditionalPanel(condition = "input.nor=='Comparación de Medias'",column(width=6,align='center',br(),plotOutput("densnor2"))),
-              conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",column(width=6,align='center',br(),plotOutput("densnor3")))
+              conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",column(width=6,align='center',br(),plotOutput("densnor3"))),
+              conditionalPanel(condition = "input.nor=='Cuantiles'",column(width=6,align='center',br(),verbatimTextOutput("norm2"),plotOutput("densnor4"))),
+              conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",column(width=6,align='center',br(),verbatimTextOutput("norm3"),plotOutput("densnor5")))
                        ))
 )
 
@@ -148,6 +158,57 @@ server <- function(input, output,session) {
       theme(plot.title = element_text(size = rel(1.3),hjust = 0.5)) 
   })
   
+  output$norm2<-renderText({
+    x<-input$valor2
+    media<-input$mu2
+    dv<-input$sigma2
+    
+    
+    resultado<-paste("x = ", qnorm(x,mean = media,sd=dv))
+    return(resultado)
+  })
+  
+  output$densnor4<-renderPlot({
+    x1<-input$valor2
+    media<-input$mu2
+    dv<-input$sigma2
+    
+    x2<-qnorm(x1,mean = media,sd=dv) #cuantil
+    x <- seq(media-6,6+media,0.01)
+    hx <- dnorm(x,mean=media,sd=dv)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dnorm(x2, mean= media ,sd = dv)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Normal',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+      scale_x_continuous(limits = c(media-6,media+6))
+    return(f)
+  })
+  
+  muestra<-reactive({
+    x<-input$valor3
+    media<-input$mu3
+    dv<-input$sigma3
+    
+    round(rnorm(x,mean=media,sd=dv),2)
+  })
+  
+  output$norm3<-renderPrint({
+    return(muestra())
+  })
+  
+  output$densnor5<-renderPlot({
+    data2<-data.frame(x=muestra())
+    f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
+      labs( title = "Muestra Aleatoria",
+            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+    return(f2)
+  })
   
   
   
