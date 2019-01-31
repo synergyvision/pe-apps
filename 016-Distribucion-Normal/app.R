@@ -66,7 +66,7 @@ server <- function(input, output,session) {
     media<-input$mu
     dv<-input$sigma
     
-    x <- seq(-x1-media,x1+media,0.01)
+    x <- seq(media-6,6+media,0.01)
     hx <- dnorm(x,mean=media,sd=dv)
     
     dat<-data.frame(x,hx)
@@ -77,7 +77,8 @@ server <- function(input, output,session) {
                        yend = dnorm(x1,mean=media,sd=dv)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Normal',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+      scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
   
