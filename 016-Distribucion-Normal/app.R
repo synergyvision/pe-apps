@@ -54,14 +54,21 @@ ui <- fluidPage(
                        conditionalPanel(condition = "input.nor=='Probabilidad por rango'",
                                         numericInput(inputId = 'mu4',label = HTML('Seleccione el valor de la media &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma4',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
-                                        radioButtons(inputId = 'prob',label = 'Elija la probabilidad a calcular',choiceNames = list(tags$i('P(X \\(\\leq\\) a)'),tags$i('P(a \\(\\leq\\) X \\(\\leq\\) b)'),tags$i('P(X \\(\\geq\\) b)')),choiceValues = c('int1','int2','int3'),selected = ''))
+                                        radioButtons(inputId = 'prob',label = 'Elija la probabilidad a calcular',choiceNames = list(tags$i('P(X \\(\\leq\\) a)'),tags$i('P(a \\(\\leq\\) X \\(\\leq\\) b)'),tags$i('P(X \\(\\geq\\) b)')),choiceValues = c('int1','int2','int3'),selected = ''),
+                                        conditionalPanel(condition = "input.prob=='int1' ", numericInput(inputId = 'a',label = HTML('Seleccione el valor de a'),min=-20,max=20,step=0.1,value = 0,width = '150px')),
+                                        conditionalPanel(condition = "input.prob == 'int2'",sliderInput('ab',label = 'Parámetros [a,b]',min = -40,max=40,value=c(0,1),step = 1,width = '300px')),
+                                        conditionalPanel(condition = "input.prob=='int3' ", numericInput(inputId = 'b',label = HTML('Seleccione el valor de b'),min=-20,max=20,step=0.1,value = 0,width = '150px'))
+                                        )
               ),
               conditionalPanel(condition = "input.nor=='Función de Densidad'",column(width=7,align='center',br(),verbatimTextOutput("norm"),plotOutput("densnor"))),
               conditionalPanel(condition = "input.nor=='Función de Distribución'",column(width=6,align='center',br(),verbatimTextOutput("norm1"),plotOutput("densnor1"))),
               conditionalPanel(condition = "input.nor=='Comparación de Medias'",column(width=7,align='center',br(),plotOutput("densnor2"))),
               conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",column(width=7,align='center',br(),plotOutput("densnor3"))),
               conditionalPanel(condition = "input.nor=='Cuantiles'",column(width=6,align='center',br(),verbatimTextOutput("norm2"),plotOutput("densnor4"))),
-              conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",column(width=6,align='center',br(),verbatimTextOutput("norm3"),plotOutput("densnor5")))
+              conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",column(width=6,align='center',br(),verbatimTextOutput("norm3"),plotOutput("densnor5"))),
+              conditionalPanel(condition = "input.prob=='int1'",column(width=6,align='center',br(),verbatimTextOutput("norm4"),plotOutput("densnor6"))),
+              conditionalPanel(condition = "input.prob=='int2'",column(width=6,align='center',br(),verbatimTextOutput("norm5"),plotOutput("densnor7"))),
+              conditionalPanel(condition = "input.prob=='int3'",column(width=6,align='center',br(),verbatimTextOutput("norm6"),plotOutput("densnor8")))
                        ))
 )
 
@@ -216,6 +223,101 @@ server <- function(input, output,session) {
     return(f2)
   })
   
+  output$norm4<-renderText({
+    x<-input$a
+    media<-input$mu4
+    dv<-input$sigma4
+    resultado<-paste("P(X <=",x,") = ", pnorm(x,mean=media,sd=dv))
+    return(resultado)
+  })
+  
+  output$densnor6<-renderPlot({
+    x1<-input$a
+    media<-input$mu4
+    dv<-input$sigma4
+    
+    x <- seq(media-6,6+media,0.01)
+    hx <- dnorm(x,mean=media,sd=dv)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dnorm(x1,mean=media,sd=dv)),
+                   colour = "black",linetype=2)+
+      # geom_area(mapping = aes(x= ifelse(x <= x1,x,0)), fill = "blue",alpha = 0.5)+
+      labs( title = 'Densidad Normal',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+      scale_x_continuous(limits = c(media-6,media+6))
+    return(f)
+  })
+  
+  output$norm5<-renderText({
+    media<-input$mu4
+    dv<-input$sigma4
+    l<-input$ab[1]
+    u<-input$ab[2]
+    resultado<-paste("P(",l,"<= X <=",u,") = ", pnorm(u,mean = media,sd=dv)-pnorm(l,mean = media,sd=dv))
+    return(resultado)
+    
+  })
+  
+  output$densnor7<-renderPlot({
+    l<-input$ab[1]
+    u<-input$ab[2]
+    media<-input$mu4
+    dv<-input$sigma4
+    
+    x <- seq(media-6,6+media,0.01)
+    hx <- dnorm(x,mean=media,sd=dv)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = l, y =0 , xend = l,
+                       yend = dnorm(l,mean=media,sd=dv)),
+                   colour = "black",linetype=2)+
+      geom_segment(aes(x = u, y =0 , xend = u,
+                       yend = dnorm(u,mean=media,sd=dv)),
+                   colour = "black",linetype=2)+
+      # geom_area(mapping = aes(x= ifelse(x <= x1,x,0)), fill = "blue",alpha = 0.5)+
+      labs( title = 'Densidad Normal',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+      scale_x_continuous(limits = c(media-6,media+6))
+    return(f)
+  })
+  
+  output$norm6<-renderText({
+    x<-input$b
+    media<-input$mu4
+    dv<-input$sigma4
+    resultado<-paste("P(X >=",x,") = ", pnorm(x,mean=media,sd=dv,lower.tail = FALSE))
+    return(resultado)
+  })
+  
+  output$densnor8<-renderPlot({
+    x1<-input$b
+    media<-input$mu4
+    dv<-input$sigma4
+    
+    x <- seq(media-6,6+media,0.01)
+    hx <- dnorm(x,mean=media,sd=dv)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x1, y =0 , xend = x1,
+                       yend = dnorm(x1,mean=media,sd=dv)),
+                   colour = "black",linetype=2)+
+      # geom_area(mapping = aes(x= ifelse(x <= x1,x,0)), fill = "blue",alpha = 0.5)+
+      labs( title = 'Densidad Normal',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+      scale_x_continuous(limits = c(media-6,media+6))
+    return(f)
+  })
   
   
   
