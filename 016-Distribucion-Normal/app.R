@@ -38,11 +38,11 @@ ui <- fluidPage(
                                         numericInput(inputId = 'sigma1',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
                                         numericInput(inputId = 'valor1',label = HTML('Seleccione el valor de la función de distribución'),min=-50,max=50,step=0.1,value = 5,width = '150px')),
                        conditionalPanel(condition = "input.nor=='Comparación de Medias'",
-                                        numericInput(inputId = 'mu_1',label = HTML('Seleccione el valor del parámetro &mu1;'),min=-10,max=10,step=0.1,value = 0,width = '150px'),
-                                        numericInput(inputId = 'mu_2',label = HTML('Seleccione el valor del parámetro &mu2;'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
+                                        numericInput(inputId = 'mu_1',label = HTML('Seleccione el valor del parámetro &mu;<sub>1</sub>'),min=-10,max=10,step=0.1,value = 0,width = '150px'),
+                                        numericInput(inputId = 'mu_2',label = HTML('Seleccione el valor del parámetro &mu;<sub>2</sub>'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
                        conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",
-                                        numericInput(inputId = 'va_1',label = HTML('Seleccione el valor del parámetro &sigma1;'),min=-10,max=10,step=0.1,value = 1,width = '150px'),
-                                        numericInput(inputId = 'va_2',label = HTML('Seleccione el valor del parámetro &sigma2;'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
+                                        numericInput(inputId = 'va_1',label = HTML('Seleccione el valor del parámetro &sigma;<sub>1</sub>'),min=-10,max=10,step=0.1,value = 1,width = '150px'),
+                                        numericInput(inputId = 'va_2',label = HTML('Seleccione el valor del parámetro &sigma;<sub>2</sub>'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
                        conditionalPanel(condition = "input.nor=='Cuantiles'",
                                         numericInput(inputId = 'mu2',label = HTML('Seleccione el valor del parámetro &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma2',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
@@ -55,8 +55,8 @@ ui <- fluidPage(
               ),
               conditionalPanel(condition = "input.nor=='Función de Densidad'",column(width=7,align='center',br(),verbatimTextOutput("norm"),plotOutput("densnor"))),
               conditionalPanel(condition = "input.nor=='Función de Distribución'",column(width=6,align='center',br(),verbatimTextOutput("norm1"),plotOutput("densnor1"))),
-              conditionalPanel(condition = "input.nor=='Comparación de Medias'",column(width=6,align='center',br(),plotOutput("densnor2"))),
-              conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",column(width=6,align='center',br(),plotOutput("densnor3"))),
+              conditionalPanel(condition = "input.nor=='Comparación de Medias'",column(width=7,align='center',br(),plotOutput("densnor2"))),
+              conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",column(width=7,align='center',br(),plotOutput("densnor3"))),
               conditionalPanel(condition = "input.nor=='Cuantiles'",column(width=6,align='center',br(),verbatimTextOutput("norm2"),plotOutput("densnor4"))),
               conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",column(width=6,align='center',br(),verbatimTextOutput("norm3"),plotOutput("densnor5")))
                        ))
@@ -136,7 +136,7 @@ server <- function(input, output,session) {
     geom_area(mapping = aes(x,y2), fill = "red",alpha = .2)+
     labs(title = 'Medias de la distribución Normal',
          x = "x", y = "f(x)")+
-    theme(plot.title = element_text(size = rel(1.3),hjust = 0.5))
+    theme(plot.title = element_text(size = rel(1.3),hjust = 0.5))+scale_color_manual('Medias',values=c("red","yellow"),labels=c('Media 2','Media 1'))
   })
   
   output$densnor3<-renderPlot({
