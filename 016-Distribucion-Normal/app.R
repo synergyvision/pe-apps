@@ -121,19 +121,22 @@ server <- function(input, output,session) {
   
   #revisar
   output$densnor2<-renderPlot({
-  x<-seq(-15,15,0.01)
-  y1 <- dnorm(x,mean=input$mu_1, sd=1)
-  y2 <- dnorm(x,mean=input$mu_2, sd=1)
+  media1<-input$mu_1
+  media2<-input$mu_2
+  x1<-seq(media1-6,media1+6,0.01)
+  x2<-seq(media2-6,media2+6,0.01)
+  y1 <- dnorm(x1,mean=media1, sd=1)
+  y2 <- dnorm(x2,mean=media2, sd=1)
   
-  dat<-data.frame(x,y1,y2)
-  ggplot(data=dat, mapping = aes(x,y1))+geom_line(aes(colour = I("yellow")))+
-    geom_area(mapping = aes(x,y1), fill = "yellow",alpha = .2)+
-    geom_segment(aes(x = input$mu_1, y =0 , xend = input$mu_1,
-                     yend = y1),linetype="dashed",colour="yellow")+
-    geom_line(data=dat, aes(x,y2,colour = I("red")))+
-    geom_segment(aes(x = input$mu_2, y =0 , xend = input$mu_2,
-                     yend = y2),linetype="dashed",colour="red")+
-    geom_area(mapping = aes(x,y2), fill = "red",alpha = .2)+
+  dat<-data.frame(x1,x2,y1,y2)
+  ggplot(data=dat, mapping = aes(x1,y1))+geom_line(aes(colour = I("yellow")))+
+    geom_area(mapping = aes(x1,y1), fill = "yellow",alpha = .2)+
+    geom_segment(aes(x = media1, y =0 , xend = media1,
+                     yend = dnorm(media1,mean = media1,sd=1)),linetype="dashed",colour="yellow")+
+    geom_line(data=dat, aes(x2,y2,colour = I("red")))+
+    geom_segment(aes(x = media2, y =0 , xend = media2,
+                     yend = dnorm(media2,mean = media2,sd=1)),linetype="dashed",colour="red")+
+    geom_area(mapping = aes(x2,y2), fill = "red",alpha = .2)+
     labs(title = 'Medias de la distribución Normal',
          x = "x", y = "f(x)")+
     theme(plot.title = element_text(size = rel(1.3),hjust = 0.5))+scale_color_manual('Medias',values=c("red","yellow"),labels=c('Media 2','Media 1'))
