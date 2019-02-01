@@ -158,7 +158,7 @@ server <- function(input, output,session) {
       geom_area(mapping = aes(x,y2), fill = "red",alpha = .2)+
       labs(title = 'Varianzas de la distribución Normal',
            x = "x", y = "f(x)")+
-      theme(plot.title = element_text(size = rel(1.3),hjust = 0.5)) 
+      theme(plot.title = element_text(size = rel(1.3),hjust = 0.5)) +scale_color_manual('Varianzas',values=c("red","yellow"),labels=c('Varianza 2','Varianza 1'))
   })
   
   output$norm2<-renderText({
