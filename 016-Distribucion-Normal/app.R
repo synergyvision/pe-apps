@@ -28,7 +28,7 @@ ui <- fluidPage(
   titlePanel("Distribución Normal"),
   tabsetPanel(type = 'pills',id='pri',
               tabPanel('Características',includeHTML("normal.html")),
-              tabPanel('Cálculos',br(),column(width=5,selectInput(inputId = 'nor',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Comparación de Medias','Comparación de Varianzas','Cuantiles','Muestra Aleatoria','Normal estándar'),selected = NULL),
+              tabPanel('Cálculos',br(),column(width=5,selectInput(inputId = 'nor',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Comparación de Medias','Comparación de Varianzas','Cuantiles','Muestra Aleatoria','Probabilidad por rango'),selected = NULL),
                        conditionalPanel(condition = "input.nor=='Función de Densidad'",
                                         numericInput(inputId = 'mu',label = HTML('Seleccione el valor de la media &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
@@ -50,8 +50,11 @@ ui <- fluidPage(
                        conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",
                                         numericInput(inputId = 'mu3',label = HTML('Seleccione el valor del parámetro &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma3',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
-                                        numericInput(inputId = 'valor3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=200,step=1,value = 20,width = '150px'))
-                                        
+                                        numericInput(inputId = 'valor3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=200,step=1,value = 20,width = '150px')),
+                       conditionalPanel(condition = "input.nor=='Probabilidad por rango'",
+                                        numericInput(inputId = 'mu4',label = HTML('Seleccione el valor de la media &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
+                                        numericInput(inputId = 'sigma4',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
+                                        radioButtons(inputId = 'prob',label = 'Elija la probabilidad a calcular',choiceNames = list(tags$i('P(X \\(\\leq\\) a)'),tags$i('P(a \\(\\leq\\) X \\(\\leq\\) b)'),tags$i('P(X \\(\\geq\\) b)')),choiceValues = c('int1','int2','int3'),selected = ''))
               ),
               conditionalPanel(condition = "input.nor=='Función de Densidad'",column(width=7,align='center',br(),verbatimTextOutput("norm"),plotOutput("densnor"))),
               conditionalPanel(condition = "input.nor=='Función de Distribución'",column(width=6,align='center',br(),verbatimTextOutput("norm1"),plotOutput("densnor1"))),
