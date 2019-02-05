@@ -53,7 +53,7 @@ ui <- fluidPage(
                                                                                  ), 
                                                                                  conditionalPanel(condition = "input.ber=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("bernoulli"),plotOutput("dens1"))),
                                                                                  conditionalPanel(condition = "input.ber=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("bernoulli1"),plotOutput("dist1"))),
-                                                                                 conditionalPanel(condition = "input.ber=='Cuantiles'",column(align='center',width=6,br(),br(),br(),br(),br(),br(),verbatimTextOutput("bernoulli2"))),
+                                                                                 conditionalPanel(condition = "input.ber=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("bernoulli2"),plotOutput("dens3"))),
                                                                                  conditionalPanel(condition = "input.ber=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("bernoulli3"),plotOutput("dens2")))
                                                                                  ))),
       conditionalPanel(condition = "input.distribucion=='Binomial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeMarkdown("binomial.Rmd")),
@@ -229,7 +229,7 @@ server <- function(input, output,session) {
     }
     
     f1<-ggplot(data1, aes(x=data1[,1],y=data1[,2]))+
-        geom_segment(aes(x=0,y=1-input$proba1,xend=1,yend=1-input$proba1),size=1,color="blue")+geom_segment(aes(x=1,y=1,xend=1.3,yend=1),size=1,color="blue")+geom_segment(aes(x=1,y=1-input$proba1,xend=1,yend=1),size=1,color="blue")+
+        geom_segment(aes(x=0,y=1-input$proba1,xend=1,yend=1-input$proba1),size=1,color="blue")+geom_segment(aes(x=1,y=1,xend=1.3,yend=1),size=1,color="blue")+geom_segment(aes(x=1,y=1-input$proba1,xend=1,yend=1),size=1,color="blue",linetype=2)+
         labs( title = "Distribución Bernoulli",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )+
       scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
@@ -240,6 +240,25 @@ server <- function(input, output,session) {
     #qbinom(p=input$valor2,size = 1,prob = input$proba2,lower.tail = TRUE)
     w<-paste("x = ", qbinom(p=input$valor2,size = 1,prob = input$proba2,lower.tail = TRUE))
     return(w)
+  })
+  
+  output$dens3<-renderPlot({
+    x1<-input$valor2
+    p1<-input$proba2
+    
+    x2<-qbinom(x1,size=1,prob=p1) #cuantil
+    xp <- c(0,1)
+    hx <- dbinom(xp,size=1,prob=p1)
+    
+    dat<-data.frame(xp,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(xp,hx))+geom_point(colour="blue",size=5)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                        yend = dbinom(x2, size = 1,prob=p1)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Normal',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
   })
   
   muestraber<-reactive({
