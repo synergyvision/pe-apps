@@ -78,7 +78,7 @@ ui <- fluidPage(
                                                                                 ),
                                                                                 conditionalPanel(condition = "input.bin=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("binomial"),plotOutput("densbin"))),
                                                                                 conditionalPanel(condition = "input.bin=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("binomial1"),plotOutput("densbin1"))),
-                                                                                conditionalPanel(condition = "input.bin=='Cuantiles'",column(align='center',width=6,br(),br(),br(),br(),br(),br(),verbatimTextOutput("binomial2"))),
+                                                                                conditionalPanel(condition = "input.bin=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("binomial2"),plotOutput("densbin3"))),
                                                                                 conditionalPanel(condition = "input.bin=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("binomial3"),plotOutput("densbin2")))
                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Geométrica'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeMarkdown("geometrica.Rmd")),
@@ -256,7 +256,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                         yend = dbinom(x2, size = 1,prob=p1)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Normal',
+      labs( title = 'Densidad Bernoulli',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
@@ -315,6 +315,28 @@ server <- function(input, output,session) {
     w<-paste("x = ", qbinom(p=input$valorbin2,size = input$ensayobin2,prob = input$probabin2,lower.tail = TRUE))
     return(w)
   })
+  
+  output$densbin3<-renderPlot({
+    x1<-input$valorbin2
+    p1<-input$probabin2
+    s1<-input$ensayobin2
+    
+    x2<-qbinom(x1,size=s1,prob=p1) #cuantil
+    xp <- seq(0,s1,1)
+    hx <- dbinom(xp,size=s1,prob=p1)
+    
+    dat<-data.frame(xp,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(xp,hx))+geom_point(colour="blue",size=5)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dbinom(x2, size = s1,prob=p1)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Binomial',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  
   
   muestraber1<-reactive({
     rbinom(n=input$valorbin3,size=input$ensayobin3,prob=input$probabin3)
