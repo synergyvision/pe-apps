@@ -42,7 +42,7 @@ ui <- fluidPage(
                                                                                  tabPanel('Cálculos',br(),br(),column(width=5,selectInput(inputId = 'uni',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Cuantiles','Muestra Aleatoria'),selected = NULL),
                                                                                           conditionalPanel(condition = "input.uni=='Función de Densidad'",
                                                                                                            sliderInput('rangouni',label = 'Parámetros [a,b]',min = -40,max=40,value=c(0,1),step = 1,width = '300px'),
-                                                                                                           numericInput(inputId = 'valor',label = HTML('Seleccione el valor de la función de densidad'),min=-40,max=40,step=1,value = 1,width = '150px')),
+                                                                                                           numericInput(inputId = 'valor',label = HTML('Seleccione el valor de la función de densidad'),min=-40,max=40,step=1,value = 0.5,width = '150px')),
                                                                                           conditionalPanel(condition = "input.uni=='Función de Distribución'",
                                                                                                            sliderInput('rangouni1',label = 'Parámetros [a,b]',min = -40,max=40,value=c(0,1),step = 1,width = '300px'),
                                                                                                            numericInput(inputId = 'valor1',label = HTML('Seleccione el valor de la función de distribución'),min=-40,max=40,step=1,value = 1,width = '150px')),
@@ -55,7 +55,7 @@ ui <- fluidPage(
                                                                                           ),
                                                                                           conditionalPanel(condition = "input.uni=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("unif"),plotOutput("dens1"))),
                                                                                           conditionalPanel(condition = "input.uni=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("unif1"),plotOutput("dens2"))),
-                                                                                          conditionalPanel(condition = "input.uni=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("unif2"))),
+                                                                                          conditionalPanel(condition = "input.uni=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("unif2"),plotOutput('cuantiluni'))),
                                                                                           conditionalPanel(condition = "input.uni=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("unif3"),plotOutput("dens3")))
                                                                                           ))),
       conditionalPanel(condition = "input.distribucion=='Exponencial'",tabsetPanel(type = "pills", id="pri2",tabPanel("Características",includeHTML("exponencial.html")),
@@ -75,7 +75,7 @@ ui <- fluidPage(
                                                                                                                      ),
                                                                                          conditionalPanel(condition = "input.exp=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("expo"),plotOutput("densex"))),
                                                                                          conditionalPanel(condition = "input.exp=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("expo1"),plotOutput("densex1"))),
-                                                                                         conditionalPanel(condition = "input.exp=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("expo2"))),
+                                                                                         conditionalPanel(condition = "input.exp=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("expo2"),plotOutput('cuantilexpo'))),
                                                                                          conditionalPanel(condition = "input.exp=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("expo3"),plotOutput("densex2")))
                                                                                          ))),
       conditionalPanel(condition = "input.distribucion=='Gamma'",tabsetPanel(type = "pills", id="pri3",tabPanel("Características",includeHTML("gamma.html")),
@@ -99,7 +99,7 @@ ui <- fluidPage(
                                                                                                                        ),
                                                                                            conditionalPanel(condition = "input.gam=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("gamma"),plotOutput("densgam"))),
                                                                                            conditionalPanel(condition = "input.gam=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("gamma1"),plotOutput("densgam1"))),
-                                                                                           conditionalPanel(condition = "input.gam=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("gamma2"))),
+                                                                                           conditionalPanel(condition = "input.gam=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("gamma2"),plotOutput('cuantilgamma'))),
                                                                                            conditionalPanel(condition = "input.gam=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("gamma3"),plotOutput("densgam2")))
                                                                                            ))),
       conditionalPanel(condition = "input.distribucion=='Beta'",tabsetPanel(type = "pills", id="pri4",tabPanel("Características",includeHTML("beta.html")),
@@ -123,7 +123,7 @@ ui <- fluidPage(
                                                                                                                             ),
                                                                                                 conditionalPanel(condition = "input.bet=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fbeta"),plotOutput("densfbeta"))),
                                                                                                 conditionalPanel(condition = "input.bet=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("fbeta1"),plotOutput("densfbeta1"))),
-                                                                                                conditionalPanel(condition = "input.bet=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fbeta2"))),
+                                                                                                conditionalPanel(condition = "input.bet=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fbeta2"),plotOutput('cuantilbeta'))),
                                                                                                 conditionalPanel(condition = "input.bet=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fbeta3"),plotOutput("densfbeta2")))
                                                                                                 ))),
       conditionalPanel(condition = "input.distribucion=='Chi-cuadrado'",tabsetPanel(type = "pills", id="pri5",tabPanel("Características",includeHTML('Chi-cuadrado.html')),
@@ -144,7 +144,7 @@ ui <- fluidPage(
                                                                                                                         ),
                                                                                    conditionalPanel(condition = "input.chi=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fchi"),plotOutput("denschi"))),
                                                                                    conditionalPanel(condition = "input.chi=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("fchi1"),plotOutput("denschi1"))),
-                                                                                   conditionalPanel(condition = "input.chi=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fchi2"))),
+                                                                                   conditionalPanel(condition = "input.chi=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fchi2"),plotOutput('cuantilchi'))),
                                                                                    conditionalPanel(condition = "input.chi=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fchi3"),plotOutput("denschi2")))
                                                                                             ))),
       conditionalPanel(condition = "input.distribucion=='Fisher-Snedecor'",tabsetPanel(type = "pills", id="pri6",tabPanel("Características",includeHTML('Fisher-snedcor.html')),
@@ -168,7 +168,7 @@ ui <- fluidPage(
                                                                                                                     ),
                                                                                conditionalPanel(condition = "input.fish=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("fisher"),plotOutput("densfi"))),
                                                                                conditionalPanel(condition = "input.fish=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("fisher1"),plotOutput("densfi1"))),
-                                                                               conditionalPanel(condition = "input.fish=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fisher2"))),
+                                                                               conditionalPanel(condition = "input.fish=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("fisher2"),plotOutput('cuantilfish'))),
                                                                                conditionalPanel(condition = "input.fish=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("fisher3"),plotOutput("densfi2")))
                                                                                         ))),
       conditionalPanel(condition = "input.distribucion=='t-Student'",tabsetPanel(type = "pills", id="pri7",tabPanel("Características",includeHTML('t-Student.html')),
@@ -188,7 +188,7 @@ ui <- fluidPage(
                                                                                                           ),
                                                                                          conditionalPanel(condition = "input.t=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("student"),plotOutput("denst"))),
                                                                                          conditionalPanel(condition = "input.t=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("student1"),plotOutput("denst1"))),
-                                                                                         conditionalPanel(condition = "input.t=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("student2"))),
+                                                                                         conditionalPanel(condition = "input.t=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("student2"),plotOutput('cuantilt'))),
                                                                                          conditionalPanel(condition = "input.t=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("student3"),plotOutput("denst2")))
                                                                                          
                                                                                                   ))),
@@ -213,7 +213,7 @@ ui <- fluidPage(
                                                                                                                               ),
                                                                                          conditionalPanel(condition = "input.wei=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("weib"),plotOutput("denswei"))),
                                                                                          conditionalPanel(condition = "input.wei=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("weib1"),plotOutput("denswei1"))),
-                                                                                         conditionalPanel(condition = "input.wei=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("weib2"))),
+                                                                                         conditionalPanel(condition = "input.wei=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("weib2"),plotOutput('cuantilwei'))),
                                                                                          conditionalPanel(condition = "input.wei=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("weib3"),plotOutput("denswei2")))
                                                                                                   ))),
       conditionalPanel(condition = "input.distribucion=='Cauchy'",tabsetPanel(type = "pills", id="pri9",tabPanel("Características",includeHTML('Cauchy.html')),
@@ -237,7 +237,7 @@ ui <- fluidPage(
                                                                               ),
                                                                               conditionalPanel(condition = "input.cau=='Función de Densidad'",column(align='center',width=7,br(),verbatimTextOutput("cauy"),plotOutput("denscau"))),
                                                                               conditionalPanel(condition = "input.cau=='Función de Distribución'",column(align='center',width=7,br(),verbatimTextOutput("cauy1"),plotOutput("denscau1"))),
-                                                                              conditionalPanel(condition = "input.cau=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("cauy2"))),
+                                                                              conditionalPanel(condition = "input.cau=='Cuantiles'",column(align='center',width=7,br(),verbatimTextOutput("cauy2"),plotOutput('cuantilcau'))),
                                                                               conditionalPanel(condition = "input.cau=='Muestra Aleatoria'",column(align='center',width=7,br(),verbatimTextOutput("cauy3"),plotOutput("denscau2")))
                                                                                        )))
     )
@@ -261,7 +261,7 @@ server <- function(input, output,session) {
     l<-input$rangouni[1]
     u<-input$rangouni[2]
     
-    x <- seq(-40,40,0.01)
+    x <- seq(-1+l,1+u,0.01)
     hx <- dunif(x,l,u)
     
     dat<-data.frame(x,hx)
@@ -958,6 +958,95 @@ server <- function(input, output,session) {
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
     return(f2)
+  })
+  
+  #Grafica de los cuantiles
+  
+  output$cuantiluni<-renderPlot({
+    x1<-input$valor2
+    l<-input$rangouni2[1]
+    u<-input$rangouni2[2]
+    
+    x2<-qunif(x1,l,u)
+    
+    x <- seq(-1+l,1+u,0.01)
+    hx <- dunif(x,l,u)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x= ifelse(x >= l & x <= u,x,x)), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dunif(x2,l,u)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Cuantil',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilexpo<-renderPlot({
+    x1<-input$valorexp2
+    
+    l<-input$lambda2
+    x <- seq(0,50,0.01)
+    hx <- dexp(x,l)
+    
+    x2<-qexp(x1,l)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dexp(x2,l)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Cuantil',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilgamma<-renderPlot({
+    x1<-input$valorgamm2
+    
+    alpha<-input$alpha2
+    beta<-input$beta2
+    x <- seq(0,50,0.01)
+    hx <- dgamma(x,shape = alpha,scale = beta)
+    
+    x2<-qgamma(x1,shape = alpha,scale = beta)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dgamma(x2,shape = alpha,scale = beta)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Cuantil',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilbeta<-renderPlot({
+    x1<-input$valorbeta2
+    
+    alpha<-input$alphab2
+    beta<-input$betab2
+    x <- seq(-0.3,1.3,0.01)
+    hx <- dbeta(x,shape1 = alpha,shape2 = beta)
+    
+    x2<-qbeta(x1,shape1 = alpha,shape2 = beta)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dbeta(x2,shape1 = alpha,shape2 = beta)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad beta',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
   })
   
   
