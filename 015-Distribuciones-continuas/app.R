@@ -304,20 +304,20 @@ server <- function(input, output,session) {
     return(resultado2)
   })
   
-  muestra<-reactive({
+  muestrau1<-reactive({
     x<-input$valor3
     l<-input$rangouni3[1]
     u<-input$rangouni3[2]
     
-    round(runif(x,l,u),2)
+    return(round(runif(x,l,u),2))
   })
   
   output$unif3<-renderPrint({
-    return(muestra())
+    return(muestrau1())
   })
   
   output$dens3<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestrau1())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -377,19 +377,19 @@ server <- function(input, output,session) {
     return(resultado2)
   })
   
-  muestra<-reactive({
+  muestraexp<-reactive({
     x<-input$valorexp3
     l<-input$lambda3
     
-    round(rexp(x,l),2)
+    return(round(rexp(x,l),2))
   })
   
   output$expo3<-renderPrint({
-    return(muestra())
+    return(muestraexp())
   })
   
   output$densex2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestraexp())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -458,19 +458,19 @@ server <- function(input, output,session) {
     return(resultado2)
   })
   
-  muestra<-reactive({
+  muestragamm<-reactive({
     x<-input$valorgamm3
     alpha<-input$alpha3
     beta<-input$beta3
-    round(rgamma(x,shape = alpha,scale = beta),2)
+    return(round(rgamma(x,shape = alpha,scale = beta),2))
   })
   
   output$gamma3<-renderPrint({
-    return(muestra())
+    return(muestragamm())
   })
   
   output$densgam2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestragamm())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -537,19 +537,19 @@ server <- function(input, output,session) {
     return(resultado2)
   })
   
-  muestra<-reactive({
+  muestrabeta<-reactive({
     x<-input$valorbeta3
     alpha<-input$alphab3
     beta<-input$betab3
-    round(rbeta(x,shape1 = alpha,shape2 = beta),2)
+    return(round(rbeta(x,shape1 = alpha,shape2 = beta),2))
   })
   
   output$fbeta3<-renderPrint({
-    return(muestra())
+    return(muestrabeta())
   })
   
   output$densfbeta2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestrabeta())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -617,18 +617,18 @@ server <- function(input, output,session) {
   })
   
   
-  muestra<-reactive({
+  muestrachi<-reactive({
     x<-input$valorchi3
     g<-input$df3
-    round(rchisq(x,df=g),2)
+    return(round(rchisq(x,df=g),2))
   })
   
   output$fchi3<-renderPrint({
-    return(muestra())
+    return(muestrachi())
   })
   
   output$denschi2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestrachi())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -699,19 +699,19 @@ server <- function(input, output,session) {
     return(resultado2)
   })
   
-  muestra<-reactive({
+  muestrafish<-reactive({
     x<-input$valorfish3
     g1<-input$dfisher7
     g2<-input$dfisher8
-    round(rf(x,df1=g1,df2 = g2),2)
+    return(round(rf(x,df1=g1,df2 = g2),2))
   })
   
   output$fisher3<-renderPrint({
-    return(muestra())
+    return(muestrafish())
   })
   
   output$densfi2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestrafish())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -776,18 +776,18 @@ server <- function(input, output,session) {
     return(resultado2)
   })
   
-  muestra<-reactive({
+  muestrats<-reactive({
     x<-input$valort3
     g<-input$dft3
-    round(rt(x,df=g),2)
+    return(round(rt(x,df=g),2))
   })
 
   output$student3<-renderPrint({
-    return(muestra())
+    return(muestrats())
   })
   
   output$denst2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestrats())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -856,20 +856,20 @@ server <- function(input, output,session) {
     return(resultado2)
   })
   
-  muestra<-reactive({
+  muestrawei<-reactive({
     x<-input$valorwei3
     alpha<-input$alphaw3
     beta<-input$betaw3
     
-    round(rweibull(x,shape = beta,scale = alpha),2)
+    return(round(rweibull(x,shape = beta,scale = alpha),2))
   })
   
   output$weib3<-renderPrint({
-    return(muestra())
+    return(muestrawei())
   })
   
   output$denswei2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestrawei())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -940,20 +940,20 @@ server <- function(input, output,session) {
   })
   
   
-  muestra<-reactive({
+  muestracau<-reactive({
     x<-input$valorcau3
     alpha<-input$alphacau3
     beta<-input$betacau3
     
-    round(rcauchy(x,location = alpha,scale = beta),2)
+    return(round(rcauchy(x,location = alpha,scale = beta),2))
   })
   
   output$cauy3<-renderPrint({
-    return(muestra())
+    return(muestracau())
   })
   
   output$denscau2<-renderPlot({
-    data2<-data.frame(x=muestra())
+    data2<-data.frame(x=muestracau())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
       labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
@@ -1044,7 +1044,120 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dbeta(x2,shape1 = alpha,shape2 = beta)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad beta',
+      labs( title = 'Cuantil',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilchi<-renderPlot({
+    x1<-input$valorchi2
+    
+    gl<-input$df2
+    
+    x <- seq(0,100,0.01)
+    hx <- dchisq(x,df=gl)
+    
+    x2<-qchisq(x1,gl)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dchisq(x2,df=gl)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Chi-Cuadrado',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilfish<-renderPlot({
+    x1<-input$valorfish2
+    
+    gl1<-input$dfisher5
+    gl2<-input$dfisher6
+    
+    x <- seq(0,30,0.01)
+    hx <- df(x,df1=gl1,df2 = gl2)
+    
+    dat<-data.frame(x,hx)
+    
+    x2<-qf(x1,gl1,gl2)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = df(x2,df1=gl1,df2=gl2)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Fisher',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilt<-renderPlot({
+    x1<-input$valort2
+    
+    gl<-input$dft2
+    
+    x <- seq(-6,6,0.01)
+    hx <- dt(x,df=gl)
+    
+    x2<-qt(x1,gl)
+    
+    dat<-data.frame(x,hx)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dt(x2,df=gl)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad t-Student',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilwei<-renderPlot({
+    x1<-input$valorwei2
+    
+    alpha<-input$alphaw2
+    beta<-input$betaw2
+    
+    x <- seq(0,10,0.01)
+    hx <- dweibull(x,shape=beta,scale=alpha)
+    
+    dat<-data.frame(x,hx)
+    
+    x2<-qweibull(x1,shape = beta,scale = alpha)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dweibull(x2,shape=beta,scale=alpha)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Weibull',
+            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+    return(f)
+  })
+  
+  output$cuantilcau<-renderPlot({
+    x1<-input$valorcau2
+    
+    alpha<-input$alphacau2
+    beta<-input$betacau2
+    
+    x <- seq(-20,20,0.01)
+    hx <- dcauchy(x,location = alpha,scale=beta)
+    
+    dat<-data.frame(x,hx)
+    
+    x2<-qcauchy(x1,location = alpha,scale = beta)
+    
+    f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
+      geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
+      geom_segment(aes(x = x2, y =0 , xend = x2,
+                       yend = dcauchy(x2,location = alpha,scale=beta)),
+                   colour = "black",linetype=2)+
+      labs( title = 'Densidad Cauchy',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
