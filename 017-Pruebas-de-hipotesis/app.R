@@ -25,8 +25,19 @@ library(ggplot2)
 
 ui <- fluidPage(
   
-  titlePanel("Pruebas de Hipotesis")
-  
+  titlePanel("Pruebas de Hipotesis"),
+  selectInput(inputId = 'ph',label = 'Escoja la Prueba de Hipótesis deseada',choices = c('Media de una población','Diferencia de medias de dos poblaciones',
+                                                                                         'Varianza de una población','Igualdad de varianzas de dos poblaciones','Proporción en una población'),
+              selected = NULL),
+  conditionalPanel(condition = "input.ph == 'Media de una población'", selectInput(inputId = 'vc',label = '',choices = c('Varianza conocida','Varianza desconocida'),selected = NULL)),
+                  conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza conocida'", selectInput(inputId = 'tp',label = 'Tipo de Prueba',choices = c('Dos colas','Cola superior','Cola inferior'),selected = NULL)),
+                  conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza desconocida'", selectInput(inputId = 'tp1',label = 'Tipo de Prueba',choices = c('Dos colas','Cola superior','Cola inferior'),selected = NULL)),
+  conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones'", selectInput(inputId = 'vc1',label = '',choices = c('Varianza conocida','Varianza desconocida'),selected = NULL)),
+                  conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza conocida'", selectInput(inputId = 'tp',label = 'Tipo de Prueba',choices = c('Dos colas','Cola superior','Cola inferior'),selected = NULL)),
+                  conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza desconocida'", selectInput(inputId = 'tp1',label = 'Tipo de Prueba',choices = c('Dos colas','Cola superior','Cola inferior'),selected = NULL)),
+  conditionalPanel(condition = "input.ph == 'Varianza de una población'", selectInput(inputId = 'tp2',label = 'Tipo de Prueba',choices = c('Dos colas','Cola superior','Cola inferior'),selected = NULL)),
+  conditionalPanel(condition = "input.ph == 'Igualdad de varianzas de dos poblaciones'", selectInput(inputId = 'tp3',label = 'Tipo de Prueba',choices = c('Dos colas','Cola superior','Cola inferior'),selected = NULL)),
+  conditionalPanel(condition = "input.ph == 'Proporción en una población'", selectInput(inputId = 'tp4',label = 'Tipo de Prueba',choices = c('Dos colas','Cola superior','Cola inferior'),selected = NULL))
 )
 
 
