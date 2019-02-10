@@ -5,7 +5,7 @@ ensure_version <- function(pkg, ver = "0.0") {
 
 ensure_version("shiny", "1.2.0")
 ensure_version("readxl", "1.2.0")
-ensure_version("shinydasboard", "0.7.1")
+ensure_version("shinydashboard", "0.7.1")
 ensure_version("psych", "1.8.10")
 #ensure_version("modeest", "2.3.2")
 ensure_version("matrixStats", "0.54.0")
@@ -24,7 +24,7 @@ library(ggplot2)
 
 
 ui <- fluidPage(
-  
+
   titlePanel("Distribución Normal"),
   tabsetPanel(type = 'pills',id='pri',
               tabPanel('Características',includeHTML("normal.html")),
@@ -76,7 +76,7 @@ ui <- fluidPage(
 
 
 server <- function(input, output,session) {
-  
+
   output$norm<-renderText({
     x<-input$valor
     media<-input$mu
@@ -84,18 +84,18 @@ server <- function(input, output,session) {
     resultado<-paste("f(",x,") = ", dnorm(x,mean=media,sd=dv))
     return(resultado)
   })
-  
+
   output$densnor<-renderPlot({
     x1<-input$valor
-    
+
     media<-input$mu
     dv<-input$sigma
-    
+
     x <- seq(media-6,6+media,0.01)
     hx <- dnorm(x,mean=media,sd=dv)
-    
+
     dat<-data.frame(x,hx)
-    
+
     f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
       geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
       geom_segment(aes(x = x1, y =0 , xend = x1,
@@ -106,31 +106,31 @@ server <- function(input, output,session) {
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
-  
+
   output$norm1<-renderText({
     x<-input$valor1
     media<-input$mu1
     dv<-input$sigma1
-    
+
     resultado<-paste("F(",x,") = P(X <=",x,") = ", pnorm(x,mean = media, sd=dv))
     return(resultado)
   })
-  
-  
+
+
   output$densnor1<-renderPlot({
     x<-input$valor1
     media<-input$mu1
     dv<-input$sigma1
-    
+
     data<-data.frame(norm=pnorm(seq(-x,x,0.01),mean = media,sd=dv))
-    
+
     f1<-ggplot(data,aes(x=seq(-x,x,0.01),y=norm))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Normal",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f1)
   })
-  
-  
+
+
   output$densnor2<-renderPlot({
   media1<-input$mu_1
   media2<-input$mu_2
@@ -138,7 +138,7 @@ server <- function(input, output,session) {
   x2<-seq(media2-6,media2+6,0.01)
   y1 <- dnorm(x1,mean=media1, sd=1)
   y2 <- dnorm(x2,mean=media2, sd=1)
-  
+
   dat<-data.frame(x1,x2,y1,y2)
   ggplot(data=dat, mapping = aes(x1,y1))+geom_line(aes(colour = I("yellow")))+
     geom_area(mapping = aes(x1,y1), fill = "yellow",alpha = .2)+
@@ -152,12 +152,12 @@ server <- function(input, output,session) {
          x = "x", y = "f(x)")+
     theme(plot.title = element_text(size = rel(1.3),hjust = 0.5))+scale_color_manual('Medias',values=c("red","yellow"),labels=c('Media 2','Media 1'))
   })
-  
+
   output$densnor3<-renderPlot({
     x<-seq(-15,15,0.01)
     y1 <- dnorm(x,mean=0, sd=input$va_1)
     y2 <- dnorm(x,mean=0, sd=input$va_2)
-    
+
     dat<-data.frame(x,y1,y2)
     ggplot(data=dat, mapping = aes(x,y1))+geom_line(aes(colour = I("yellow")))+
       geom_area(mapping = aes(x,y1), fill = "yellow",alpha = .2)+
@@ -167,28 +167,28 @@ server <- function(input, output,session) {
            x = "x", y = "f(x)")+
       theme(plot.title = element_text(size = rel(1.3),hjust = 0.5)) +scale_color_manual('Varianzas',values=c("red","yellow"),labels=c('Varianza 2','Varianza 1'))
   })
-  
+
   output$norm2<-renderText({
     x<-input$valor2
     media<-input$mu2
     dv<-input$sigma2
-    
-    
+
+
     resultado<-paste("x = ", qnorm(x,mean = media,sd=dv))
     return(resultado)
   })
-  
+
   output$densnor4<-renderPlot({
     x1<-input$valor2
     media<-input$mu2
     dv<-input$sigma2
-    
+
     x2<-qnorm(x1,mean = media,sd=dv) #cuantil
     x <- seq(media-6,6+media,0.01)
     hx <- dnorm(x,mean=media,sd=dv)
-    
+
     dat<-data.frame(x,hx)
-    
+
     f<-ggplot(data=dat, mapping = aes(x,hx))+geom_line()+
       geom_area(mapping = aes(x), fill = "blue",alpha = 0.4)+
       geom_segment(aes(x = x2, y =0 , xend = x2,
@@ -199,19 +199,19 @@ server <- function(input, output,session) {
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
-  
+
   muestra<-reactive({
     x<-input$valor3
     media<-input$mu3
     dv<-input$sigma3
-    
+
     round(rnorm(x,mean=media,sd=dv),2)
   })
-  
+
   output$norm3<-renderPrint({
     return(muestra())
   })
-  
+
   output$densnor5<-renderPlot({
     data2<-data.frame(x=muestra())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
@@ -219,7 +219,7 @@ server <- function(input, output,session) {
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
     return(f2)
   })
-  
+
   output$norm4<-renderText({
     x<-input$a
     media<-input$mu4
@@ -227,7 +227,7 @@ server <- function(input, output,session) {
     resultado<-paste("P(X <=",x,") = ", pnorm(x,mean=media,sd=dv))
     return(resultado)
   })
-  
+
   output$densnor6<-renderPlot({
     x1<-input$a
     media<-input$mu4
@@ -249,7 +249,7 @@ server <- function(input, output,session) {
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
-  
+
   output$norm5<-renderText({
     media<-input$mu4
     dv<-input$sigma4
@@ -257,20 +257,20 @@ server <- function(input, output,session) {
     u<-input$ab2
     resultado<-paste("P(",l,"<= X <=",u,") = ", pnorm(u,mean = media,sd=dv)-pnorm(l,mean = media,sd=dv))
     return(resultado)
-    
+
   })
-  
+
   output$densnor7<-renderPlot({
     l<-input$ab1
     u<-input$ab2
     media<-input$mu4
     dv<-input$sigma4
-    
+
     xp <- seq(media-6,6+media,0.01)
     hx <- dnorm(xp,mean=media,sd=dv)
-    
+
     dat<-data.frame(xp,hx)
-    
+
     f<-ggplot(data=dat, mapping = aes(xp,hx))+geom_line()+
       geom_area(mapping = aes(xp,hx), fill = "blue",alpha = 0.2)+
       geom_area(mapping = aes(x=ifelse(l<=xp & xp<=u,xp,NA),y=ifelse(l<=xp & xp<=u,dnorm(xp,mean=media,sd=dv),NA)), fill = "blue",alpha = 0.5)+
@@ -285,7 +285,7 @@ server <- function(input, output,session) {
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
-  
+
   output$norm6<-renderText({
     x<-input$b
     media<-input$mu4
@@ -293,17 +293,17 @@ server <- function(input, output,session) {
     resultado<-paste("P(X >=",x,") = ", pnorm(x,mean=media,sd=dv,lower.tail = FALSE))
     return(resultado)
   })
-  
+
   output$densnor8<-renderPlot({
     x1<-input$b
     media<-input$mu4
     dv<-input$sigma4
-    
+
     xp <- seq(media-6,6+media,0.01)
     hx <- dnorm(xp,mean=media,sd=dv)
-    
+
     dat<-data.frame(xp,hx)
-    
+
     f<-ggplot(data=dat, mapping = aes(xp,hx))+geom_line()+
       geom_area(mapping = aes(xp,hx), fill = "blue",alpha = 0.2)+
       geom_area(mapping = aes(x=ifelse(xp>=x1,xp,NA),y=ifelse(xp>=x1,dnorm(xp,mean=media,sd=dv),NA)), fill = "blue",alpha = 0.5)+
@@ -315,11 +315,11 @@ server <- function(input, output,session) {
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
-  
-  
-  
-  
-  
+
+
+
+
+
   }
 
 
