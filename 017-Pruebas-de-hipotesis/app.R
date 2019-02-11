@@ -5,7 +5,7 @@ ensure_version <- function(pkg, ver = "0.0") {
 
 ensure_version("shiny", "1.2.0")
 ensure_version("readxl", "1.2.0")
-ensure_version("shinydasboard", "0.7.1")
+ensure_version("shinydashboard", "0.7.1")
 ensure_version("psych", "1.8.10")
 ensure_version("matrixStats", "0.54.0")
 ensure_version("ggplot2","3.1.0")
