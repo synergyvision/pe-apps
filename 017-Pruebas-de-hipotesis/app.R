@@ -55,7 +55,9 @@ ui <- fluidPage(
                                                                                                                  numericInput(inputId = 'Muestra1',label = 'Inserte Tamaño de la muestra',min=0,max = 100,value = 5,step = 1,width = '150px'),
                                                                                                                  numericInput(inputId = 'Varianzamu1',label = 'Inserte Varianza muestral',min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
                                                                                                                 numericInput(inputId = 'signif1',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
-    ),column(width = 8,align='center',plotOutput('grafica2')))
+    ),column(width = 8,align='center',plotOutput('grafica2'))),
+
+    conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza conocida'",column(width = 4,numericInput(inputId = 'Media1Hip',label = HTML('Inserte Media &mu;<sub>x</sub>'),min=0,max = 100,value = 0,step = 0.1,width = '150px')))
 
 
     )
