@@ -164,43 +164,102 @@ server <- function(input, output,session) {
   })
 
 
+  output$grafica2<-renderPlot({
 
-  # output$grafica2<-renderPlot({
-  #   mu<-input$MediaHip1
-  #   x_bar<-input$MediaMuestral1
-  #   n<-input$Muestra1
-  #   alpha<-input$signif1
-  #
-  #   t<-(x_bar-mu)/(s/sqrt(n))
-  #
-  #   z_alpha<-if(z<0){
-  #     qnorm(alpha,mean=0,sd=1)
-  #   }
-  #   else{
-  #     qnorm(1-alpha,mean=0,sd=1)
-  #   }
-  #
-  #   x<-seq(-4,4,0.01)
-  #   y<-dnorm(x,mean=0, sd=1)
-  #   f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
-  #     geom_area(mapping = aes(x,y), fill = "blue",alpha = .2)+
-  #
-  #     geom_segment(aes(x = z_alpha, y =0 , xend = z_alpha, yend = dnorm(z_alpha,mean=0, sd=1)), colour = "black",linetype=2)+
-  #     geom_segment(aes(x = z, y =0 , xend = z, yend = dnorm(z,mean=0, sd=1)), colour = "red",linetype=1)+
-  #
-  #     annotate("text", x=z, y =-0.02, label ="z", parse = TRUE)+
-  #     annotate("text", x=z_alpha, y =-0.02, label="'Z'[alpha]", parse = TRUE)+
-  #     annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
-  #     annotate("text", x=z_alpha+0.5, y=0.05, label="'Rechazar H'[0]", parse = TRUE)+
-  #
-  #     ylim(-0.05,0.41)+
-  #     xlim(-4,4)+
-  #     labs( title = "Prueba de cola derecha Distribución Normal",
-  #           x = " ", y = " ",caption = "http://synergy.vision/" )
-  #
-  #   return(f)
-  # })
-  #
+    mu<-input$MediaHip1
+    x_bar<-input$MediaMuestral1
+    n<-input$Muestra1
+    sigma<-sqrt(input$Varianzamu1)
+    alpha<-input$signif1
+
+    t<-(x_bar-mu)/(sigma/sqrt(n))
+
+    x<-if(-6<=t & t<=6){
+      seq(-6,6,0.01)
+    } else if(-6>t){
+      seq(t-1,6,0.01)
+    } else if(t>6){
+      seq(-6,t+1,0.01)
+    }
+
+    y<-dt(x,df=n-1)
+
+
+    if(input$tp1=='Dos colas'){
+
+      alpha_2<-alpha/2
+
+      t_alpha1<-qt(alpha_2,df=n-1)
+
+      t_alpha2<-qt(1-alpha_2,df=n-1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=t_alpha2,x,NA),y=ifelse(x>=t_alpha2,dt(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+        geom_area(mapping = aes(x=ifelse(x<=t_alpha1,x,NA),y=ifelse(x<=t_alpha1,dt(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = t_alpha1, y =0 , xend = t_alpha1, yend = dt(t_alpha1,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t_alpha2, y =0 , xend = t_alpha2, yend = dt(t_alpha2,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t, y =0 , xend = t, yend = dt(t,df=n-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=t, y =-0.02, label ="T", parse = TRUE)+
+        annotate("text", x=t_alpha1, y =-0.02, label="-'T'[alpha/2]", parse = TRUE)+
+        annotate("text", x=t_alpha2, y =-0.02, label="'T'[alpha/2]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha1-2, y=dt(t_alpha1,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha2+2, y=dt(t_alpha2,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de dos colas Distribución T-student",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+    else if(input$tp1=='Cola superior'){
+
+      t_alpha2<-qt(1-alpha,df=n-1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=t_alpha2,x,NA),y=ifelse(x>=t_alpha2,dt(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = t_alpha2, y =0 , xend = t_alpha2, yend = dt(t_alpha2,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t, y =0 , xend = t, yend = dt(t,df=n-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=t, y =-0.02, label ="T", parse = TRUE)+
+        annotate("text", x=t_alpha2, y =-0.02, label="'T'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha2+2, y=dt(t_alpha2,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de cola superior Distribución T-student",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+
+    }
+    else if(input$tp1=='Cola inferior'){
+      t_alpha1<-qt(alpha,df=n-1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x<=t_alpha1,x,NA),y=ifelse(x<=t_alpha1,dt(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = t_alpha1, y =0 , xend = t_alpha1, yend = dt(t_alpha1,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t, y =0 , xend = t, yend = dt(t,df=n-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=t, y =-0.02, label ="T", parse = TRUE)+
+        annotate("text", x=t_alpha1, y =-0.02, label="-'T'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha1-2, y=dt(t_alpha1,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de dos colas Distribución T-student",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+  })
 
 
 
