@@ -5,7 +5,7 @@ ensure_version <- function(pkg, ver = "0.0") {
 
 ensure_version("shiny", "1.1.0")
 ensure_version("readxl", "1.1.0")
-ensure_version("shinydasboard", "0.7.0")
+ensure_version("shinydashboard", "0.7.0")
 ensure_version("psych", "1.8.4")
 #ensure_version("modeest", "2.1")
 ensure_version("matrixStats", "0.54.0")
@@ -37,17 +37,17 @@ library(VennDiagram)
 
 
 ui <- fluidPage(
-  
+
   titlePanel("Teoría de Conjuntos"),
-  
+
   sidebarLayout(
-    
+
     sidebarPanel(
-      
-      
+
+
       textInput(inputId = "con1", label = "Introducir el primer conjunto",placeholder = "a,b,..."),
       textInput(inputId = "con2", label = "Introducir el segundo conjunto",placeholder = "a,b,..."),
-      
+
       selectInput(inputId = "ope",label = "Operaciones de cojuntos",choices = c("Unión","Intersección","Diferencia","Complemento","Producto Cartesiano","Potencia"),
                                                          selected = NULL),
       conditionalPanel(condition = "input.ope=='Complemento'",
@@ -70,9 +70,9 @@ ui <- fluidPage(
       ),
 
     mainPanel(
-      
+
       column(width=5,h3("Operación"),div(style="height:400px; overflow-y: scroll",verbatimTextOutput("op1"))),
-      
+
       column(width=5,h3("Diagrama de Venn"),plotOutput("plot"))
     )
   )
@@ -81,17 +81,17 @@ ui <- fluidPage(
 
 
 server <- function(input, output,session) {
-  
-  
+
+
   conjunto1<-reactive({
     if(is.null(input$con1)){
       return()
     } else{
     as.vector(unlist(strsplit(input$con1,",")))
     }
-    
+
   })
-  
+
 
     conjunto2<-reactive({
      if(is.null(input$con2)){
@@ -100,7 +100,7 @@ server <- function(input, output,session) {
        as.vector(unlist(strsplit(input$con2,",")))
      }
  })
- 
+
     conjuntou<-reactive({
       if(is.null(input$con3)){
         return()
@@ -108,17 +108,17 @@ server <- function(input, output,session) {
         as.vector(unlist(strsplit(input$con3,",")))
       }
     })
-      
+
     d<-reactive({
       w<-rbind(conjunto1(),conjunto2())
       row.names(w)<-c("c1","c2")
       return(w)
-      
+
     })
 
 
  output$op1<-renderPrint({
-   
+
     if(is.null(input$con)){
       return()
     }
@@ -135,7 +135,7 @@ server <- function(input, output,session) {
         else{
           union(conjunto1(),conjunto2())
         }
-      } 
+      }
       else if(input$ope=="Intersección"){
         if(length(input$con)==1){
           if(input$con=='c1'){
@@ -221,7 +221,7 @@ server <- function(input, output,session) {
     }
   }
 })
- 
+
 output$plot<-renderPlot({
   if(is.null(input$con)){
     return()
@@ -261,7 +261,7 @@ output$plot<-renderPlot({
           draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
         }
         else{
-        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
+        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE,
                    fill = c("blue", "blue"),
                    cat.pos = c(0, 0),
                    lab.cex=1.1,file = NULL,ext = NULL)
@@ -303,7 +303,7 @@ output$plot<-renderPlot({
           draw.single.venn(length(a),fill='blue',category = a1,cat.default.pos = 'text',cat.cex = 1,cat.pos = 180)
         }
         else{
-        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE, 
+        group.venn(list(Conjunto1=conjunto1(), Conjunto2=conjunto2()), label=TRUE,
                    fill = c("green", "blue"),
                    cat.pos = c(0, 0),
                    lab.cex=1.1,file = NULL,ext = NULL)
@@ -357,27 +357,27 @@ output$plot<-renderPlot({
   # else if(input$ope=="Unión"){
   #   a<-d()[input$con[1],]
   #   b<-d()[input$con[2],]
-  # 
-  #   group.venn(list(Conjunto1=a, Conjunto2=b), label=TRUE, 
+  #
+  #   group.venn(list(Conjunto1=a, Conjunto2=b), label=TRUE,
   #              fill = c("blue", "blue"),
   #              cat.pos = c(0, 0),
   #              lab.cex=1.1,file = NULL,ext = NULL)
-  #   
+  #
   # } else if(input$ope=="Intersección"){
   #   a1<-d()[input$con[1],]
   #   b1<-d()[input$con[2],]
-  #   
-  #   group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE, 
+  #
+  #   group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE,
   #              fill = c("green", "blue"),
   #              cat.pos = c(0, 0),
   #              lab.cex=1.1,file = NULL,ext = NULL)
-  #   
-  #   
+  #
+  #
   # } else if(input$ope=="Diferencia"){
   #   a1<-d()[input$con[1],]
   #   b1<-d()[input$con[2],]
-  #   
-  #   group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE, 
+  #
+  #   group.venn(list(Conjunto1=a1, Conjunto2=b1), label=TRUE,
   #              fill = c("green", "white"),
   #              cat.pos = c(0, 0),
   #              lab.cex=1.1,file = NULL,ext = NULL)
