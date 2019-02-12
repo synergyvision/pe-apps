@@ -43,19 +43,19 @@ ui <- fluidPage(
     ),
 
   mainPanel(
-    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza conocida'",column(width=5,numericInput(inputId = 'MediaHip',label = 'Inserte Media hipotética',min=0,max = 100,value = 0,step = 0.1,width = '150px'),
+    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza conocida'",column(width=4,numericInput(inputId = 'MediaHip',label = 'Inserte Media hipotética',min=0,max = 100,value = 0,step = 0.1,width = '150px'),
                      numericInput(inputId = 'MediaMuestral',label = 'Inserte Media de la muestra',min=0,max = 100,value = 5,step = 0.1,width = '150px'),
                      numericInput(inputId = 'Muestra',label = 'Inserte Tamaño de la muestra',min=0,max = 100,value = 5,step = 1,width = '150px'),
                      numericInput(inputId = 'VarianzaPob',label = 'Inserte Varianza Poblacional',min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
                      numericInput(inputId = 'signif',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
-    ),column(width = 7,plotOutput('grafica1'))
+    ),column(width = 8,align='center',plotOutput('grafica1'))
                      ),
-    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza desconocida'",column(width=5,numericInput(inputId = 'MediaHip1',label = 'Inserte Media hipotética',min=0,max = 100,value = 0,step = 0.1,width = '150px'),
+    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza desconocida'",column(width=4,numericInput(inputId = 'MediaHip1',label = 'Inserte Media hipotética',min=0,max = 100,value = 0,step = 0.1,width = '150px'),
                                                                                                                  numericInput(inputId = 'MediaMuestral1',label = 'Inserte Media de la muestra',min=0,max = 100,value = 5,step = 0.1,width = '150px'),
                                                                                                                  numericInput(inputId = 'Muestra1',label = 'Inserte Tamaño de la muestra',min=0,max = 100,value = 5,step = 1,width = '150px'),
                                                                                                                  numericInput(inputId = 'Varianzamu1',label = 'Inserte Varianza muestral',min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
                                                                                                                 numericInput(inputId = 'signif1',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
-    ),column(width = 7,plotOutput('grafica2')))
+    ),column(width = 8,align='center',plotOutput('grafica2')))
 
 
     )
@@ -68,20 +68,13 @@ server <- function(input, output,session) {
 
   output$grafica1<-renderPlot({
 
-    if(input$tp=='Dos colas'){
     mu<-input$MediaHip
     x_bar<-input$MediaMuestral
     n<-input$Muestra
     sigma<-sqrt(input$VarianzaPob)
     alpha<-input$signif
 
-    alpha_2<-alpha/2
-
     z<-(x_bar-mu)*sqrt(n)/sigma
-
-    z_alpha1<-qnorm(alpha_2,mean=0,sd=1)
-
-    z_alpha2<-qnorm(1-alpha_2,mean=0,sd=1)
 
     x<-if(-6<=z & z<=6){
       seq(-6,6,0.01)
@@ -92,6 +85,16 @@ server <- function(input, output,session) {
     }
 
     y<-dnorm(x,mean=0, sd=1)
+
+
+    if(input$tp=='Dos colas'){
+
+    alpha_2<-alpha/2
+
+    z_alpha1<-qnorm(alpha_2,mean=0,sd=1)
+
+    z_alpha2<-qnorm(1-alpha_2,mean=0,sd=1)
+
     f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
       geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
       geom_area(mapping = aes(x=ifelse(x>=z_alpha2,x,NA),y=ifelse(x>=z_alpha2,dnorm(x,mean=0, sd=1),NA)), fill = "blue",alpha = 0.4)+
@@ -113,6 +116,50 @@ server <- function(input, output,session) {
             x = " ", y = " ",caption = "http://synergy.vision/" )
 
     return(f)
+    }
+    else if(input$tp=='Cola superior'){
+
+      z_alpha2<-qnorm(1-alpha,mean=0,sd=1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=z_alpha2,x,NA),y=ifelse(x>=z_alpha2,dnorm(x,mean=0, sd=1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = z_alpha2, y =0 , xend = z_alpha2, yend = dnorm(z_alpha2,mean=0, sd=1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = z, y =0 , xend = z, yend = dnorm(z,mean=0, sd=1)), colour = "red",linetype=1)+
+
+        annotate("text", x=z, y =-0.02, label ="Z", parse = TRUE)+
+        annotate("text", x=z_alpha2, y =-0.02, label="'Z'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=z_alpha2+2, y=dnorm(z_alpha2,mean=0, sd=1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de cola superior Distribución Normal",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+
+    }
+    else if(input$tp=='Cola inferior'){
+      z_alpha1<-qnorm(alpha,mean=0,sd=1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x<=z_alpha1,x,NA),y=ifelse(x<=z_alpha1,dnorm(x,mean=0, sd=1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = z_alpha1, y =0 , xend = z_alpha1, yend = dnorm(z_alpha1,mean=0, sd=1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = z, y =0 , xend = z, yend = dnorm(z,mean=0, sd=1)), colour = "red",linetype=1)+
+
+        annotate("text", x=z, y =-0.02, label ="Z", parse = TRUE)+
+        annotate("text", x=z_alpha1, y =-0.02, label="-'Z'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=z_alpha1-2, y=dnorm(z_alpha1,mean=0, sd=1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de dos colas Distribución Normal",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
     }
   })
 
