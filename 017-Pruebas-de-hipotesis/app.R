@@ -68,7 +68,19 @@ ui <- fluidPage(
                                                                                                                                    numericInput(inputId = 'Varianza1Pob',label = HTML('Inserte Varianza Poblacional &sigma;<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
                                                                                                                                    numericInput(inputId = 'Varianza2Pob',label = HTML('Inserte Varianza Poblacional &sigma;<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px')
                                                                                                                                    ),
-                                                                                                                            column(width = 8,align='center',plotOutput('grafica3')))
+                                                                                                                            column(width = 8,align='center',plotOutput('grafica3'))),
+    conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza desconocida'",column(width = 2,numericInput(inputId = 'Media1Hip1',label = HTML('Inserte Media &mu;<sub>x</sub>'),min=0,max = 100,value = 1,step = 0.1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media2Hip1',label = HTML('Inserte Media &mu;<sub>y</sub>'),min=0,max =100,value = 1,step = 0.1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media1Muestral1',label = HTML('Inserte Media de la muestra X&#772;'),min=0,max = 100,value = 5,step = 0.1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media2Muestral1',label = HTML('Inserte Media de la muestra Y&#772;'),min=0,max = 100,value = 7,step = 0.1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'signif3',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
+    ),
+    column(width = 2,br(),numericInput(inputId = 'Muestra13',label = HTML('Inserte Tamaño de la muestra n<sub>x</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
+           numericInput(inputId = 'Muestra14',label = HTML('Inserte Tamaño de la muestra n<sub>y</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px'),
+           numericInput(inputId = 'Varianza1Mu1',label = HTML('Inserte Varianza Muestral &sigma;<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
+           numericInput(inputId = 'Varianza2Mu2',label = HTML('Inserte Varianza Muestral &sigma;<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px')
+    ),
+    column(width = 8,align='center',plotOutput('grafica4')))
 
 
     )
@@ -373,6 +385,116 @@ server <- function(input, output,session) {
     }
 
   })
+
+  output$grafica4<-renderPlot({
+
+    mux<-input$Media1Hip1
+    muy<-input$Media2Hip1
+    x_bar<-input$Media1Muestral1
+    y_bar<-input$Media2Muestral1
+    nx<-input$Muestra13
+    ny<-input$Muestra14
+    sigma2x<-input$Varianza1Mu1
+    sigma2y<-input$Varianza2Mu2
+    alpha<-input$signif3
+
+    s<-((nx-1)*sigma2x+(ny-1)*sigma2y)/(nx+ny-2)
+
+    t<-((x_bar - y_bar)-(mux-muy))/(s*sqrt((1/nx) + (1/ny)))
+
+    x<-if(-6<=t & t<=6){
+      seq(-6,6,0.01)
+    } else if(-6>t){
+      seq(t-1,6,0.01)
+    } else if(t>6){
+      seq(-6,t+1,0.01)
+    }
+
+    y<-dt(x,df=nx+ny-2)
+
+    if(input$tp12=='Dos colas'){
+
+      alpha_2<-alpha/2
+
+      t_alpha1<-qt(alpha_2,df=nx+ny-2)
+
+      t_alpha2<-qt(1-alpha_2,df=nx+ny-2)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=t_alpha2,x,NA),y=ifelse(x>=t_alpha2,dt(x,df=nx+ny-2),NA)), fill = "blue",alpha = 0.4)+
+        geom_area(mapping = aes(x=ifelse(x<=t_alpha1,x,NA),y=ifelse(x<=t_alpha1,dt(x,df=nx+ny-2),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = t_alpha1, y =0 , xend = t_alpha1, yend = dt(t_alpha1,df=nx+ny-2)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t_alpha2, y =0 , xend = t_alpha2, yend = dt(t_alpha2,df=nx+ny-2)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t, y =0 , xend = t, yend = dt(t,df=nx+ny-2)), colour = "red",linetype=1)+
+
+        annotate("text", x=t, y =-0.02, label ="T", parse = TRUE)+
+        annotate("text", x=t_alpha1, y =-0.02, label="-'T'[alpha/2]", parse = TRUE)+
+        annotate("text", x=t_alpha2, y =-0.02, label="'T'[alpha/2]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha1-2, y=dt(t_alpha1,df=nx+ny-2), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha2+2, y=dt(t_alpha2,df=nx+ny-2), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de dos colas Distribución T-student",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+    else if(input$tp12=='Cola superior'){
+
+      t_alpha2<-qt(1-alpha,df=nx+ny-2)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=t_alpha2,x,NA),y=ifelse(x>=t_alpha2,dt(x,df=nx+ny-2),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = t_alpha2, y =0 , xend = t_alpha2, yend = dt(t_alpha2,df=nx+ny-2)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t, y =0 , xend = t, yend = dt(t,df=nx+ny-2)), colour = "red",linetype=1)+
+
+        annotate("text", x=t, y =-0.02, label ="T", parse = TRUE)+
+        annotate("text", x=t_alpha2, y =-0.02, label="'T'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha2+2, y=dt(t_alpha2,df=nx+ny-2), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de cola superior Distribución T-student",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+    else if(input$tp12=='Cola inferior'){
+      t_alpha1<-qt(alpha,df=nx+ny-2)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x<=t_alpha1,x,NA),y=ifelse(x<=t_alpha1,dt(x,df=nx+ny-2),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = t_alpha1, y =0 , xend = t_alpha1, yend = dt(t_alpha1,df=nx+ny-2)), colour = "black",linetype=2)+
+        geom_segment(aes(x = t, y =0 , xend = t, yend = dt(t,df=nx+ny-2)), colour = "red",linetype=1)+
+
+        annotate("text", x=t, y =-0.02, label ="T", parse = TRUE)+
+        annotate("text", x=t_alpha1, y =-0.02, label="-'T'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=t_alpha1-2, y=dt(t_alpha1,df=nx+ny-2), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de dos colas Distribución T-student",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+
+  })
+
+
+
+
+
+
+
+
 
 
 
