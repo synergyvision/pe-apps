@@ -100,7 +100,10 @@ ui <- fluidPage(
     column(width = 2,br(),numericInput(inputId = 'Muestra4',label = HTML('Inserte Tamaño de la muestra n<sub>x</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
            numericInput(inputId = 'Muestra5',label = HTML('Inserte Tamaño de la muestra n<sub>y</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px')
     ),
-    column(width = 8,align='center',plotOutput('grafica6')))
+    column(width = 8,align='center',plotOutput('grafica6'))),
+
+    conditionalPanel(condition = "input.ph == 'Proporción en una población'",column(width = 2,numericInput(inputId = 'PropHip',label = HTML('Inserte Proporción hipotética <i>p</i><sub>o</sub>'),min=0,max = 1,value = 0.5,step = 0.05,width = '150px'),
+                                                                                    numericInput(inputId = 'PropEstim',label = HTML('Inserte Proporción Estimada <i>p&#770;</i>'),min=0,max = 1,value = 0.5,step = 0.05,width = '150px')))
 
 
     )
@@ -521,7 +524,7 @@ server <- function(input, output,session) {
 
     x<-if(0<=X2 & X2<=p){
       seq(0,p,0.01)
-    } else if(0>t){
+    } else if(0>X2){
       seq(X2-1,p,0.01)
     } else if(X2>p){
       seq(0,X2+1,0.01)
@@ -558,7 +561,7 @@ server <- function(input, output,session) {
 
       return(f)
     }
-    else if(input$tp12=='Cola superior'){
+    else if(input$tp2=='Cola superior'){
 
       x_alpha2<-qchisq(1-alpha,df=n-1)
 
@@ -570,7 +573,7 @@ server <- function(input, output,session) {
         geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
 
         annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
-        annotate("text", x=x_alpha2, y =-0.003, label="'X'[alpha/2]", parse = TRUE)+
+        annotate("text", x=x_alpha2, y =-0.003, label="'X'[alpha]", parse = TRUE)+
         annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
         annotate("text", x=x_alpha2+1, y=dchisq(x_alpha2,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
 
@@ -580,7 +583,7 @@ server <- function(input, output,session) {
       return(f)
 
     }
-    else if(input$tp12=='Cola inferior'){
+    else if(input$tp2=='Cola inferior'){
 
       x_alpha1<-qchisq(alpha,df=n-1)
 
@@ -592,7 +595,7 @@ server <- function(input, output,session) {
         geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
 
         annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
-        annotate("text", x=x_alpha1, y =-0.003, label="-'X'[alpha/2]", parse = TRUE)+
+        annotate("text", x=x_alpha1, y =-0.003, label="-'X'[alpha]", parse = TRUE)+
         annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
         annotate("text", x=x_alpha1-1, y=dchisq(x_alpha1,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
 
