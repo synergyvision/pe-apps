@@ -77,10 +77,18 @@ ui <- fluidPage(
     ),
     column(width = 2,br(),numericInput(inputId = 'Muestra13',label = HTML('Inserte Tamaño de la muestra n<sub>x</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
            numericInput(inputId = 'Muestra14',label = HTML('Inserte Tamaño de la muestra n<sub>y</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px'),
-           numericInput(inputId = 'Varianza1Mu1',label = HTML('Inserte Varianza Muestral &sigma;<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
-           numericInput(inputId = 'Varianza2Mu2',label = HTML('Inserte Varianza Muestral &sigma;<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px')
+           numericInput(inputId = 'Varianza1Mu1',label = HTML('Inserte Varianza Muestral S<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
+           numericInput(inputId = 'Varianza2Mu2',label = HTML('Inserte Varianza Muestral S<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px')
     ),
     column(width = 8,align='center',plotOutput('grafica4')))
+    ,
+
+
+     conditionalPanel(condition = "input.ph == 'Varianza de una población'",column(width=3,numericInput(inputId = 'SigmaHip',label = HTML('Inserte Varianza hipotética &sigma;<sup>2</sup><sub>o</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
+                                                                                           numericInput(inputId = 'SigmaMuestral',label = HTML('Inserte Varianza Muestral S<sup>2</sup>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px'),
+                                                                                           numericInput(inputId = 'MuestraVar',label = 'Inserte Tamaño de la muestra',min=0,max = 100,value = 15,step = 1,width = '150px'),
+                                                                                           numericInput(inputId = 'signif4',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px'))
+     ,column(width = 8,align='center',plotOutput('grafica5')))
 
 
     )
@@ -484,6 +492,103 @@ server <- function(input, output,session) {
               x = " ", y = " ",caption = "http://synergy.vision/" )
 
       return(f)
+    }
+
+  })
+
+  output$grafica5<-renderPlot({
+
+    sigma2o<-input$SigmaHip
+    S2<-input$SigmaMuestral
+    n<-input$MuestraVar
+    alpha<-input$signif4
+
+    X2<-((n-1)*S2)/sigma2o
+
+    p<-n*2.5
+
+    x<-if(0<=X2 & X2<=p){
+      seq(0,p,0.01)
+    } else if(0>t){
+      seq(X2-1,p,0.01)
+    } else if(X2>p){
+      seq(0,X2+1,0.01)
+    }
+
+    y<-dchisq(x,df=n-1)
+
+    if(input$tp2=='Dos colas'){
+
+      alpha_2<-alpha/2
+
+      x_alpha1<-qchisq(alpha_2,df=n-1)
+
+      x_alpha2<-qchisq(1-alpha_2,df=n-1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=x_alpha2,x,NA),y=ifelse(x>=x_alpha2,dchisq(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+        geom_area(mapping = aes(x=ifelse(x<=x_alpha1,x,NA),y=ifelse(x<=x_alpha1,dchisq(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = x_alpha1, y =0 , xend = x_alpha1, yend = dchisq(x_alpha1,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = x_alpha2, y =0 , xend = x_alpha2, yend = dchisq(x_alpha2,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
+        annotate("text", x=x_alpha1, y =-0.003, label="-'X'[alpha/2]", parse = TRUE)+
+        annotate("text", x=x_alpha2, y =-0.003, label="'X'[alpha/2]", parse = TRUE)+
+        annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=x_alpha1-1, y=dchisq(x_alpha1,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=x_alpha2+1, y=dchisq(x_alpha2,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        labs( title = "Prueba de dos colas Distribución chi cuadrado",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+    else if(input$tp12=='Cola superior'){
+
+      x_alpha2<-qchisq(1-alpha,df=n-1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=x_alpha2,x,NA),y=ifelse(x>=x_alpha2,dchisq(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = x_alpha2, y =0 , xend = x_alpha2, yend = dchisq(x_alpha2,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
+        annotate("text", x=x_alpha2, y =-0.003, label="'X'[alpha/2]", parse = TRUE)+
+        annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=x_alpha2+1, y=dchisq(x_alpha2,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        labs( title = "Prueba cola superior Distribución chi cuadrado",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+
+    }
+    else if(input$tp12=='Cola inferior'){
+
+      x_alpha1<-qchisq(alpha,df=n-1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x<=x_alpha1,x,NA),y=ifelse(x<=x_alpha1,dchisq(x,df=n-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = x_alpha1, y =0 , xend = x_alpha1, yend = dchisq(x_alpha1,df=n-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
+        annotate("text", x=x_alpha1, y =-0.003, label="-'X'[alpha/2]", parse = TRUE)+
+        annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=x_alpha1-1, y=dchisq(x_alpha1,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        labs( title = "Prueba cola inferior Distribución chi cuadrado",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+
     }
 
   })
