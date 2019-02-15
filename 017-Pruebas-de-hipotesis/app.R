@@ -88,7 +88,19 @@ ui <- fluidPage(
                                                                                            numericInput(inputId = 'SigmaMuestral',label = HTML('Inserte Varianza Muestral S<sup>2</sup>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px'),
                                                                                            numericInput(inputId = 'MuestraVar',label = 'Inserte Tamaño de la muestra',min=0,max = 100,value = 15,step = 1,width = '150px'),
                                                                                            numericInput(inputId = 'signif4',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px'))
-     ,column(width = 8,align='center',plotOutput('grafica5')))
+     ,column(width = 8,align='center',plotOutput('grafica5'))),
+
+
+    conditionalPanel(condition = "input.ph == 'Igualdad de varianzas de dos poblaciones'",column(width = 2,numericInput(inputId = 'var1Hip1',label = HTML('Inserte Varianza &sigma;<sup>2</sup><sub>x</sub>'),min=0,max = 100,value = 1,step = 0.1,width = '150px'),
+                                                                                                                                      numericInput(inputId = 'var2Hip1',label = HTML('Inserte Varianza &sigma;<sup>2</sup><sub>y</sub>'),min=0,max =100,value = 1,step = 0.1,width = '150px'),
+                                                                                                                                      numericInput(inputId = 'var1Muestral1',label = HTML('Inserte Varianza de la muestra S<sup>2</sup><sub>x</sub>'),min=0,max = 100,value = 5,step = 0.1,width = '150px'),
+                                                                                                                                      numericInput(inputId = 'var2Muestral1',label = HTML('Inserte Varianza de la muestra S<sup>2</sup><sub>y</sub>'),min=0,max = 100,value = 7,step = 0.1,width = '150px'),
+                                                                                                                                      numericInput(inputId = 'signif5',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
+    ),
+    column(width = 2,br(),numericInput(inputId = 'Muestra4',label = HTML('Inserte Tamaño de la muestra n<sub>x</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
+           numericInput(inputId = 'Muestra5',label = HTML('Inserte Tamaño de la muestra n<sub>y</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px')
+    ),
+    column(width = 8,align='center',plotOutput('grafica6')))
 
 
     )
@@ -593,9 +605,98 @@ server <- function(input, output,session) {
 
   })
 
+  output$grafica6<-renderPlot({
+
+    varx<-input$var1Hip1
+    vary<-input$var2Hip1
+    nx<-input$Muestra4
+    ny<-input$Muestra5
+    sigma2x<-input$var1Muestral1
+    sigma2y<-input$var2Muestral1
+    alpha<-input$signif5
+
+    f<-(sigma2x/varx)/(sigma2y/vary)
 
 
+    x<-seq(0,10,0.01)
 
+    y<-df(x, df1= nx - 1,df2 = ny - 1)
+
+    if(input$tp3=='Dos colas'){
+
+      alpha_2<-alpha/2
+
+      f_alpha1<-qf(alpha_2,df1 = nx - 1,df2 = ny - 1)
+
+      f_alpha2<-qf(1-alpha_2,df1=nx - 1,df2 = ny - 1)
+
+      f1<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=f_alpha2,x,NA),y=ifelse(x>=f_alpha2,df(x,df1= nx - 1,df2= ny - 1),NA)), fill = "blue",alpha = 0.4)+
+        geom_area(mapping = aes(x=ifelse(x<=f_alpha1,x,NA),y=ifelse(x<=f_alpha1,df(x,df1= nx - 1,df2=ny - 1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = f_alpha1, y =0 , xend = f_alpha1, yend = df(f_alpha1,df1= nx - 1,df2= ny - 1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = f_alpha2, y =0 , xend = f_alpha2, yend = df(f_alpha2,df1= nx - 1,df2= ny - 1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = f, y =0 , xend = f, yend = df(f,df1= nx - 1,df2= ny - 1)), colour = "red",linetype=1)+
+
+        annotate("text", x=f, y =-0.02, label ="F", parse = TRUE)+
+        annotate("text", x=f_alpha1, y =-0.02, label="-'F'[alpha/2]", parse = TRUE)+
+        annotate("text", x=f_alpha2, y =-0.02, label="'F'[alpha/2]", parse = TRUE)+
+        annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1 = nx - 1 ,df2 = ny - 1)/2, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha1-0.5, y=df(f_alpha1,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,max(y)+0.01)+
+        labs( title = "Prueba de dos colas Distribución Fisher",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f1)
+    }
+    else if(input$tp3=='Cola superior'){
+
+      f_alpha2<-qf(1-alpha,df1=nx-1,df2 = ny-1)
+
+      f1<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=f_alpha2,x,NA),y=ifelse(x>=f_alpha2,df(x,df1=nx-1,df2=ny-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = f_alpha2, y =0 , xend = f_alpha2, yend = df(f_alpha2,df1=nx-1,df2=ny-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = f, y =0 , xend = f, yend = df(f,df1=nx-1,df2=ny-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=f, y =-0.02, label ="F", parse = TRUE)+
+        annotate("text", x=f_alpha2, y =-0.02, label="'F'[alpha]", parse = TRUE)+
+        annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1=nx-1,df2=ny-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1=nx-1,df2=ny-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,max(y)+0.01)+
+        labs( title = "Prueba de cola superior Distribución Fisher",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f1)
+    }
+    else if(input$tp3=='Cola inferior'){
+      f_alpha1<-qf(alpha,df1=nx-1,df2=ny-1)
+
+      f1<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x<=f_alpha1,x,NA),y=ifelse(x<=f_alpha1,df(x,df1=nx-1,df2=ny-1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = f_alpha1, y =0 , xend = f_alpha1, yend = df(f_alpha1,df1=nx-1,df2=ny-1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = f, y =0 , xend = f, yend = df(f,df1=nx-1,df2=ny-1)), colour = "red",linetype=1)+
+
+        annotate("text", x=f, y =-0.02, label ="F", parse = TRUE)+
+        annotate("text", x=f_alpha1, y =-0.02, label="-'F'[alpha]", parse = TRUE)+
+        annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1=nx-1,df2 = ny-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha1-0.5, y=df(f_alpha1,df1=nx-1,df2=ny-1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,max(y)+0.01)+
+        labs( title = "Prueba de cola inferior Distribución Fisher",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f1)
+    }
+
+})
 
 
 
