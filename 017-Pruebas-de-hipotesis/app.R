@@ -102,8 +102,12 @@ ui <- fluidPage(
     ),
     column(width = 8,align='center',plotOutput('grafica6'))),
 
-    conditionalPanel(condition = "input.ph == 'Proporción en una población'",column(width = 2,numericInput(inputId = 'PropHip',label = HTML('Inserte Proporción hipotética <i>p</i><sub>o</sub>'),min=0,max = 1,value = 0.5,step = 0.05,width = '150px'),
-                                                                                    numericInput(inputId = 'PropEstim',label = HTML('Inserte Proporción Estimada <i>p&#770;</i>'),min=0,max = 1,value = 0.5,step = 0.05,width = '150px')))
+    conditionalPanel(condition = "input.ph == 'Proporción en una población'",column(width = 3,numericInput(inputId = 'PropHip',label = HTML('Inserte Proporción hipotética <i>p</i><sub>o</sub>'),min=0,max = 1,value = 0.5,step = 0.05,width = '150px'),
+                                                                                    numericInput(inputId = 'PropEstim',label = HTML('Inserte Proporción Estimada <i>p&#770;</i>'),min=0,max = 1,value = 0.6,step = 0.05,width = '150px'),
+                                                                                    numericInput(inputId = 'Muestra6',label = HTML('Inserte Tamaño de la muestra n'),min=0,max = 100,value = 15,step = 1,width = '150px'),
+                                                                                    numericInput(inputId = 'signif6',label = 'Inserte Nivel de Significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')),
+                     column(width = 8,align='center',plotOutput('grafica7'))
+                     )
 
 
     )
@@ -700,6 +704,58 @@ server <- function(input, output,session) {
     }
 
 })
+
+  output$grafica7<-renderPlot({
+
+    po<-input$PropHip
+    p<-input$PropEstim
+    n<-input$Muestra6
+    alpha<-input$signif6
+
+    P<-(p-po)*sqrt(n)/sqrt(po*(1-po))
+
+    x<-if(-6<=P & P<=6){
+      seq(-6,6,0.01)
+    } else if(-6>P){
+      seq(P-1,6,0.01)
+    } else if(P>6){
+      seq(-6,P+1,0.01)
+    }
+
+    y<-dnorm(x,mean=0, sd=1)
+
+
+    if(input$tp4=='Dos colas'){
+
+      alpha_2<-alpha/2
+
+      z_alpha1<-qnorm(alpha_2,mean=0,sd=1)
+
+      z_alpha2<-qnorm(1-alpha_2,mean=0,sd=1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=z_alpha2,x,NA),y=ifelse(x>=z_alpha2,dnorm(x,mean=0, sd=1),NA)), fill = "blue",alpha = 0.4)+
+        geom_area(mapping = aes(x=ifelse(x<=z_alpha1,x,NA),y=ifelse(x<=z_alpha1,dnorm(x,mean=0, sd=1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = z_alpha1, y =0 , xend = z_alpha1, yend = dnorm(z_alpha1,mean=0, sd=1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = z_alpha2, y =0 , xend = z_alpha2, yend = dnorm(z_alpha2,mean=0, sd=1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = P, y =0 , xend = P, yend = dnorm(P,mean=0, sd=1)), colour = "red",linetype=1)+
+
+        annotate("text", x=P, y =-0.02, label ="P", parse = TRUE)+
+        annotate("text", x=z_alpha1, y =-0.02, label="-'Z'[alpha/2]", parse = TRUE)+
+        annotate("text", x=z_alpha2, y =-0.02, label="'Z'[alpha/2]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=z_alpha1-2, y=dnorm(z_alpha1,mean=0, sd=1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=z_alpha2+2, y=dnorm(z_alpha2,mean=0, sd=1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de dos colas Distribución Normal con respecto a Porporciones",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+  })
 
 
 
