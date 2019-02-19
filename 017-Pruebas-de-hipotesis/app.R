@@ -755,6 +755,49 @@ server <- function(input, output,session) {
 
       return(f)
     }
+    else if(input$tp4=='Cola superior'){
+
+      z_alpha2<-qnorm(1-alpha,mean=0,sd=1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x>=z_alpha2,x,NA),y=ifelse(x>=z_alpha2,dnorm(x,mean=0, sd=1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = z_alpha2, y =0 , xend = z_alpha2, yend = dnorm(z_alpha2,mean=0, sd=1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = P, y =0 , xend = P, yend = dnorm(P,mean=0, sd=1)), colour = "red",linetype=1)+
+
+        annotate("text", x=P, y =-0.02, label ="P", parse = TRUE)+
+        annotate("text", x=z_alpha2, y =-0.02, label="'Z'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=z_alpha2+2, y=dnorm(z_alpha2,mean=0, sd=1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de cola superior Distribución Normal con respecto a Porporciones",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+      return(f)
+    }
+    else if(input$tp4=='Cola inferior'){
+      z_alpha1<-qnorm(alpha,mean=0,sd=1)
+
+      f<-ggplot(mapping = aes(x,y))+geom_line(colour = "blue")+
+        geom_area(mapping = aes(x,y), fill = "blue",alpha = 0.2)+
+        geom_area(mapping = aes(x=ifelse(x<=z_alpha1,x,NA),y=ifelse(x<=z_alpha1,dnorm(x,mean=0, sd=1),NA)), fill = "blue",alpha = 0.4)+
+
+        geom_segment(aes(x = z_alpha1, y =0 , xend = z_alpha1, yend = dnorm(z_alpha1,mean=0, sd=1)), colour = "black",linetype=2)+
+        geom_segment(aes(x = P, y =0 , xend = P, yend = dnorm(P,mean=0, sd=1)), colour = "red",linetype=1)+
+
+        annotate("text", x=P, y =-0.02, label ="P", parse = TRUE)+
+        annotate("text", x=z_alpha1, y =-0.02, label="-'Z'[alpha]", parse = TRUE)+
+        annotate("text", x=0, y = 0.1, label="'Aceptar H'[0]", parse = TRUE)+
+        annotate("text", x=z_alpha1-2, y=dnorm(z_alpha1,mean=0, sd=1), label="'Rechazar H'[0]", parse = TRUE)+
+
+        ylim(-0.05,0.41)+
+        labs( title = "Prueba de cola inferior Distribución Normal con respecto a Porporciones",
+              x = " ", y = " ",caption = "http://synergy.vision/" )
+
+      return(f)
+    }
+
   })
 
 
