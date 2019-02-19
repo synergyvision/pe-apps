@@ -5,7 +5,7 @@ ensure_version <- function(pkg, ver = "0.0") {
 
 ensure_version("shiny", "1.1.0")
 ensure_version("readxl", "1.1.0")
-ensure_version("shinydasboard", "0.7.0")
+ensure_version("shinydashboard", "0.7.0")
 ensure_version("psych", "1.8.4")
 ensure_version("modeest", "2.1")
 ensure_version("matrixStats", "0.54.0")
@@ -26,11 +26,11 @@ library(ggplot2)
 
 
 ui <- fluidPage(
-  
+
   titlePanel("Lanzamiento de dados"),
-  
+
   sidebarLayout(
-    
+
     sidebarPanel(
       radioButtons(inputId = 'dados',label = HTML('Seleccione la cantidad <br/>de dados a lanzar'),choices = c('1','2','3','4','5','6','7','8','9','10'),selected = '1'),
       # numericInput(inputId = 'proba',label=HTML('Elija la probabilidad <br/>de salir cara'),value = 0.5,min = 0,max = 1,step = 0.1,width = '150px'),
@@ -38,7 +38,7 @@ ui <- fluidPage(
       ),
 
     mainPanel(
-      
+
       fluidRow(
         conditionalPanel(condition = "input.dados=='1'",
         column(width=12,imageOutput('imagen1',height = "300px"),style="text-align: center;")),
@@ -76,8 +76,8 @@ ui <- fluidPage(
                        column(width=2,imageOutput('imagen51',height = "200px")),column(width=2,imageOutput('imagen52',height = "200px")),
                        column(width=2,imageOutput('imagen53',height = "200px")),column(width=2,imageOutput('imagen54',height = "200px")),
                        column(width=3,imageOutput('imagen55',height = "200px")))),
-      # 
-      # 
+      #
+      #
       fluidRow(verbatimTextOutput('hola'))
     )
   )
@@ -90,7 +90,7 @@ server <- function(input, output,session) {
     # rbinom(as.numeric(input$monedas),1,input$proba)
     sample(1:6,as.numeric(input$dados),replace = TRUE,prob = rep(1/6,6))
   })
-  
+
   #1 lanzamiento
   output$imagen1<-renderImage({
       if(prueba()==1){
@@ -107,7 +107,7 @@ server <- function(input, output,session) {
         list(src='www/img/dado6.png',height=200,width=200)
       }
   },deleteFile = FALSE)
-  
+
   # 2 lanzamiento
   output$imagen2<-renderImage({
     if(prueba()[1]==1){
@@ -160,12 +160,12 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=200,width=200)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen5<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
-     } 
+     }
        else if(prueba()[2]==1){
        list(src='www/img/dado1.png',height=200,width=200)
      } else if(prueba()[2]==2){
@@ -178,13 +178,13 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=200,width=200)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=200,width=200)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen6<-renderImage({
         if(is.na(prueba()[3])==TRUE){
         list(src='')
-      } 
+      }
        else if(prueba()[3]==1){
        list(src='www/img/dado1.png',height=200,width=200)
      } else if(prueba()[3]==2){
@@ -197,11 +197,11 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=200,width=200)
      } else if(prueba()[3]==6){
        list(src='www/img/dado6.png',height=200,width=200)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    #4 lanzamientos
-   
+
    output$imagen7<-renderImage({
      if(prueba()[1]==1){
        list(src='www/img/dado1.png',height=150,width=150)
@@ -217,12 +217,12 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen8<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
-     } 
+     }
        else if(prueba()[2]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[2]==2){
@@ -235,13 +235,13 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen9<-renderImage({
      if(is.na(prueba()[3])==TRUE){
        list(src='')
-     } 
+     }
        else if(prueba()[3]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[3]==2){
@@ -256,12 +256,12 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen10<-renderImage({
      if(is.na(prueba()[4])==TRUE){
        list(src='')
      }
-     
+
        else if(prueba()[4]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[4]==2){
@@ -274,12 +274,12 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[4]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-  
-    
+
+
    # 5 lanzamientos
-   
+
    output$imagen11<-renderImage({
      if(prueba()[1]==1){
        list(src='www/img/dado1.png',height=150,width=150)
@@ -293,15 +293,15 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[1]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
-  
+
+
    output$imagen12<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
      }
-     
+
        else if(prueba()[2]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[2]==2){
@@ -314,9 +314,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen13<-renderImage({
      if(is.na(prueba()[3])==TRUE){
        list(src='')
@@ -335,7 +335,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen14<-renderImage({
      if(is.na(prueba()[4])==TRUE){
        list(src='')
@@ -354,8 +354,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen15<-renderImage({
      if(is.na(prueba()[5])==TRUE){
        list(src='')
@@ -372,11 +372,11 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[5]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    # 6 lanzamiento
-   
+
    output$imagen16<-renderImage({
      if(prueba()[1]==1){
        list(src='www/img/dado1.png',height=150,width=150)
@@ -390,10 +390,10 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[1]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen17<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
@@ -410,9 +410,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen18<-renderImage({
      if(is.na(prueba()[3])==TRUE){
        list(src='')
@@ -431,12 +431,12 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen19<-renderImage({
      if(is.na(prueba()[4])==TRUE){
        list(src='')
      }
-     
+
        else if(prueba()[4]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[4]==2){
@@ -451,8 +451,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen20<-renderImage({
      if(is.na(prueba()[5])==TRUE){
        list(src='')
@@ -471,8 +471,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen21<-renderImage({
      if(is.na(prueba()[6])==TRUE){
        list(src='')
@@ -491,9 +491,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    # 7 lanzamiento
-   
+
    output$imagen22<-renderImage({
      if(prueba()[1]==1){
        list(src='www/img/dado1.png',height=150,width=150)
@@ -507,10 +507,10 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[1]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen23<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
@@ -527,9 +527,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen24<-renderImage({
      if(is.na(prueba()[3])==TRUE){
        list(src='')
@@ -548,12 +548,12 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen25<-renderImage({
      if(is.na(prueba()[4])==TRUE){
        list(src='')
      }
-     
+
      else if(prueba()[4]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[4]==2){
@@ -568,8 +568,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen26<-renderImage({
      if(is.na(prueba()[5])==TRUE){
        list(src='')
@@ -588,8 +588,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen27<-renderImage({
      if(is.na(prueba()[6])==TRUE){
        list(src='')
@@ -608,7 +608,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen28<-renderImage({
      if(is.na(prueba()[7])==TRUE){
        list(src='')
@@ -627,10 +627,10 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    # 8 lanzamiento
-   
+
    output$imagen29<-renderImage({
      if(prueba()[1]==1){
        list(src='www/img/dado1.png',height=150,width=150)
@@ -644,10 +644,10 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[1]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen30<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
@@ -664,9 +664,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen31<-renderImage({
      if(is.na(prueba()[3])==TRUE){
        list(src='')
@@ -685,12 +685,12 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen32<-renderImage({
      if(is.na(prueba()[4])==TRUE){
        list(src='')
      }
-     
+
      else if(prueba()[4]==1){
        list(src='www/img/dado1.png',height=150,width=150)
      } else if(prueba()[4]==2){
@@ -705,8 +705,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen33<-renderImage({
      if(is.na(prueba()[5])==TRUE){
        list(src='')
@@ -725,8 +725,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen34<-renderImage({
      if(is.na(prueba()[6])==TRUE){
        list(src='')
@@ -745,7 +745,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen35<-renderImage({
      if(is.na(prueba()[7])==TRUE){
        list(src='')
@@ -764,7 +764,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen36<-renderImage({
      if(is.na(prueba()[8])==TRUE){
        list(src='')
@@ -783,9 +783,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    # 9 lanzamiento
-   
+
    output$imagen37<-renderImage({
      if(prueba()[1]==1){
        list(src='www/img/dado1.png',height=150,width=150)
@@ -799,10 +799,10 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[1]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen38<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
@@ -819,9 +819,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen39<-renderImage({
      if(is.na(prueba()[3])==TRUE){
        list(src='')
@@ -840,7 +840,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen40<-renderImage({
      if(is.na(prueba()[4])==TRUE){
        list(src='')
@@ -859,8 +859,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen41<-renderImage({
      if(is.na(prueba()[5])==TRUE){
        list(src='')
@@ -879,8 +879,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen42<-renderImage({
      if(is.na(prueba()[6])==TRUE){
        list(src='')
@@ -899,7 +899,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen43<-renderImage({
      if(is.na(prueba()[7])==TRUE){
        list(src='')
@@ -918,7 +918,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen44<-renderImage({
      if(is.na(prueba()[8])==TRUE){
        list(src='')
@@ -937,7 +937,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen45<-renderImage({
      if(is.na(prueba()[9])==TRUE){
        list(src='')
@@ -956,9 +956,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    # 10 lanzamiento
-   
+
    output$imagen46<-renderImage({
      if(prueba()[1]==1){
        list(src='www/img/dado1.png',height=150,width=150)
@@ -972,10 +972,10 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[1]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen47<-renderImage({
      if(is.na(prueba()[2])==TRUE){
        list(src='')
@@ -992,9 +992,9 @@ server <- function(input, output,session) {
        list(src='www/img/dado5.png',height=150,width=150)
      } else if(prueba()[2]==6){
        list(src='www/img/dado6.png',height=150,width=150)
-     } 
+     }
    },deleteFile = FALSE)
-   
+
    output$imagen48<-renderImage({
      if(is.na(prueba()[3])==TRUE){
        list(src='')
@@ -1013,7 +1013,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen49<-renderImage({
      if(is.na(prueba()[4])==TRUE){
        list(src='')
@@ -1032,8 +1032,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen50<-renderImage({
      if(is.na(prueba()[5])==TRUE){
        list(src='')
@@ -1052,8 +1052,8 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
+
+
    output$imagen51<-renderImage({
      if(is.na(prueba()[6])==TRUE){
        list(src='')
@@ -1072,7 +1072,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen52<-renderImage({
      if(is.na(prueba()[7])==TRUE){
        list(src='')
@@ -1091,7 +1091,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen53<-renderImage({
      if(is.na(prueba()[8])==TRUE){
        list(src='')
@@ -1110,7 +1110,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen54<-renderImage({
      if(is.na(prueba()[9])==TRUE){
        list(src='')
@@ -1129,7 +1129,7 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
+
    output$imagen55<-renderImage({
      if(is.na(prueba()[10])==TRUE){
        list(src='')
@@ -1148,11 +1148,11 @@ server <- function(input, output,session) {
        list(src='www/img/dado6.png',height=150,width=150)
      }
    },deleteFile = FALSE)
-   
-   
-   
-   
-   
+
+
+
+
+
    output$hola<-renderPrint({
      return(prueba())
    })
