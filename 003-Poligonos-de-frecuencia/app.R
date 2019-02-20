@@ -26,7 +26,7 @@ ui <- fluidPage(
       conditionalPanel( condition = "input.n == 'gen'",
                         sliderInput( "m",
                                      label = "Cantidad de datos",
-                                     min = 1, max = 50, value = 5),
+                                     min = 2, max = 50, value = 5),
                         radioButtons(inputId="interval",
                                      label = "Elección de intervalos de clases",
                                      choices = c('Métodos dados','Manual'),
@@ -198,14 +198,14 @@ server <- function(input, output) {
 
            k1<-input$bins1
 
-           Ancho<-(max(data()[,1])-min(data()[,1]))/k1
-           Centro<-(2*min(data()[,1])+Ancho)/2
+           Ancho1<-(max(data()[,1])-min(data()[,1]))/k1
+           Centro1<-(2*min(data()[,1])+Ancho1)/2
 
            ggplot(data(),aes(x=data()[,1]))+
              geom_histogram( aes(y=..count..),
                              closed="left",bins = k1,linetype="dashed",
-                             fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro)+
-             geom_freqpoly( col="red",size=0.8,bins=k1,binwidth = Ancho,center=Centro)+
+                             fill="blue",col="black",alpha=0.3,binwidth = Ancho1,center=Centro1)+
+             geom_freqpoly( col="red",size=0.8,bins=k1,binwidth = Ancho1,center=Centro1)+
              labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
       }
@@ -219,7 +219,7 @@ server <- function(input, output) {
       }
 
       else if(input$interval1=="Métodos dados"){
-        k<-if(input$metodo2=='Fórmula de Sturges'){
+        k2<-if(input$metodo2=='Fórmula de Sturges'){
           nclass.Sturges(data()[,ncol][[1]])
         }
         else if(input$metodo2=='Regla de Scott'){
@@ -229,29 +229,29 @@ server <- function(input, output) {
           nclass.FD(data()[,ncol][[1]])
         }
 
-        Ancho<-(max(data()[,ncol][[1]])-min(data()[,ncol][[1]]))/k
-        Centro<-(2*min(data()[,ncol][[1]])+Ancho)/2
+        Ancho2<-(max(data()[,ncol][[1]])-min(data()[,ncol][[1]]))/k2
+        Centro2<-(2*min(data()[,ncol][[1]])+Ancho2)/2
 
 
         ggplot(data(),aes(x=data()[,ncol][[1]]))+
           geom_histogram( aes(y=..count..),
-                          closed="left",bins = k,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro)+
-          geom_freqpoly( col="red",size=0.8,bins=k,binwidth = Ancho,center=Centro)+
+                          closed="left",bins = k2,linetype="dashed",
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho2,center=Centro2)+
+          geom_freqpoly( col="red",size=0.8,bins=k2,binwidth = Ancho2,center=Centro2)+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
 
       } else if(input$interval1=="Manual"){
-        k1<-input$bins2
+        k3<-input$bins2
 
-        Ancho<-(max(data()[,ncol][[1]])-min(data()[,ncol][[1]]))/k1
-        Centro<-(2*min(data()[,ncol][[1]])+Ancho)/2
+        Ancho3<-(max(data()[,ncol][[1]])-min(data()[,ncol][[1]]))/k3
+        Centro3<-(2*min(data()[,ncol][[1]])+Ancho3)/2
 
         ggplot(data(),aes(x=data()[,ncol][[1]]))+
           geom_histogram( aes(y=..count..),
-                          closed="left",bins = k1,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro)+
-          geom_freqpoly( col="red",size=0.8,bins=k1,binwidth = Ancho,center=Centro)+
+                          closed="left",bins = k3,linetype="dashed",
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho3,center=Centro3)+
+          geom_freqpoly( col="red",size=0.8,bins=k3,binwidth = Ancho3,center=Centro3)+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
       }
@@ -266,7 +266,7 @@ server <- function(input, output) {
 
       else if(input$interval2=="Métodos dados"){
 
-        k<-if(input$metodo1=='Fórmula de Sturges'){
+        k4<-if(input$metodo1=='Fórmula de Sturges'){
           nclass.Sturges(data()[,1])
         }
         else if(input$metodo1=='Regla de Scott'){
@@ -276,29 +276,29 @@ server <- function(input, output) {
           nclass.FD(data()[,1])
         }
 
-        Ancho<-(max(data()[,1])-min(data()[,1]))/k
-        Centro<-(2*min(data()[,1])+Ancho)/2
+        Ancho4<-(max(data()[,1])-min(data()[,1]))/k4
+        Centro4<-(2*min(data()[,1])+Ancho4)/2
 
 
         ggplot(data(),aes(x=data()[,1]))+
           geom_histogram( aes(y=..count..),
-                          closed="left",bins = k,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro)+
-          geom_freqpoly( col="red",size=0.8,bins=k,binwidth = Ancho,center=Centro)+
+                          closed="left",bins = k4,linetype="dashed",
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho4,center=Centro4)+
+          geom_freqpoly( col="red",size=0.8,bins=k4,binwidth = Ancho4,center=Centro4)+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
 
       } else if(input$interval2=="Manual"){
-        k1<-input$bins3
+        k5<-input$bins3
 
-        Ancho<-(max(data()[,1])-min(data()[,1]))/k1
-        Centro<-(2*min(data()[,1])+Ancho)/2
+        Ancho5<-(max(data()[,1])-min(data()[,1]))/k5
+        Centro5<-(2*min(data()[,1])+Ancho5)/2
 
         ggplot(data(),aes(x=data()[,1]))+
           geom_histogram( aes(y=..count..),
-                          closed="left",bins = k1,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro)+
-          geom_freqpoly( col="red",size=0.8,bins=k1,binwidth = Ancho,center=Centro)+
+                          closed="left",bins = k5,linetype="dashed",
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho5,center=Centro5)+
+          geom_freqpoly( col="red",size=0.8,bins=k5,binwidth = Ancho5,center=Centro5)+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
       }
