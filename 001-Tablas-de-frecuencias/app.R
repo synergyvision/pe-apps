@@ -55,7 +55,7 @@ ui <- fluidPage(
                                   buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo..."),
                         numericInput( inputId = "d", label="Escoja el número de columna deseado", min = 1,
                                       max = 100,step = 1,
-                                      value = 1, width = "40%"),
+                                      value = 1, width = "100%"),
                         radioButtons(inputId="interval1",
                                      label = "Elección de intervalos de clases",
                                      choices = c('Métodos dados','Manual'),
