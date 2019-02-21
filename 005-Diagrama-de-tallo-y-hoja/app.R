@@ -121,23 +121,34 @@ server <- function(input, output) {
     })
 
 
-    num<-as.numeric(unlist(data()))
-    scale3<-as.numeric(unlist(input$scale))
-    scale1<-as.numeric(unlist(input$scale1))
-    scale2<-as.numeric(unlist(input$scale2))
-
       if(input$n=="gen")({
+        num<-as.numeric(unlist(data()))
+        scale3<-as.numeric(unlist(input$scale))
+
         stem(x=num, scale = scale3)
       })
      else if(input$n=="car")({
 
+        cl<-input$d
+         num<-as.numeric(unlist(data()[,cl]))
+        scale1<-as.numeric(unlist(input$scale1))
+
+
+
        if(is.null(input$datoscargados))({
-         return()
+         return(print('Introduzca los datos'))
+
        }) else({
-       stem(x=num, scale = scale1)
+
+        stem(x=num, scale = scale1)
+
        })
+
      })
      else if(input$n=="ejem")({
+       num<-as.numeric(unlist(data()))
+       scale2<-as.numeric(unlist(input$scale2))
+
        stem(x=num, scale = scale2)
      })
 
