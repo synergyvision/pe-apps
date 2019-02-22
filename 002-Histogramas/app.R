@@ -3,9 +3,9 @@ ensure_version <- function(pkg, ver = "0.0") {
     install.packages(pkg)
 }
 
-ensure_version("shiny", "1.1.0")
-ensure_version("ggplot2", "3.0.0")
-ensure_version("readxl", "1.1.0")
+ensure_version("shiny", "1.2.0")
+ensure_version("ggplot2", "3.1.0")
+ensure_version("readxl", "1.2.0")
 
 library(shiny)
 library(ggplot2)
@@ -216,7 +216,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()[,1]))+
           geom_histogram(aes(y=..count..),
                          closed="left",bins = intervalo,
-                         fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+                         fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
           labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
       }
@@ -226,7 +226,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()[,1]))+
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo,
-                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
           labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
       }
@@ -246,7 +246,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()[,1]))+
           geom_histogram(aes(y=..count..),
                          closed="left",bins = intervalo,
-                         fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+                         fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
           labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
       }
@@ -256,7 +256,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()[,1]))+
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo,
-                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro)+
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
           labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
 
@@ -292,7 +292,7 @@ server <- function(input, output) {
           ggplot(dat(),aes(x=dat()$Datos))+
             geom_histogram( aes(y=..count..),
                             closed="left",bins = intervalo1,
-                            fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+                            fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
             labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
         }
@@ -302,7 +302,7 @@ server <- function(input, output) {
           ggplot(dat(),aes(x=dat()$Datos))+
             geom_histogram( aes(y=..density..),
                             closed="left",bins = intervalo1,
-                            fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+                            fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
             labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
         }
@@ -321,7 +321,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()$Datos))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = intervalo1,
-                          fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
           labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
       }
@@ -331,7 +331,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()$Datos))+
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo1,
-                          fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1)+
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
           labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
       }
@@ -373,7 +373,7 @@ server <- function(input, output) {
             ggplot(dat(),aes(x=dat()[,ncolumna]))+
               geom_histogram( aes(y=..count..),
                               closed="left",bins = intervalo2,
-                              fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2)+
+                              fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho2))+
               labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho2,by=Ancho2),2))
 
           }
@@ -383,7 +383,7 @@ server <- function(input, output) {
             ggplot(dat(),aes(x=dat()[,ncolumna]))+
               geom_histogram( aes(y=..density..),
                               closed="left",bins = intervalo2,
-                              fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2)+
+                              fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho2))+
               labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho2,by=Ancho2),2))
           }
 
@@ -401,7 +401,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()[,ncolumna]))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = intervalo20,
-                          fill="blue",col="black",alpha=0.7,binwidth = Ancho20,center=Centro20)+
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho20,center=Centro20,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho20))+
           labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho20,by=Ancho20),2))
 
       }
@@ -411,7 +411,7 @@ server <- function(input, output) {
         ggplot(dat(),aes(x=dat()[,ncolumna]))+
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo20,
-                          fill="blue",col="black",alpha=0.7,binwidth = Ancho20,center=Centro20)+
+                          fill="blue",col="black",alpha=0.7,binwidth = Ancho20,center=Centro20,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho20))+
           labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho20,by=Ancho20),2))
       }
         }

@@ -129,8 +129,10 @@ server <- function(input, output) {
       if(is.null(file1)){
         return()
       }
+      else{
 
       read_excel(file1$datapath)
+      }
 
 
     } else if(input$n=="ejem"){
@@ -164,7 +166,7 @@ server <- function(input, output) {
     }
 
 
-    if(input$n=="gen"){
+    else if(input$n=="gen"){
 
       if(is.null(input$interval)){
         return()
@@ -190,7 +192,7 @@ server <- function(input, output) {
         ggplot(data(),aes(x=data()[,1]))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = k,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro)+
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho))+
           geom_freqpoly( col="red",size=0.8,bins=k,binwidth = Ancho,center=Centro)+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
@@ -204,7 +206,7 @@ server <- function(input, output) {
            ggplot(data(),aes(x=data()[,1]))+
              geom_histogram( aes(y=..count..),
                              closed="left",bins = k1,linetype="dashed",
-                             fill="blue",col="black",alpha=0.3,binwidth = Ancho1,center=Centro1)+
+                             fill="blue",col="black",alpha=0.3,binwidth = Ancho1,center=Centro1,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho1))+
              geom_freqpoly( col="red",size=0.8,bins=k1,binwidth = Ancho1,center=Centro1)+
              labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
@@ -236,7 +238,7 @@ server <- function(input, output) {
         ggplot(data(),aes(x=data()[,ncol][[1]]))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = k2,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho2,center=Centro2)+
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho2,center=Centro2,breaks=seq(min(data()[,ncol][[1]]),max(data()[,ncol][[1]]),by=Ancho2))+
           geom_freqpoly( col="red",size=0.8,bins=k2,binwidth = Ancho2,center=Centro2)+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
@@ -250,7 +252,7 @@ server <- function(input, output) {
         ggplot(data(),aes(x=data()[,ncol][[1]]))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = k3,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho3,center=Centro3)+
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho3,center=Centro3,breaks=seq(min(data()[,ncol][[1]]),max(data()[,ncol][[1]]),by=Ancho3))+
           geom_freqpoly( col="red",size=0.8,bins=k3,binwidth = Ancho3,center=Centro3)+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
@@ -266,13 +268,13 @@ server <- function(input, output) {
 
       else if(input$interval2=="Métodos dados"){
 
-        k4<-if(input$metodo1=='Fórmula de Sturges'){
+        k4<-if(input$metodo3=='Fórmula de Sturges'){
           nclass.Sturges(data()[,1])
         }
-        else if(input$metodo1=='Regla de Scott'){
+        else if(input$metodo3=='Regla de Scott'){
           nclass.scott(data()[,1])
         }
-        else if(input$metodo1=='Selección de Freedman-Diaconis'){
+        else if(input$metodo3=='Selección de Freedman-Diaconis'){
           nclass.FD(data()[,1])
         }
 
@@ -283,8 +285,8 @@ server <- function(input, output) {
         ggplot(data(),aes(x=data()[,1]))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = k4,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho4,center=Centro4)+
-          geom_freqpoly( col="red",size=0.8,bins=k4,binwidth = Ancho4,center=Centro4)+
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho4,center=Centro4,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho4))+
+          geom_freqpoly( col="red",size=0.8,bins=k4,binwidth = Ancho4,center=Centro4,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho4))+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
 
@@ -297,8 +299,8 @@ server <- function(input, output) {
         ggplot(data(),aes(x=data()[,1]))+
           geom_histogram( aes(y=..count..),
                           closed="left",bins = k5,linetype="dashed",
-                          fill="blue",col="black",alpha=0.3,binwidth = Ancho5,center=Centro5)+
-          geom_freqpoly( col="red",size=0.8,bins=k5,binwidth = Ancho5,center=Centro5)+
+                          fill="blue",col="black",alpha=0.3,binwidth = Ancho5,center=Centro5,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho5))+
+          geom_freqpoly( col="red",size=0.8,bins=k5,binwidth = Ancho5,center=Centro5,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho5))+
           labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
 
       }
