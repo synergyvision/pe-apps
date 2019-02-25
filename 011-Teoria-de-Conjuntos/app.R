@@ -38,7 +38,7 @@ library(VennDiagram)
 
 ui <- fluidPage(
 
-  titlePanel("Teoría de Conjuntos"),
+  titlePanel("Teoría de conjuntos"),
 
   sidebarLayout(
 
