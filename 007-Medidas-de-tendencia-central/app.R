@@ -86,7 +86,10 @@ server <- function(input, output) {
        return()
      }
 
-    read_excel(file1$datapath)
+    d<-read_excel(file1$datapath)
+    d<-as.matrix(d)
+    rownames(d)<-c(paste0(" ",1:nrow(d)))
+    return(d)
 
 
    } else if(input$n=="ejem"){
@@ -98,14 +101,22 @@ server <- function(input, output) {
      Ventas <- c(1034,1075,1123,1172,1218,1265,1313,1379,1452,1597)
 
         if(input$ejemplos=="Sueldos"){
-         data.frame(Sueldos)
-
+         m<-matrix(Sueldos)
+         colnames(m)<-'Sueldos'
+         rownames(m)<-c(paste0(" ",1:42))
+         return(m)
 
         } else if(input$ejemplos=="Horas"){
-          data.frame(Horas)
+          m1<-matrix(Horas)
+          colnames(m1)<-'Horas'
+          rownames(m1)<-c(paste0(" ",1:133))
+          return(m1)
 
         } else if(input$ejemplos=="Ventas"){
-             data.frame(Ventas)
+             m2<-matrix(Ventas)
+             colnames(m2)<-'Ventas'
+             rownames(m2)<-c(paste0(" ",1:10))
+             return(m2)
         }
 
   }
@@ -141,44 +152,41 @@ server <- function(input, output) {
 
     } else if(input$medias=="Moda"){
       Moda<-apply(data(),2,Mode)
-   rbind(data(),Moda)}
+   rbind(data(),Moda)
 
-   # } else if(input$medias=="Media ponderada"){
-   #
-   #   if(input$n=="gen"){
-   #     w<-prop.table(data(),2) #Pesos generados.
-   #
-   #     w1<-data()*w
-   #     w1<-colSums(w1)
-   #     return(w1)
-   #   } else if(input$n=="car"){
-   #
-   #     d<-as.matrix(data())
-   #     w2<-prop.table(d,2) #Pesos generados.
-   #
-   #     w3<-d*w2
-   #     w3<-colSums(w3)
-   #     return(w3)
-   #
-   #   } else if(input$n=="ejem"){
-   #     d1<-as.matrix(data())
-   #     w4<-prop.table(d1,2) #Pesos generados.
-   #
-   #     w5<-d1*w4
-   #     w5<-colSums(w5)
-   #     return(w5)
-   #   }
-   # }
+    } else if(input$medias=="Media ponderada"){
+
+      if(input$n=="gen"){
+        w<-prop.table(data(),2) #Pesos generados.
+
+        w1<-data()*w
+        Media_ponderada<-colSums(w1)
+
+        d<-rbind(data(),Media_ponderada)
+        return(d)
+      } else if(input$n=="car"){
+
+
+        w2<-prop.table(data(),2) #Pesos generados.
+
+        w3<-data()*w2
+        Media_ponderada<-colSums(w3)
+        d1<-rbind(data(),Media_ponderada)
+        return(d1)
+
+      } else if(input$n=="ejem"){
+
+       w4<-prop.table(data(),2) #Pesos generados.
+
+        w5<-data()*w4
+        Media_ponderada<-colSums(w5)
+        d2<-rbind(data(),Media_ponderada)
+        return(d2)
+      }
+ }
 
  }, striped = TRUE,hover = TRUE,
                              bordered = TRUE,rownames = TRUE)
-
- # })
-
- # output$table <- renderTable({ data() },
- #                             striped = TRUE,hover = TRUE,
- #                             bordered = TRUE,rownames = FALSE)
-
 
 }
 
