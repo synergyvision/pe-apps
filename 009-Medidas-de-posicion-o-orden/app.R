@@ -137,7 +137,7 @@ server <- function(input, output) {
      return(print('Introduzca los datos'))
    }
 
-   if(input$medias=="Cuantiles"){
+   else if(input$medias=="Cuantiles"){
 
       if(is.null(input$vect)){
         return(print('Introduzca la probabilidad asociada al cuantil'))
