@@ -271,7 +271,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x1, y =0 , xend = x1,
                        yend = dunif(x1,l,u)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad uniforme',
+      labs( title = 'Densidad Uniforme',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
@@ -345,7 +345,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x1, y =0 , xend = x1,
                        yend = dexp(x1,l)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad exponencial',
+      labs( title = 'Densidad Exponencial',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
@@ -419,7 +419,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x1, y =0 , xend = x1,
                        yend = dgamma(x1,shape = alpha,scale = beta)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad gamma',
+      labs( title = 'Densidad Gamma',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
@@ -500,7 +500,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x1, y =0 , xend = x1,
                        yend = dbeta(x1,shape1 = alpha,shape2 = beta)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad beta',
+      labs( title = 'Densidad Beta',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
@@ -741,7 +741,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x1, y =0 , xend = x1,
                        yend = dt(x1,df=gl)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad t-Student',
+      labs( title = 'Densidad T-Student',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
@@ -1111,7 +1111,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dt(x2,df=gl)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad t-Student',
+      labs( title = 'Densidad T-Student',
             x = "x", y = "f(x)",caption = "http://synergy.vision/" )
     return(f)
   })
