@@ -364,7 +364,7 @@ server <- function(input, output,session) {
   output$densgeo<-renderPlot({
     data5<-data.frame(geom=dgeom(0:(input$valorgeo-1),input$probageo))
     f5<-ggplot(data5,aes(x=1:length(geom),y=geom))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 1:length(data5$geom))+
-      labs( title = "Densidad geometrica",
+      labs( title = "Densidad Geometrica",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f5)
   })
@@ -440,7 +440,7 @@ server <- function(input, output,session) {
   output$denship<-renderPlot({
     data8<-data.frame(hiper=dhyper(0:input$valorhip4,input$valorhip2,input$valorhip3,input$valorhip))
     f8<-ggplot(data8,aes(x=0:(length(hiper)-1),y=hiper))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data8$hiper)-1))+
-      labs( title = "Densidad hipergeometrica",
+      labs( title = "Densidad Hipergeométrica",
             x = "x", y = "f(x)", caption = "http://synergy.vision/" )
     return(f8)
   })
@@ -457,7 +457,7 @@ server <- function(input, output,session) {
   output$denship1<-renderPlot({
     data9<-data.frame(hiper1=phyper(0:input$valorhip8,input$valorhip6,input$valorhip7,input$valorhip5))
     f9<-ggplot(data9,aes(x=0:(length(hiper1)-1),y=hiper1))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:(length(data9$hiper1)-1))+
-      labs( title = "Distribución hipergeometrica",
+      labs( title = "Distribución Hipergeométrica",
             x = "x", y = "F(x)", caption = "http://synergy.vision/" )
     return(f9)
   })
