@@ -155,7 +155,7 @@ server <- function(input, output) {
 
      if(input$medias=="Diagrama de caja"){
 
-       if(input$n=="gen"){
+       else if(input$n=="gen"){
          datos<-as.data.frame(data())
 
          ncol<-input$k

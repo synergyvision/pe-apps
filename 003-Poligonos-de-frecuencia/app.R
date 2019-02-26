@@ -15,7 +15,7 @@ library(readxl)
 # Crear polígonos de frecuencias.
 ui <- fluidPage(
 
-  titlePanel("Polígonos de frecuencias"),
+  titlePanel("Polígonos de frecuencia"),
 
   sidebarLayout(
 
@@ -194,7 +194,7 @@ server <- function(input, output) {
                           closed="left",bins = k,linetype="dashed",
                           fill="blue",col="black",alpha=0.3,binwidth = Ancho,center=Centro,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho))+
           geom_freqpoly(closed='left',col="red",size=0.8,bins=k,binwidth = Ancho,center=Centro)+
-          labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
+          labs(title = "Polígono de frecuencia", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
          } else if(input$interval=="Manual"){
 
@@ -208,7 +208,7 @@ server <- function(input, output) {
                              closed="left",bins = k1,linetype="dashed",
                              fill="blue",col="black",alpha=0.3,binwidth = Ancho1,center=Centro1,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho1))+
              geom_freqpoly(closed='left',col="red",size=0.8,bins=k1,binwidth = Ancho1,center=Centro1)+
-             labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
+             labs(title = "Polígono de frecuencia", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
       }
 
@@ -240,7 +240,7 @@ server <- function(input, output) {
                           closed="left",bins = k2,linetype="dashed",
                           fill="blue",col="black",alpha=0.3,binwidth = Ancho2,center=Centro2,breaks=seq(min(data()[,ncol][[1]]),max(data()[,ncol][[1]]),by=Ancho2))+
           geom_freqpoly(closed='left',col="red",size=0.8,bins=k2,binwidth = Ancho2,center=Centro2)+
-          labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
+          labs(title = "Polígono de frecuencia", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
 
       } else if(input$interval1=="Manual"){
@@ -254,7 +254,7 @@ server <- function(input, output) {
                           closed="left",bins = k3,linetype="dashed",
                           fill="blue",col="black",alpha=0.3,binwidth = Ancho3,center=Centro3,breaks=seq(min(data()[,ncol][[1]]),max(data()[,ncol][[1]]),by=Ancho3))+
           geom_freqpoly(closed='left',col="red",size=0.8,bins=k3,binwidth = Ancho3,center=Centro3)+
-          labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
+          labs(title = "Polígono de frecuencia", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
       }
 
@@ -287,7 +287,7 @@ server <- function(input, output) {
                           closed="left",bins = k4,linetype="dashed",
                           fill="blue",col="black",alpha=0.3,binwidth = Ancho4,center=Centro4,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho4))+
           geom_freqpoly(closed='left',col="red",size=0.8,bins=k4,binwidth = Ancho4,center=Centro4,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho4))+
-          labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
+          labs(title = "Polígono de frecuencia", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
 
       } else if(input$interval2=="Manual"){
@@ -301,7 +301,7 @@ server <- function(input, output) {
                           closed="left",bins = k5,linetype="dashed",
                           fill="blue",col="black",alpha=0.3,binwidth = Ancho5,center=Centro5,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho5))+
           geom_freqpoly(closed='left',col="red",size=0.8,bins=k5,binwidth = Ancho5,center=Centro5,breaks=seq(min(data()[,1]),max(data()[,1]),by=Ancho5))+
-          labs(title = "Polígono de frecuencia", x="x", y="Frecuencia",caption = "https://synergy.vision/")
+          labs(title = "Polígono de frecuencia", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
       }
 

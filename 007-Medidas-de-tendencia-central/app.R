@@ -130,7 +130,7 @@ server <- function(input, output) {
      return()
    }
 
-   if(input$medias=="Media aritmética"){
+   else if(input$medias=="Media aritmética"){
 
      Media_aritmética<-apply(data(),2,mean)
 

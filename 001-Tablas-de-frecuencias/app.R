@@ -173,7 +173,7 @@ server <- function(input, output) {
     }
 
 
-    if(input$n=="gen"){
+    else if(input$n=="gen"){
 
       if(is.null(input$interval)){
         return()

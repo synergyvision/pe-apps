@@ -121,7 +121,7 @@ server <- function(input, output) {
     })
 
 
-      if(input$n=="gen")({
+      else if(input$n=="gen")({
         num<-as.numeric(unlist(data()))
         scale3<-as.numeric(unlist(input$scale))
 
