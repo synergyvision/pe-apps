@@ -25,30 +25,30 @@ ui <- fluidPage(
 
 
       radioButtons(inputId="n",
-                   label = "Tipos de Datos",
-                   choices = c('Ejemplos del libro','Generados aleatoriamente','Cargados'),
+                   label = "Origen de los datos",
+                   choices = c('Generados','Cargados','Ejemplos'),
                    selected = " "),
-      conditionalPanel( condition = "input.n=='Ejemplos del libro'",
+      conditionalPanel( condition = "input.n=='Ejemplos'",
                         selectInput( inputId = "m",
-                                     label = "Ejemplo",
-                                     choices= c('Tiempo de uso de equipos','Sueldos','Otros'),
+                                     label = "Datos de ejemplos",
+                                     choices= c('Sueldos','Otros','Tiempo de uso de equipos'),
                                      selected = NULL)
                         ),
       conditionalPanel( condition = "input.n=='Cargados'",
                         fileInput( inputId = "datoscargados",
-                                   label = "Seleccionar archivo:", buttonLabel = "Buscar...",
+                                   label = "Seleccionar desde un archivo guardado", buttonLabel = "Buscar...",
                                    placeholder = "Aun no seleccionas el archivo..."),
                         numericInput( inputId = "columna",
-                                      label="Elija el número de columna deseado",
+                                      label="Escoja el número de columna deseado",
                                       min = 1,
                                       max = 100,
                                       step = 1,
                                       value = 1,
                                       width = "100%")
                         ),
-      conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
+      conditionalPanel( condition = "input.n=='Generados'",
                         sliderInput(inputId = "CantidadDatos",
-                                    label = "Cantidad de datos a generar",
+                                    label = "Cantidad de datos",
                                     min = 1,
                                     max = 100,
                                     value = 5)
@@ -57,8 +57,11 @@ ui <- fluidPage(
 
     # Main panel for displaying outputs ----
     mainPanel(
-      column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput("tabla"))),
-      column(width=8,plotOutput(outputId = "distPlot"))
+      tabsetPanel(type='tabs',id='f',
+                  tabPanel('Datos',br(),dataTableOutput(outputId = "tabla")),
+                  tabPanel('Gráfico de barra',br(),plotOutput(outputId = "distPlot"))
+                  )
+
     )
   )
 )
@@ -80,7 +83,7 @@ server <- function(input, output) {
       return()
     }
 
-    else if(infile=='Ejemplos del libro'){
+    else if(infile=='Ejemplos'){
 
       infile1<-input$m
 
@@ -107,7 +110,7 @@ server <- function(input, output) {
       }
     }
 
-    else if(infile=='Generados aleatoriamente'){
+    else if(infile=='Generados'){
       data.frame(Datos=sample(80:100,input$CantidadDatos,replace = TRUE))
     }
 
@@ -140,12 +143,12 @@ fr<-reactive({
   }
 })
 
-output$tabla<-renderTable({
+output$tabla<-renderDataTable({
   if(is.null(input$n)){
         return()
   }
   return(fr())
-})
+},options = list(scrollX=TRUE,scrollY=300,searching=FALSE))
 
 
   output$distPlot<-renderPlot({
@@ -160,14 +163,14 @@ output$tabla<-renderTable({
         ggplot(fr(), aes(x=fr()[,1],y=Frecuencia))+
           geom_bar(stat = "identity", color="black",
                    fill="Blue", alpha=0.5)+
-          labs(title = "Diagrama de Barra", x=vars(),y="Frecuencias")
+          labs(title = "Diagrama de barra", x=vars(),y="Frecuencias")
       }
     }
     else{
       ggplot(fr(), aes(x=fr()[,1],y=Frecuencia))+
         geom_bar(stat = "identity", color="black",
                  fill="Blue", alpha=0.5)+
-        labs(title = "Diagrama de Barra", x=vars(),y="Frecuencias")
+        labs(title = "Diagrama de barra", x=vars(),y="Frecuencias")
     }
   })
 
