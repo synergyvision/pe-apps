@@ -70,10 +70,10 @@ ui <- fluidPage(
       ),
 
     mainPanel(
+     tabsetPanel(type = 'tabs',id="c",
+      tabPanel('Operación de conjuntos',br(),br(),verbatimTextOutput("op1")),
 
-      column(width=5,h3("Operación"),div(style="height:400px; overflow-y: scroll",verbatimTextOutput("op1"))),
-
-      column(width=5,h3("Diagrama de Venn"),plotOutput("plot"))
+      tabPanel('Diagrama de Venn',br(),column(width=8,align='center',plotOutput("plot"))))
     )
   )
 )
@@ -120,7 +120,7 @@ server <- function(input, output,session) {
  output$op1<-renderPrint({
 
     if(is.null(input$con)){
-      return()
+      return(print('Introduzca los conjuntos'))
     }
     else{
       if(input$ope=="Unión"){
