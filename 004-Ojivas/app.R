@@ -418,7 +418,7 @@ server <- function(input, output) {
                   geom_point(colour="blue" ,size=2)+
                   geom_line( colour="blue",size=1)+
                   labs(title = expression('Ojiva menor que (' <=')'),x="Distribución de frecuencia",
-                       y="Frecuencia acumulada")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
+                       y="Frecuencia acumulada",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
         }
 
         else if(input$n1=='Frecuencia acumulada relativa'){
@@ -431,7 +431,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
+                 y="Frecuencia acumulada relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
         }
       }
 
@@ -451,7 +451,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
+                 y="Frecuencia acumulada",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
         }
 
         else if(input$n1=='Frecuencia acumulada relativa'){
@@ -464,7 +464,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
+                 y="Frecuencia acumulada relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1])+Ancho,max(dat()[,1]),by=Ancho),2))
         }
 
       }
@@ -502,7 +502,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
+                 y="Frecuencia acumulada",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
         }
 
         else if(input$n3=='Frecuencia acumulada relativa'){
@@ -515,7 +515,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada relativa")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
+                 y="Frecuencia acumulada relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
         }
 
       }
@@ -536,7 +536,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
+                 y="Frecuencia acumulada",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
         }
 
         else if(input$n3=='Frecuencia acumulada relativa'){
@@ -550,7 +550,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada relativa")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
+                 y="Frecuencia acumulada relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos)+Ancho,max(dat()$Datos),by=Ancho),2))
         }
 
       }
@@ -590,7 +590,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
+                 y="Frecuencia acumulada",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
 
 
         }
@@ -605,7 +605,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
+                 y="Frecuencia acumulada relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
 
         }
 
@@ -627,7 +627,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
+                 y="Frecuencia acumulada",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
 
 
         }
@@ -642,7 +642,7 @@ server <- function(input, output) {
             geom_point(colour="blue",size=2)+
             geom_line( colour="blue",size=1)+
             labs(title = expression('Ojiva menor que (' <=')'), x="Distribución de frecuencia",
-                 y="Frecuencia acumulada relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
+                 y="Frecuencia acumulada relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna])+Ancho,max(dat()[,ncolumna]),by=Ancho),2))
 
         }
 

@@ -163,14 +163,14 @@ output$tabla<-renderDataTable({
         ggplot(fr(), aes(x=fr()[,1],y=Frecuencia))+
           geom_bar(stat = "identity", color="black",
                    fill="Blue", alpha=0.5)+
-          labs(title = "Diagrama de barra", x=vars(),y="Frecuencias")
+          labs(title = "Diagrama de barra", x=vars(),y="Frecuencia",caption = "https://synergy.vision/")
       }
     }
     else{
       ggplot(fr(), aes(x=fr()[,1],y=Frecuencia))+
         geom_bar(stat = "identity", color="black",
                  fill="Blue", alpha=0.5)+
-        labs(title = "Diagrama de barra", x=vars(),y="Frecuencias")
+        labs(title = "Diagrama de barra", x=vars(),y="Frecuencia",caption = "https://synergy.vision/")
     }
   })
 
