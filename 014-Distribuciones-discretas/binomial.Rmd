@@ -14,11 +14,11 @@ $$
 ## Media
 
 $$
-\mathbb{E[\mathcal{X}]}=np
+E[X]=np
 $$
 
 ## Varianza
 
 $$
-\mathbb{V}[\mathcal{X}] = np(1-p)
+Var[X] = np(1-p)
 $$

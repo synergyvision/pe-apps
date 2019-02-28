@@ -22,3 +22,4 @@ $$
 $$
 Var[X]=k\frac{r}{n}\frac{n-r}{r}\frac{n-k}{n-1}
 $$
+
