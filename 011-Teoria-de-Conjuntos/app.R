@@ -81,6 +81,10 @@ ui <- fluidPage(
 
 server <- function(input, output,session) {
 
+  observeEvent(input$ope,{
+    if(input$ope=='Producto Cartesiano' | input$ope=='Potencia'){hideTab(inputId = 'c',target = 'Diagrama de Venn')}else{showTab('c','Diagrama de Venn')}
+  })
+
 
   conjunto1<-reactive({
     if(is.null(input$con1)){
