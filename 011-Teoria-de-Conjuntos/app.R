@@ -52,9 +52,9 @@ ui <- fluidPage(
                                                          selected = NULL),
       conditionalPanel(condition = "input.ope=='Complemento'",
                        textInput(inputId = "con3",
-                                 label = "Introducir Conjunto Universo",
+                                 label = "Introducir conjunto universo",
                                  placeholder = "a,b,...")),
-      checkboxGroupInput(inputId = "con",label="Selección de Conjuntos",choices = c("Conjunto 1"="c1","Conjunto 2"="c2"),selected=NULL),
+      checkboxGroupInput(inputId = "con",label="Selección de conjuntos",choices = c("Conjunto 1"="c1","Conjunto 2"="c2"),selected=NULL),
       conditionalPanel(condition = "input.ope=='Diferencia'",
                        conditionalPanel(condition = "input.con.indexOf('c1')!=-1 & input.con.indexOf('c2')!=-1",
                        selectInput(inputId = 'dif',
@@ -72,7 +72,6 @@ ui <- fluidPage(
     mainPanel(
      tabsetPanel(type = 'tabs',id="c",
       tabPanel('Operación de conjuntos',br(),br(),verbatimTextOutput("op1")),
-
       tabPanel('Diagrama de Venn',br(),column(width=8,align='center',plotOutput("plot"))))
     )
   )

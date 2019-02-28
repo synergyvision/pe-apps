@@ -217,7 +217,7 @@ server <- function(input, output) {
           geom_histogram(aes(y=..count..),
                          closed="left",bins = intervalo,
                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
       }
 
@@ -227,7 +227,7 @@ server <- function(input, output) {
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
       }
 
@@ -247,7 +247,7 @@ server <- function(input, output) {
           geom_histogram(aes(y=..count..),
                          closed="left",bins = intervalo,
                          fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
       }
 
@@ -257,7 +257,7 @@ server <- function(input, output) {
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho,center=Centro,breaks=seq(min(dat()[,1]),max(dat()[,1]),by=Ancho))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,1]),max(dat()[,1])+Ancho,by=Ancho),2))
 
 
        }
@@ -293,7 +293,7 @@ server <- function(input, output) {
             geom_histogram( aes(y=..count..),
                             closed="left",bins = intervalo1,
                             fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
-            labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
+            labs(title = "Histograma", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
         }
 
@@ -303,7 +303,7 @@ server <- function(input, output) {
             geom_histogram( aes(y=..density..),
                             closed="left",bins = intervalo1,
                             fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
-            labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
+            labs(title = "Histograma", x="Clases", y="Frecuencia relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
         }
 
@@ -322,7 +322,7 @@ server <- function(input, output) {
           geom_histogram( aes(y=..count..),
                           closed="left",bins = intervalo1,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
       }
 
@@ -332,7 +332,7 @@ server <- function(input, output) {
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo1,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho1,center=Centro1,breaks=seq(min(dat()$Datos),max(dat()$Datos),by=Ancho1))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()$Datos),max(dat()$Datos)+Ancho1,by=Ancho1),2))
 
       }
 
@@ -374,7 +374,7 @@ server <- function(input, output) {
               geom_histogram( aes(y=..count..),
                               closed="left",bins = intervalo2,
                               fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho2))+
-              labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho2,by=Ancho2),2))
+              labs(title = "Histograma", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho2,by=Ancho2),2))
 
           }
 
@@ -384,7 +384,7 @@ server <- function(input, output) {
               geom_histogram( aes(y=..density..),
                               closed="left",bins = intervalo2,
                               fill="blue",col="black",alpha=0.7,binwidth = Ancho2,center=Centro2,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho2))+
-              labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho2,by=Ancho2),2))
+              labs(title = "Histograma", x="Clases", y="Frecuencia relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho2,by=Ancho2),2))
           }
 
         }
@@ -402,7 +402,7 @@ server <- function(input, output) {
           geom_histogram( aes(y=..count..),
                           closed="left",bins = intervalo20,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho20,center=Centro20,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho20))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho20,by=Ancho20),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho20,by=Ancho20),2))
 
       }
 
@@ -412,7 +412,7 @@ server <- function(input, output) {
           geom_histogram( aes(y=..density..),
                           closed="left",bins = intervalo20,
                           fill="blue",col="black",alpha=0.7,binwidth = Ancho20,center=Centro20,breaks=seq(min(dat()[,ncolumna]),max(dat()[,ncolumna]),by=Ancho20))+
-          labs(title = "Histograma", x="Clases", y="Frecuencia relativa")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho20,by=Ancho20),2))
+          labs(title = "Histograma", x="Clases", y="Frecuencia relativa",caption = "https://synergy.vision/")+scale_x_continuous(breaks = round(seq(min(dat()[,ncolumna]),max(dat()[,ncolumna])+Ancho20,by=Ancho20),2))
       }
         }
       }
