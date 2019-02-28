@@ -139,7 +139,7 @@ server <- function(input, output) {
 
    else if(input$medias=="Cuantiles"){
 
-      if(is.null(input$vect)){
+      if(isTRUE(input$vect=="")){
         return(print('Introduzca la probabilidad asociada al cuantil'))
        } else{
        x <- as.numeric(unlist(strsplit(input$vect,",")))
@@ -155,7 +155,7 @@ server <- function(input, output) {
 
      if(input$medias=="Diagrama de caja"){
 
-       else if(input$n=="gen"){
+       if(input$n=="gen"){
          datos<-as.data.frame(data())
 
          ncol<-input$k
@@ -167,14 +167,19 @@ server <- function(input, output) {
        }
 
        else if(input$n=="car"){
-       datos<-as.data.frame(data())
 
-       ncol<-input$d
+         if(is.null(input$datoscargados)){
+           return(print("Introduzca los datos"))
+         } else{
+         datos<-as.data.frame(data())
 
-       ggplot(datos, aes(x=length(datos[,ncol]),y=datos[,ncol]))+
-         geom_boxplot(fill="blue",alpha=0.5)+
-         labs(title = "Diagrama de caja",
+         ncol<-input$d
+
+         ggplot(datos, aes(x=length(datos[,ncol]),y=datos[,ncol]))+
+           geom_boxplot(fill="blue",alpha=0.5)+
+           labs(title = "Diagrama de caja",
               x=colnames(datos[ncol]),y="")
+         }
        }
        else if(input$n=="ejem"){
          datos<-as.data.frame(data())
