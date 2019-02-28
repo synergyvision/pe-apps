@@ -23,7 +23,7 @@ library(ggplot2)
 
 ui <- fluidPage(
 
-  titlePanel("Analisis de Varianza"),
+  titlePanel("Analisis de varianza"),
   sidebarLayout(
 
     sidebarPanel(
@@ -42,14 +42,16 @@ ui <- fluidPage(
       ),
       conditionalPanel( condition = "input.n == 'car'",
                         fileInput(inputId = "datoscargados",label = "Seleccionar desde un archivo guardado",
-                                  buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo...")
+                                  buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo..."),
+                        textInput(inputId = "vect", label = "Introducir las columnas numéricas deseadas",
+                                  placeholder = "1,2,...")
 
 
       ),
 
       conditionalPanel( condition = "input.n == 'ejem'",
                         selectInput( inputId = "ejemplos", label = "Datos de ejemplo",
-                                     choices= c("Sueldos","Horas","Ventas"),
+                                     choices= c("Armands"),
                                      selected = NULL)),
 
       selectInput( inputId = "factores", label = "Factores ANOVA",
@@ -61,7 +63,7 @@ ui <- fluidPage(
     mainPanel(
     tabsetPanel(type = 'tabs',id='anova',
      tabPanel("Datos",br(),dataTableOutput("table")),
-     tabPanel("ANOVA",br(),br(),verbatimTextOutput("tabla1")))
+     tabPanel("ANOVA",br(),br(),'Tabla ANOVA',verbatimTextOutput("table1")))
 
     )
   )
@@ -100,29 +102,86 @@ server <- function(input, output,session) {
 
     } else if(input$n=="ejem"){
 
-      Sueldos<- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
-                  54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
-      Horas<-c(rep(2,46),rep(3,15),rep(4,12),rep(6,52),rep(7,8))
-
-      Ventas <- c(1034,1075,1123,1172,1218,1265,1313,1379,1452,1597)
-
-      if(input$ejemplos=="Sueldos"){
-        data.frame(Sueldos)
-      } else if(input$ejemplos=="Horas"){
-        data.frame(Horas)
-      } else if(input$ejemplos=="Ventas"){
-        data.frame(Ventas)
-      }
+      Armands<-read_excel("Armand's.xlsx")
 
     }
 })
 
 output$table<-renderDataTable({
-data()
+
+  if(is.null(input$n)){
+    return(print("Introduzca los datos"))
+  } else{
+     return(data())
+  }
+
 },options = list(scrollX=TRUE,scrollY=300,searching=FALSE))
 
 # s<-data.frame(Precio=c(a[,1],a[,2],a[,3]))
 # variables<-rep(c(colnames(a)[1:3]),each=10)
+
+
+output$table1<-renderPrint ({
+
+  if(is.null(input$n)){
+    return("Introduzca los datos")
+  }
+
+  else if(input$factores=='ANOVA de un factor'){
+
+      if(input$n=="car"){
+
+
+         if(is.null(input$datoscargados) | isTRUE(input$vect=="") ){
+         return('Introduzca los datos y escoja las columnas numéricas deseadas (mínimo dos columnas).')
+         }
+         else{
+         col<-as.numeric(unlist(strsplit(input$vect,",")))
+         data1<-as.data.frame(data()[,col])
+
+         z<-c()
+
+         for(i in 1:ncol(data1)){
+           z<-data.frame(Precio=c(z[,1],data1[,i]))
+         }
+
+         z1<-data.frame(variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+         g<-cbind(z,z1)
+
+         #ANOVA
+         w<-summary(aov(g$Precio ~ g$variables))
+
+         return(w)
+         }
+
+    } else{
+      data1<-as.data.frame(data())
+
+      z<-c()
+
+      for(i in 1:ncol(data1)){
+        z<-data.frame(Precio=c(z[,1],data1[,i]))
+      }
+
+      z1<-data.frame(variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+      g<-cbind(z,z1)
+
+      #ANOVA
+      w<-summary(aov(g$Precio ~ g$variables))
+
+      return(w)
+   }
+}
+
+})
+
+
+
+
+
+
 
   }
 
