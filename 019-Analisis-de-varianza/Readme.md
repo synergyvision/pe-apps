@@ -1,1 +1,1 @@
-Ésta es una aplicación que muestra cómo podemos interactuar con las pruebas de hipótesis manipulando las diferentes hipótesis.
+Esta es una aplicación que muestra como podemos interactuar con las tablas de ANOVA manipulando el origen de los datos.
