@@ -14,11 +14,11 @@ $$
 ## Media
 
 $$
-\mathbb{E[\mathcal{X}]}=\displaystyle \frac{1}{p}
+E[X]=\displaystyle \frac{1}{p}
 $$
 
 ## Varianza
 
 $$
-\mathbb{V}[\mathcal{X}] = \displaystyle \frac{1-p}{p^2}
+Var[X] = \displaystyle \frac{1-p}{p^2}
 $$

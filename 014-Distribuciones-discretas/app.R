@@ -7,7 +7,6 @@ ensure_version("shiny", "1.2.0")
 ensure_version("readxl", "1.2.0")
 ensure_version("shinydashboard", "0.7.1")
 ensure_version("psych", "1.8.10")
-#ensure_version("modeest", "2.3.2")
 ensure_version("matrixStats", "0.54.0")
 ensure_version("ggplot2","3.1.0")
 
@@ -18,14 +17,13 @@ library(shiny)
 library(shinydashboard)
 library(readxl)
 library(psych)
-#library(modeest)
 library(matrixStats)
 library(ggplot2)
 
 
 ui <- fluidPage(
 
-  titlePanel("Distribuciones Discretas"),
+  titlePanel("Distribuciones discretas"),
   sidebarLayout(
 
     sidebarPanel(
@@ -209,7 +207,7 @@ server <- function(input, output,session) {
     }
     f<-ggplot(data, mapping = aes(x,pro1))+geom_point(colour="blue",size=5)+
       labs( title = "Densidad Bernoulli",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )+
+            x = "x", y = "f(x)", caption = "https://synergy.vision/" )+
       scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f)
   })
@@ -231,7 +229,7 @@ server <- function(input, output,session) {
     f1<-ggplot(data1, aes(x=data1[,1],y=data1[,2]))+
         geom_segment(aes(x=0,y=1-input$proba1,xend=1,yend=1-input$proba1),size=1,color="blue")+geom_segment(aes(x=1,y=1,xend=1.3,yend=1),size=1,color="blue")+geom_segment(aes(x=1,y=1-input$proba1,xend=1,yend=1),size=1,color="blue",linetype=2)+
         labs( title = "Distribución Bernoulli",
-            x = "x", y = "F(x)", caption = "http://synergy.vision/" )+
+            x = "x", y = "F(x)", caption = "https://synergy.vision/" )+
       scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f1)
   })
@@ -257,7 +255,7 @@ server <- function(input, output,session) {
                         yend = dbinom(x2, size = 1,prob=p1)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Bernoulli',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
 
@@ -272,8 +270,8 @@ server <- function(input, output,session) {
   output$dens2<-renderPlot({
     data2<-data.frame(x1=muestraber())
     f2<-ggplot(data2,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x1))+
-      labs( title = "Muestra aleatoria",
-           x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+      labs( title = "Muestra Aleatoria",
+           x = "x", y = "m.a.s", caption = "https://synergy.vision/" )
     return(f2)
   })
 
@@ -289,7 +287,7 @@ server <- function(input, output,session) {
     data3<-data.frame(bin=dbinom(0:input$valorbin,input$ensayobin,input$probabin))
     f3<-ggplot(data3,aes(x=0:(length(bin)-1),y=bin))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data3$bin)-1))+
       labs( title = "Densidad Binomial",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)", caption = "https://synergy.vision/" )
     return(f3)
   })
 
@@ -305,7 +303,7 @@ server <- function(input, output,session) {
     data3<-data.frame(bin=pbinom(0:input$valorbin1,input$ensayobin1,input$probabin1))
     f4<-ggplot(data3,aes(x=0:(length(bin)-1),y=bin))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:length(data3$bin)-1)+
       labs( title = "Distribución Binomial",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )+
+            x = "x", y = "F(x)", caption = "https://synergy.vision/" )+
       scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f4)
   })
@@ -332,7 +330,7 @@ server <- function(input, output,session) {
                        yend = dbinom(x2, size = s1,prob=p1)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Binomial',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
 
@@ -349,8 +347,8 @@ server <- function(input, output,session) {
   output$densbin2<-renderPlot({
     data5<-data.frame(x1=muestraber1())
     f5<-ggplot(data5,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data5$x1))+
-      labs( title = "Muestra aleatoria",
-            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+      labs( title = "Muestra Aleatoria",
+            x = "x", y = "m.a.s", caption = "https://synergy.vision/" )
     return(f5)
   })
 
@@ -365,7 +363,7 @@ server <- function(input, output,session) {
     data5<-data.frame(geom=dgeom(0:(input$valorgeo-1),input$probageo))
     f5<-ggplot(data5,aes(x=1:length(geom),y=geom))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 1:length(data5$geom))+
       labs( title = "Densidad Geometrica",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)", caption = "https://synergy.vision/" )
     return(f5)
   })
 
@@ -380,7 +378,7 @@ server <- function(input, output,session) {
     data6<-data.frame(geom=pgeom(0:(input$valorgeo1-1),input$probageo1))
     f6<-ggplot(data6,aes(x=1:length(geom),y=geom))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 1:length(data6$geom))+
       labs( title = "Distribución Geométrica",
-            x = "x", y = "F(x)", caption = "http://synergy.vision/" )+
+            x = "x", y = "F(x)", caption = "https://synergy.vision/" )+
       scale_y_continuous(breaks = seq(0,1,by=0.1),limits = c(0,1))
     return(f6)
   })
@@ -408,7 +406,7 @@ server <- function(input, output,session) {
                        yend = dgeom(x2,prob=p1)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Geométrica',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
 
@@ -423,8 +421,8 @@ server <- function(input, output,session) {
   output$densgeo2<-renderPlot({
     data7<-data.frame(x1=muestraber3())
     f7<-ggplot(data7,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data7$x1))+
-      labs( title = "Muestra aleatoria",
-            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+      labs( title = "Muestra Aleatoria",
+            x = "x", y = "m.a.s", caption = "https://synergy.vision/" )
     return(f7)
   })
 
@@ -441,7 +439,7 @@ server <- function(input, output,session) {
     data8<-data.frame(hiper=dhyper(0:input$valorhip4,input$valorhip2,input$valorhip3,input$valorhip))
     f8<-ggplot(data8,aes(x=0:(length(hiper)-1),y=hiper))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data8$hiper)-1))+
       labs( title = "Densidad Hipergeométrica",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)", caption = "https://synergy.vision/" )
     return(f8)
   })
 
@@ -458,7 +456,7 @@ server <- function(input, output,session) {
     data9<-data.frame(hiper1=phyper(0:input$valorhip8,input$valorhip6,input$valorhip7,input$valorhip5))
     f9<-ggplot(data9,aes(x=0:(length(hiper1)-1),y=hiper1))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:(length(data9$hiper1)-1))+
       labs( title = "Distribución Hipergeométrica",
-            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "F(x)", caption = "https://synergy.vision/" )
     return(f9)
   })
 
@@ -488,7 +486,7 @@ server <- function(input, output,session) {
                        yend = dhyper(x2,m,n,k)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Hipergeométrica',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
 
@@ -511,8 +509,8 @@ server <- function(input, output,session) {
   output$denship2<-renderPlot({
     data10<-data.frame(x1=muestraber4())
     f10<-ggplot(data10,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data10$x1))+
-      labs( title = "Muestra aleatoria",
-            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+      labs( title = "Muestra Aleatoria",
+            x = "x", y = "m.a.s", caption = "https://synergy.vision/" )
     return(f10)
   })
 
@@ -528,7 +526,7 @@ server <- function(input, output,session) {
     data11<-data.frame(poi=dpois(0:input$valorpoi2,input$valorpoi))
     f11<-ggplot(data11,aes(x=0:(length(poi)-1),y=poi))+geom_point(colour='blue',size=2)+scale_x_continuous(breaks = 0:(length(data11$poi)-1))+
       labs( title = "Densidad Poisson",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)", caption = "https://synergy.vision/" )
     return(f11)
   })
 
@@ -543,7 +541,7 @@ server <- function(input, output,session) {
     data12<-data.frame(poi=ppois(0:input$valorpoi4,input$valorpoi3))
     f12<-ggplot(data12,aes(x=0:(length(poi)-1),y=poi))+geom_step(colour='blue',size=1)+scale_x_continuous(breaks = 0:(length(data12$poi)-1))+
       labs( title = "Distribución Poisson",
-            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "F(x)", caption = "https://synergy.vision/" )
     return(f12)
   })
 
@@ -569,7 +567,7 @@ server <- function(input, output,session) {
                        yend = dpois(x2,p1)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Poison',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
 
@@ -588,8 +586,8 @@ server <- function(input, output,session) {
   output$denspoi2<-renderPlot({
     data13<-data.frame(x1=muestraber5())
     f13<-ggplot(data13,mapping=aes(x=1:length(x1),y=x1))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data13$x1))+
-      labs( title = "Muestra aleatoria",
-            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+      labs( title = "Muestra Aleatoria",
+            x = "x", y = "m.a.s", caption = "https://synergy.vision/" )
     return(f13)
   })
 
@@ -644,8 +642,8 @@ server <- function(input, output,session) {
   output$densmulti1<-renderPlot({
     data14<-data.frame(x2=muestraber6())
     f14<-ggplot(data14,mapping=aes(x=1:length(x2),y=x2))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data14$x2))+
-      labs( title = "Muestra aleatoria",
-            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+      labs( title = "Muestra Aleatoria",
+            x = "x", y = "m.a.s", caption = "https://synergy.vision/" )
     return(f14)
   })
 
@@ -665,7 +663,7 @@ server <- function(input, output,session) {
     data16<-data.frame(hola=k,mundo=x)
     f15<-ggplot(data15,aes(x=data16$hola:data16$mundo,y=binega))+geom_point(colour='blue',size=2)+
       labs( title = "Densidad Binomial negativa",
-            x = "x", y = "f(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)", caption = "https://synergy.vision/" )
     return(f15)
   })
 
@@ -685,7 +683,7 @@ server <- function(input, output,session) {
     # data17<-data.frame(hola=k,mundo=x)
     f16<-ggplot(data16,aes(x=k:x,y=binega))+geom_step(colour='blue',size=1)+
       labs( title = "Distribución Binomial negativa",
-            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "F(x)", caption = "https://synergy.vision/" )
     return(f16)
   })
 
@@ -713,7 +711,7 @@ server <- function(input, output,session) {
                        yend = dnbinom(x2,k,p1)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Binomial Negativa',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
 
@@ -735,8 +733,8 @@ server <- function(input, output,session) {
   output$densbinega2<-renderPlot({
     data17<-data.frame(x2=muestraber7())
     f17<-ggplot(data17,mapping=aes(x=1:length(x2),y=x2))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data17$x2))+
-      labs( title = "Muestra aleatoria",
-            x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
+      labs( title = "Muestra Aleatoria",
+            x = "x", y = "m.a.s", caption = "https://synergy.vision/" )
     return(f17)
   })
 
