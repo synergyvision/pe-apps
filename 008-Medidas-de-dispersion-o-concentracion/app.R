@@ -15,7 +15,7 @@ library(readxl)
 ui <- fluidPage(
 
   # App title ----
-  titlePanel("Medidas dispersion"),
+  titlePanel("Medidas dispersión"),
 
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -23,54 +23,62 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
       radioButtons(inputId="n",
-                   label = "Tipos de Datos",
-                   choices = c('Ejemplos del libro','Generados aleatoriamente','Cargados'),
+                   label = "Origen de los datos",
+                   choices = c('Generados','Cargados','Ejemplos'),
                    selected = " "),
-      conditionalPanel( condition = "input.n=='Ejemplos del libro'",
-                        selectInput( inputId = "m", 
-                                     label = "Ejemplo",
-                                     choices= c('Tiempo de uso de equipos','Sueldos','Otros'), 
+      conditionalPanel( condition = "input.n=='Ejemplos'",
+                        selectInput( inputId = "m",
+                                     label = "Datos de ejemplo",
+                                     choices= c('Sueldos','Otros','Tiempo de uso de equipos'),
                                      selected = NULL),
-                        selectInput( inputId = "dispersion1", 
+                        selectInput( inputId = "dispersion1",
                                      label = "Elija medida de dispersión",
-                                     choices= c('Desviación absoluta','Varianza','Desviación estándar','Rango'), 
+                                     choices= c('Desviación absoluta','Varianza','Desviación estándar','Rango'),
                                      selected = NULL)
       ),
       conditionalPanel( condition = "input.n=='Cargados'",
                         fileInput( inputId = "datoscargados",
-                                   label = "Seleccionar archivo:", buttonLabel = "Buscar...",
+                                   label = "Seleccionar desde un archivo guardado", buttonLabel = "Buscar...",
                                    placeholder = "Aun no seleccionas el archivo..."),
-                        numericInput( inputId = "columna", 
-                                      label="Elija el número de columna deseado", 
-                                      min = 1, 
+                        numericInput( inputId = "columna",
+                                      label="Escoja el número de columna deseado",
+                                      min = 1,
                                       max = 100,
-                                      step = 1, 
-                                      value = 1, 
+                                      step = 1,
+                                      value = 1,
                                       width = "100%"),
-                        selectInput( inputId = "dispersion2", 
+                        selectInput( inputId = "dispersion2",
                                      label = "Elija medida de dispersión",
-                                     choices= c('Desviación absoluta','Varianza','Desviación estándar','Rango'), 
+                                     choices= c('Desviación absoluta','Varianza','Desviación estándar','Rango'),
                                      selected = NULL)
       ),
-      conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
+      conditionalPanel( condition = "input.n=='Generados'",
                         sliderInput(inputId = "CantidadDatos",
-                                    label = "Cantidad de datos a generar",
+                                    label = "Cantidad de datos",
                                     min = 1,
                                     max = 100,
                                     value = 5),
-                        selectInput( inputId = "dispersion3", 
+                        selectInput( inputId = "dispersion3",
                                      label = "Elija medida de dispersión",
-                                     choices= c('Desviación absoluta','Varianza','Desviación estándar','Rango'), 
+                                     choices= c('Desviación absoluta','Varianza','Desviación estándar','Rango'),
                                      selected = NULL)
       )
-      
+
     ),
 
     # Main panel for displaying outputs ----
-    mainPanel(
-      column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput("table"))),
-      column(width=8,verbatimTextOutput(outputId = "texto"))
+    # mainPanel(
+    #   column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput("table"))),
+    #   column(width=8,verbatimTextOutput(outputId = "texto"))
+    # )
+
+    mainPanel(tabsetPanel(type = 'tabs',id='f',tabPanel('Datos',br(),
+         fluidRow(dataTableOutput("table")),br(),br(),uiOutput('prueba'),
+         fluidRow(column(width = 6,verbatimTextOutput(outputId = "texto")))
     )
+    )
+       )
+
   )
 )
 
@@ -79,57 +87,57 @@ server <- function(input, output) {
 
   Sueldos <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
                54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
-  
+
   Horas<-c(rep(2,46),rep(3,15),rep(4,12),rep(6,52),rep(7,8))
-  
+
   Otros<-c(rep(10,4),rep(22,5),rep(35,2),rep(46,10),rep(57,9),rep(68,6),rep(74,6))
-  
-  
+
+
   dat<-reactive({
-    
+
     infile <- input$n
     if(is.null(infile)){
       return()
       }
-    
-    else if(infile=='Ejemplos del libro'){
-      
+
+    else if(infile=='Ejemplos'){
+
       infile1<-input$m
-      
+
       if(infile1=='Sueldos'){
        data.frame(Sueldos)
       }
-      
+
       else if(infile1=='Tiempo de uso de equipos'){
         data.frame(Horas)
       }
-      
+
       else if(infile1=='Otros')
         data.frame(Otros)
     }
-    
+
     else if(infile=='Cargados'){
       infile2<-input$datoscargados
       if(is.null(infile2)){
         return()
       }
-      
+
       else{
         as.data.frame(read_excel(infile2$datapath))
       }
     }
-    
-    else if(infile=='Generados aleatoriamente'){
+
+    else if(infile=='Generados'){
       data.frame(Datos=sample(80:100,input$CantidadDatos,replace = TRUE))
     }
-    
+
     })
-  
-  output$table<-renderTable({
+
+  output$table<-renderDataTable({
     return(dat())
-  },digits = 1)
-  
-  output$texto<-renderPrint({
+  },options = list(scrollX=TRUE,scrollY=300,searching=FALSE))
+
+  output$texto<-renderText({
     if(is.null(input$n)){
       return()
     }
@@ -152,7 +160,7 @@ server <- function(input, output) {
         return(diff(m))
       }
     }
-    else if(input$n=='Ejemplos del libro'){
+    else if(input$n=='Ejemplos'){
       if(input$dispersion1=='Desviación absoluta'){
         return(mean(abs(dat()[,1]-mean(dat()[,1]))))
       }
@@ -167,7 +175,7 @@ server <- function(input, output) {
         return(diff(m))
       }
     }
-    else if(input$n=='Generados aleatoriamente'){
+    else if(input$n=='Generados'){
       if(input$dispersion3=='Desviación absoluta'){
         return(mean(abs(dat()[,1]-mean(dat()[,1]))))
       }
@@ -183,7 +191,22 @@ server <- function(input, output) {
       }
     }
   })
-  
+
+  output$prueba<-renderUI({
+    if(is.null(input$n)){
+      return()
+    }
+    else if(input$n=='Generados'){
+      h3(input$dispersion3)
+    }
+    else if(input$n=='Ejemplos'){
+      h3(input$dispersion1)
+    }
+    else if(input$n=='Cargados'& !is.null(input$datoscargados)){
+      h3(input$dispersion2)
+    }
+  })
+
 }
 
 # Create Shiny app ----

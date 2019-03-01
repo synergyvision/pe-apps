@@ -23,7 +23,7 @@ library(ggplot2)
 
 ui <- fluidPage(
 
-  titlePanel("Pruebas de Hipotesis"),
+  titlePanel("Pruebas de hipótesis"),
   sidebarLayout(
 
     sidebarPanel(width = 3,
@@ -555,15 +555,16 @@ server <- function(input, output,session) {
         geom_segment(aes(x = x_alpha2, y =0 , xend = x_alpha2, yend = dchisq(x_alpha2,df=n-1)), colour = "black",linetype=2)+
         geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
 
-        annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
-        annotate("text", x=x_alpha1, y =-0.003, label="-'X'[alpha/2]", parse = TRUE)+
-        annotate("text", x=x_alpha2, y =-0.003, label="'X'[alpha/2]", parse = TRUE)+
+        annotate("text", x=X2, y =-0.003, label ="chi^2", parse = TRUE)+
+        annotate("text", x=x_alpha1, y =-0.003, label="-chi[alpha/2]^2", parse = TRUE)+
+        annotate("text", x=x_alpha2, y =-0.003, label="chi[alpha/2]^2", parse = TRUE)+
         annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=x_alpha1-1, y=dchisq(x_alpha1,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
-        annotate("text", x=x_alpha2+1, y=dchisq(x_alpha2,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=x_alpha1-3, y=dchisq(x_alpha1,df=n-1)+0.001, label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=x_alpha2+3, y=dchisq(x_alpha2,df=n-1)+0.001, label="'Rechazar H'[0]", parse = TRUE)+
 
         labs( title = "Prueba de dos colas Distribución chi cuadrado",
-              x = " ", y = " ",caption = "http://synergy.vision/" )
+              x = " ", y = " ",caption = "http://synergy.vision/" )+
+      xlim(if(X2<x_alpha1){X2-5}else if(X2>x_alpha1){x_alpha1-5},if(X2<x_alpha2){x_alpha2+10}else if(X2>x_alpha1){X2+5})
 
       return(f)
     }
