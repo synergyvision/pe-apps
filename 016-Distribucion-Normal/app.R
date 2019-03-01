@@ -7,7 +7,6 @@ ensure_version("shiny", "1.2.0")
 ensure_version("readxl", "1.2.0")
 ensure_version("shinydashboard", "0.7.1")
 ensure_version("psych", "1.8.10")
-#ensure_version("modeest", "2.3.2")
 ensure_version("matrixStats", "0.54.0")
 ensure_version("ggplot2","3.1.0")
 
@@ -18,7 +17,6 @@ library(shiny)
 library(shinydashboard)
 library(readxl)
 library(psych)
-#library(modeest)
 library(matrixStats)
 library(ggplot2)
 
@@ -28,26 +26,26 @@ ui <- fluidPage(
   titlePanel("Distribución Normal"),
   tabsetPanel(type = 'pills',id='pri',
               tabPanel('Características',includeHTML("normal.html")),
-              tabPanel('Cálculos',br(),column(width=5,selectInput(inputId = 'nor',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de Densidad','Función de Distribución','Comparación de Medias','Comparación de Varianzas','Cuantiles','Muestra Aleatoria','Probabilidad por rango'),selected = NULL),
-                       conditionalPanel(condition = "input.nor=='Función de Densidad'",
+              tabPanel('Cálculos',br(),column(width=5,selectInput(inputId = 'nor',label = HTML('Seleccione el cálculo deseado'),choices = c('Función de densidad','Función de distribución','Comparación de medias','Comparación de varianzas','Cuantiles','Muestra aleatoria','Probabilidad por rango'),selected = NULL),
+                       conditionalPanel(condition = "input.nor=='Función de densidad'",
                                         numericInput(inputId = 'mu',label = HTML('Seleccione el valor de la media &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
                                         numericInput(inputId = 'valor',label = HTML('Seleccione el valor de la función de densidad'),min=-50,max=50,step=0.1,value = 5,width = '150px')),
-                       conditionalPanel(condition = "input.nor=='Función de Distribución'",
+                       conditionalPanel(condition = "input.nor=='Función de distribución'",
                                         numericInput(inputId = 'mu1',label = HTML('Seleccione el valor del parámetro &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma1',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
                                         numericInput(inputId = 'valor1',label = HTML('Seleccione el valor de la función de distribución'),min=-50,max=50,step=0.1,value = 5,width = '150px')),
-                       conditionalPanel(condition = "input.nor=='Comparación de Medias'",
+                       conditionalPanel(condition = "input.nor=='Comparación de medias'",
                                         numericInput(inputId = 'mu_1',label = HTML('Seleccione el valor del parámetro &mu;<sub>1</sub>'),min=-10,max=10,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'mu_2',label = HTML('Seleccione el valor del parámetro &mu;<sub>2</sub>'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
-                       conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",
+                       conditionalPanel(condition = "input.nor=='Comparación de varianzas'",
                                         numericInput(inputId = 'va_1',label = HTML('Seleccione el valor del parámetro &sigma;<sub>1</sub>'),min=-10,max=10,step=0.1,value = 1,width = '150px'),
                                         numericInput(inputId = 'va_2',label = HTML('Seleccione el valor del parámetro &sigma;<sub>2</sub>'),min=-10,max=10,step=0.1,value = 3,width = '150px')),
                        conditionalPanel(condition = "input.nor=='Cuantiles'",
                                         numericInput(inputId = 'mu2',label = HTML('Seleccione el valor del parámetro &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma2',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
                                         numericInput(inputId = 'valor2',label = HTML('Seleccione la probabilidad asociada al cuantil'),min=0,max=1,step=0.1,value = 0.5,width = '150px')),
-                       conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",
+                       conditionalPanel(condition = "input.nor=='Muestra aleatoria'",
                                         numericInput(inputId = 'mu3',label = HTML('Seleccione el valor del parámetro &mu;'),min=-20,max=20,step=0.1,value = 0,width = '150px'),
                                         numericInput(inputId = 'sigma3',label = HTML('Seleccione el valor de la desviación estándar &sigma;'),min=0.1,max=20,step=0.1,value = 1,width = '150px'),
                                         numericInput(inputId = 'valor3',label = HTML('Seleccione el tamaño de la muestra deseada'),min=1,max=200,step=1,value = 20,width = '150px')),
@@ -61,12 +59,12 @@ ui <- fluidPage(
                                         conditionalPanel(condition = "input.prob=='int3' ", numericInput(inputId = 'b',label = HTML('Seleccione el valor de b'),min=-20,max=20,step=0.1,value = 0,width = '150px'))
                                         )
               ),
-              conditionalPanel(condition = "input.nor=='Función de Densidad'",column(width=7,align='center',br(),verbatimTextOutput("norm"),plotOutput("densnor"))),
-              conditionalPanel(condition = "input.nor=='Función de Distribución'",column(width=6,align='center',br(),verbatimTextOutput("norm1"),plotOutput("densnor1"))),
-              conditionalPanel(condition = "input.nor=='Comparación de Medias'",column(width=7,align='center',br(),plotOutput("densnor2"))),
-              conditionalPanel(condition = "input.nor=='Comparación de Varianzas'",column(width=7,align='center',br(),plotOutput("densnor3"))),
+              conditionalPanel(condition = "input.nor=='Función de densidad'",column(width=7,align='center',br(),verbatimTextOutput("norm"),plotOutput("densnor"))),
+              conditionalPanel(condition = "input.nor=='Función de distribución'",column(width=6,align='center',br(),verbatimTextOutput("norm1"),plotOutput("densnor1"))),
+              conditionalPanel(condition = "input.nor=='Comparación de medias'",column(width=7,align='center',br(),plotOutput("densnor2"))),
+              conditionalPanel(condition = "input.nor=='Comparación de varianzas'",column(width=7,align='center',br(),plotOutput("densnor3"))),
               conditionalPanel(condition = "input.nor=='Cuantiles'",column(width=6,align='center',br(),verbatimTextOutput("norm2"),plotOutput("densnor4"))),
-              conditionalPanel(condition = "input.nor=='Muestra Aleatoria'",column(width=6,align='center',br(),verbatimTextOutput("norm3"),plotOutput("densnor5"))),
+              conditionalPanel(condition = "input.nor=='Muestra aleatoria'",column(width=6,align='center',br(),verbatimTextOutput("norm3"),plotOutput("densnor5"))),
               conditionalPanel(condition = "input.nor=='Probabilidad por rango' & input.prob=='int1'",column(width=6,align='center',br(),verbatimTextOutput("norm4"),plotOutput("densnor6"))),
               conditionalPanel(condition = "input.nor=='Probabilidad por rango' & input.prob=='int2'",column(width=6,align='center',br(),verbatimTextOutput("norm5"),plotOutput("densnor7"))),
               conditionalPanel(condition = "input.nor=='Probabilidad por rango' & input.prob=='int3'",column(width=6,align='center',br(),verbatimTextOutput("norm6"),plotOutput("densnor8")))
@@ -102,7 +100,7 @@ server <- function(input, output,session) {
                        yend = dnorm(x1,mean=media,sd=dv)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Normal',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )+
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
@@ -126,7 +124,7 @@ server <- function(input, output,session) {
 
     f1<-ggplot(data,aes(x=seq(-x,x,0.01),y=norm))+geom_line(colour='blue',size=1)+
       labs( title = "Distribución Normal",
-            x = "x", y = "F(x)", caption = "http://synergy.vision/" )
+            x = "x", y = "F(x)", caption = "https://synergy.vision/" )
     return(f1)
   })
 
@@ -140,17 +138,17 @@ server <- function(input, output,session) {
   y2 <- dnorm(x2,mean=media2, sd=1)
 
   dat<-data.frame(x1,x2,y1,y2)
-  ggplot(data=dat, mapping = aes(x1,y1))+geom_line(aes(colour = I("yellow")))+
-    geom_area(mapping = aes(x1,y1), fill = "yellow",alpha = .2)+
+  ggplot(data=dat, mapping = aes(x1,y1))+geom_line(aes(colour = I("blue")))+
+    geom_area(mapping = aes(x1,y1), fill = "blue",alpha = .2)+
     geom_segment(aes(x = media1, y =0 , xend = media1,
-                     yend = dnorm(media1,mean = media1,sd=1)),linetype="dashed",colour="yellow")+
-    geom_line(data=dat, aes(x2,y2,colour = I("red")))+
+                     yend = dnorm(media1,mean = media1,sd=1)),linetype="dashed",colour="blue")+
+    geom_line(data=dat, aes(x2,y2,colour = I("green")))+
     geom_segment(aes(x = media2, y =0 , xend = media2,
-                     yend = dnorm(media2,mean = media2,sd=1)),linetype="dashed",colour="red")+
-    geom_area(mapping = aes(x2,y2), fill = "red",alpha = .2)+
+                     yend = dnorm(media2,mean = media2,sd=1)),linetype="dashed",colour="green")+
+    geom_area(mapping = aes(x2,y2), fill = "green",alpha = .2)+
     labs(title = 'Medias de la distribución Normal',
-         x = "x", y = "f(x)")+
-    theme(plot.title = element_text(size = rel(1.3),hjust = 0.5))+scale_color_manual('Medias',values=c("red","yellow"),labels=c('Media 2','Media 1'))
+         x = "x", y = "f(x)",caption = "https://synergy.vision/")+
+    theme(plot.title = element_text(size = rel(1.3),hjust = 0.5))+scale_color_manual('Medias',values=c("blue","green"),labels=c('Media 1','Media 2'))
   })
 
   output$densnor3<-renderPlot({
@@ -159,13 +157,13 @@ server <- function(input, output,session) {
     y2 <- dnorm(x,mean=0, sd=input$va_2)
 
     dat<-data.frame(x,y1,y2)
-    ggplot(data=dat, mapping = aes(x,y1))+geom_line(aes(colour = I("yellow")))+
-      geom_area(mapping = aes(x,y1), fill = "yellow",alpha = .2)+
-      geom_line(data=dat, aes(x,y2,colour = I("red")))+
-      geom_area(mapping = aes(x,y2), fill = "red",alpha = .2)+
+    ggplot(data=dat, mapping = aes(x,y1))+geom_line(aes(colour = I("blue")))+
+      geom_area(mapping = aes(x,y1), fill = "blue",alpha = .2)+
+      geom_line(data=dat, aes(x,y2,colour = I("green")))+
+      geom_area(mapping = aes(x,y2), fill = "green",alpha = .2)+
       labs(title = 'Varianzas de la distribución Normal',
-           x = "x", y = "f(x)")+
-      theme(plot.title = element_text(size = rel(1.3),hjust = 0.5)) +scale_color_manual('Varianzas',values=c("red","yellow"),labels=c('Varianza 2','Varianza 1'))
+           x = "x", y = "f(x)",caption = "https://synergy.vision/")+
+      theme(plot.title = element_text(size = rel(1.3),hjust = 0.5)) +scale_color_manual('Varianzas',values=c("blue","green"),labels=c('Varianza 1','Varianza 2'))
   })
 
   output$norm2<-renderText({
@@ -195,7 +193,7 @@ server <- function(input, output,session) {
                        yend = dnorm(x2, mean= media ,sd = dv)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Normal',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )+
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
@@ -215,7 +213,7 @@ server <- function(input, output,session) {
   output$densnor5<-renderPlot({
     data2<-data.frame(x=muestra())
     f2<-ggplot(data2,mapping=aes(x=1:length(x),y=x))+geom_point(colour='blue')+scale_x_continuous(breaks = 1:length(data2$x))+
-      labs( title = "Muestra Aleatoria",
+      labs( title = "Muestra aleatoria",
             x = "x", y = "m.a.s", caption = "http://synergy.vision/" )
     return(f2)
   })
@@ -245,7 +243,7 @@ server <- function(input, output,session) {
                        yend = dnorm(x1,mean=media,sd=dv)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Normal',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )+
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
@@ -281,7 +279,7 @@ server <- function(input, output,session) {
                        yend = dnorm(u,mean=media,sd=dv)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Normal',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )+
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })
@@ -311,7 +309,7 @@ server <- function(input, output,session) {
                        yend = dnorm(x1,mean=media,sd=dv)),
                    colour = "black",linetype=2)+
       labs( title = 'Densidad Normal',
-            x = "x", y = "f(x)",caption = "http://synergy.vision/" )+
+            x = "x", y = "f(x)",caption = "https://synergy.vision/" )+
       scale_x_continuous(limits = c(media-6,media+6))
     return(f)
   })

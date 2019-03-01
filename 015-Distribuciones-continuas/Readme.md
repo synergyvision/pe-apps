@@ -1,1 +1,1 @@
-Ésta es una aplicación que demuestra cómo podemos interactuar con algunas distribuciones continuas, ver sus características, interactuar con sus funciones de densidad, distrubciones, ver muestras aleatorias, etc.
+Esta es una aplicación que demuestra como podemos interactuar con algunas distribuciones continuas, ver sus características, interactuar con sus funciones de densidad, distribuciones, ver muestras aleatorias, etc.

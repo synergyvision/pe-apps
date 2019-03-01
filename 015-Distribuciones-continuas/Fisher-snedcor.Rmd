@@ -1,4 +1,4 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x) = \left\{
@@ -10,13 +10,18 @@ f(x) = \left\{
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
-F(x) = P(X\leq x)
+F(x) = \left\{
+\begin{array}{ll}
+\displaystyle I_{\displaystyle \frac{n_1x}{n_1x+n_2}}\left(\frac{n_1}{2},\frac{n_2}{2}\right) & \mathrm{si\ } x > 0\\
+0 & \mathrm{si\ } x \leq 0
+\end{array}
+\right.
 $$
 
-## Valor esperado
+## Media
 
 $$
 E[X]= \displaystyle \frac{n_2}{n_2 -2}

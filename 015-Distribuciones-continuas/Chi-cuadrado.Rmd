@@ -1,4 +1,4 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x) = \left\{
@@ -10,7 +10,7 @@ f(x) = \left\{
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
 F(x) = \left\{\begin{array}{ll}
@@ -20,7 +20,7 @@ F(x) = \left\{\begin{array}{ll}
 	     \right.
 $$
 
-## Valor esperado
+## Media
 
 $$
 E[X]=n

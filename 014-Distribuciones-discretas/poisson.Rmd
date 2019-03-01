@@ -1,11 +1,11 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x)= \frac{\lambda^x}{x!}e^{-\lambda}
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
  F(x) = p(X \le x)
