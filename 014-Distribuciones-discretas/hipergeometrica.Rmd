@@ -1,11 +1,11 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x)= \frac{\displaystyle {r\choose x} {n-r \choose k-x}}{\displaystyle {n \choose k}}
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
  F(x) = p(X \le x)

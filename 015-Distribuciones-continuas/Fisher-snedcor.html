@@ -188,7 +188,7 @@ $(document).ready(function () {
 
 
 <div id="funcion-de-densidad" class="section level2">
-<h2>Función de Densidad</h2>
+<h2>Función de densidad</h2>
 <p><span class="math display">\[
 f(x) = \left\{
 \begin{array}{ll}
@@ -199,13 +199,18 @@ f(x) = \left\{
 \]</span></p>
 </div>
 <div id="funcion-de-distribucion" class="section level2">
-<h2>Función de Distribución</h2>
+<h2>Función de distribución</h2>
 <p><span class="math display">\[
-F(x) = P(X\leq x)
+F(x) = \left\{
+\begin{array}{ll}
+\displaystyle I_{\displaystyle \frac{n_1x}{n_1x+n_2}}\left(\frac{n_1}{2},\frac{n_2}{2}\right) &amp; \mathrm{si\ } x &gt; 0\\
+0 &amp; \mathrm{si\ } x \leq 0
+\end{array}
+\right.
 \]</span></p>
 </div>
-<div id="valor-esperado" class="section level2">
-<h2>Valor esperado</h2>
+<div id="media" class="section level2">
+<h2>Media</h2>
 <p><span class="math display">\[
 E[X]= \displaystyle \frac{n_2}{n_2 -2}
 \]</span></p>

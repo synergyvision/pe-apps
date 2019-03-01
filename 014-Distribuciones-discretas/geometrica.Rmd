@@ -1,11 +1,11 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x)=(1-p)^{x-1} p
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
 F(x) = 1- (1-p)^{x+1}

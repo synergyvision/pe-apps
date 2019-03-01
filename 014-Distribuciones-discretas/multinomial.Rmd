@@ -1,11 +1,11 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x_1,x_2,x_3,...x_r)= \frac{n!}{x_1!x_2!...x_r!}p_1^{x_1}p_2^{x_2}...p_r^{x_r}
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
  F(x) = p(X \le x)

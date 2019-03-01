@@ -1,11 +1,11 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x)={n \choose x}p^x(1-p)^{n-x}
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
 F(x) = p(X \leq x)

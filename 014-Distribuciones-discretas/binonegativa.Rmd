@@ -1,11 +1,11 @@
-## Función de Densidad
+## Función de densidad
 
 $$
 f(x) = p(X=x)= {x-1\choose k-1}(1-p)^{x-k}p^k
 $$
 
 
-## Función de Distribución
+## Función de distribución
 
 $$
  F(x) = p(X \le x)
