@@ -564,7 +564,7 @@ server <- function(input, output,session) {
 
         labs( title = "Prueba de dos colas Distribución chi cuadrado",
               x = " ", y = " ",caption = "http://synergy.vision/" )+
-      xlim(if(X2<x_alpha1){X2-5}else if(X2>x_alpha1){x_alpha1-5},if(X2<x_alpha2){x_alpha2+10}else if(X2>x_alpha1){X2+5})
+      xlim(if(X2<x_alpha1){X2-5}else if(X2>x_alpha1){-5},if(X2<x_alpha2){x_alpha2+10}else if(X2>x_alpha1){X2+5})
 
       return(f)
     }
@@ -579,10 +579,10 @@ server <- function(input, output,session) {
         geom_segment(aes(x = x_alpha2, y =0 , xend = x_alpha2, yend = dchisq(x_alpha2,df=n-1)), colour = "black",linetype=2)+
         geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
 
-        annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
-        annotate("text", x=x_alpha2, y =-0.003, label="'X'[alpha]", parse = TRUE)+
+        annotate("text", x=X2, y =-0.003, label ="chi^2", parse = TRUE)+
+        annotate("text", x=x_alpha2, y =-0.003, label="chi[alpha/2]^2", parse = TRUE)+
         annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=x_alpha2+1, y=dchisq(x_alpha2,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=x_alpha2+3, y=dchisq(x_alpha2,df=n-1)+0.001, label="'Rechazar H'[0]", parse = TRUE)+
 
         labs( title = "Prueba cola superior Distribución chi cuadrado",
               x = " ", y = " ",caption = "http://synergy.vision/" )
@@ -601,8 +601,8 @@ server <- function(input, output,session) {
         geom_segment(aes(x = x_alpha1, y =0 , xend = x_alpha1, yend = dchisq(x_alpha1,df=n-1)), colour = "black",linetype=2)+
         geom_segment(aes(x = X2, y =0 , xend = X2, yend = dchisq(X2,df=n-1)), colour = "red",linetype=1)+
 
-        annotate("text", x=X2, y =-0.003, label ="X2", parse = TRUE)+
-        annotate("text", x=x_alpha1, y =-0.003, label="-'X'[alpha]", parse = TRUE)+
+        annotate("text", x=X2, y =-0.003, label ="chi^2", parse = TRUE)+
+        annotate("text", x=x_alpha1, y =-0.003, label="-chi[alpha/2]^2", parse = TRUE)+
         annotate("text", x=n, y = dchisq(n,n-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
         annotate("text", x=x_alpha1-1, y=dchisq(x_alpha1,df=n-1), label="'Rechazar H'[0]", parse = TRUE)+
 
@@ -653,10 +653,10 @@ server <- function(input, output,session) {
         annotate("text", x=f_alpha1, y =-0.02, label="-'F'[alpha/2]", parse = TRUE)+
         annotate("text", x=f_alpha2, y =-0.02, label="'F'[alpha/2]", parse = TRUE)+
         annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1 = nx - 1 ,df2 = ny - 1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha1-0.5, y=df(f_alpha1,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha1-1.5, y=df(f_alpha1,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1= nx - 1,df2= ny - 1)+0.001, label="'Rechazar H'[0]", parse = TRUE)+
 
-        ylim(-0.05,max(y)+0.01)+
+        ylim(-0.05,max(y)+0.01)+xlim(if(f<f_alpha1){f-5}else if(f>f_alpha1){-3},10)
         labs( title = "Prueba de dos colas Distribución Fisher",
               x = " ", y = " ",caption = "http://synergy.vision/" )
 
@@ -676,7 +676,7 @@ server <- function(input, output,session) {
         annotate("text", x=f, y =-0.02, label ="F", parse = TRUE)+
         annotate("text", x=f_alpha2, y =-0.02, label="'F'[alpha]", parse = TRUE)+
         annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1=nx-1,df2=ny-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1=nx-1,df2=ny-1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1=nx-1,df2=ny-1)+0.001, label="'Rechazar H'[0]", parse = TRUE)+
 
         ylim(-0.05,max(y)+0.01)+
         labs( title = "Prueba de cola superior Distribución Fisher",
@@ -697,9 +697,9 @@ server <- function(input, output,session) {
         annotate("text", x=f, y =-0.02, label ="F", parse = TRUE)+
         annotate("text", x=f_alpha1, y =-0.02, label="-'F'[alpha]", parse = TRUE)+
         annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1=nx-1,df2 = ny-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha1-0.5, y=df(f_alpha1,df1=nx-1,df2=ny-1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha1-2, y=df(f_alpha1,df1=nx-1,df2=ny-1), label="'Rechazar H'[0]", parse = TRUE)+
 
-        ylim(-0.05,max(y)+0.01)+
+        ylim(-0.05,max(y)+0.01)+xlim(-3,10)
         labs( title = "Prueba de cola inferior Distribución Fisher",
               x = " ", y = " ",caption = "http://synergy.vision/" )
 
