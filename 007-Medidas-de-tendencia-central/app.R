@@ -39,7 +39,10 @@ ui <- fluidPage(
        ),
       conditionalPanel( condition = "input.n == 'car'",
                         fileInput(inputId = "datoscargados",label = "Seleccionar desde un archivo guardado",
-                                  buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo...")
+                                  buttonLabel = "Buscar...", placeholder = "Aun no seleccionas el archivo..."),
+                                 numericInput( inputId = "v", label="Escoja el número de columna deseado", min = 1,
+                                      max = 100,step = 1,
+                                      value = 1, width = "40%")
 
 
       ),
@@ -57,8 +60,10 @@ ui <- fluidPage(
     ),
     mainPanel(
 
-      div(style="height:400px; overflow-y: scroll",tableOutput("table"))
-      # div(style="height:100px; overflow-y: scroll",verbatimTextOutput("medias1"))
+      tabsetPanel(type="tabs",id="m1",
+      tabPanel( "Datos",br(),
+      fluidRow(dataTableOutput("table"),br(),br(),uiOutput("texto")),
+       fluidRow(verbatimTextOutput("medias1"))))
     )
   )
 )
@@ -67,126 +72,155 @@ ui <- fluidPage(
 
 server <- function(input, output) {
 
- data<-reactive ({
-   if (is.null(input$n)){
-     return()
-   }
+  data<-reactive ({
+    if (is.null(input$n)){
+      return()
+    }
 
-   else if(input$n=="gen"){
-    M<-matrix( as.integer(runif(input$m*input$f,1,20)),
-               ncol = input$f, nrow = input$m)
-    colnames(M)<-c(paste0("Vari_",1:input$f))
-    rownames(M)<-c(paste0(" ",1:input$m))
-    return(M)
-   } else if(input$n=="car"){
+    else if(input$n=="gen"){
+      M<-matrix( as.integer(runif(input$m*input$f,1,20)),
+                 ncol = input$f, nrow = input$m)
+      colnames(M)<-c(paste0("Vari_",1:input$f))
+      rownames(M)<-c(paste0("fil_",1:input$m))
+      return(M)
+    } else if(input$n=="car"){
 
-     file1<-input$datoscargados
+      file1<-input$datoscargados
 
-     if(is.null(file1)){
-       return()
-     }
+      if(is.null(file1)){
+        return()
+      }
 
-    d<-read_excel(file1$datapath)
-    d<-as.matrix(d)
-    rownames(d)<-c(paste0(" ",1:nrow(d)))
-    return(d)
+      read_excel(file1$datapath)
 
 
-   } else if(input$n=="ejem"){
+    } else if(input$n=="ejem"){
 
-     Sueldos<- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
-                      54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
-     Horas<-c(rep(2,46),rep(3,15),rep(4,12),rep(6,52),rep(7,8))
+      Sueldos<- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
+                  54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
+      Horas<-c(rep(2,46),rep(3,15),rep(4,12),rep(6,52),rep(7,8))
 
-     Ventas <- c(1034,1075,1123,1172,1218,1265,1313,1379,1452,1597)
+      Ventas <- c(1034,1075,1123,1172,1218,1265,1313,1379,1452,1597)
 
-        if(input$ejemplos=="Sueldos"){
-         m<-matrix(Sueldos)
-         colnames(m)<-'Sueldos'
-         rownames(m)<-c(paste0(" ",1:42))
-         return(m)
+      if(input$ejemplos=="Sueldos"){
+        data.frame(Sueldos)
+      } else if(input$ejemplos=="Horas"){
+        data.frame(Horas)
+      } else if(input$ejemplos=="Ventas"){
+        data.frame(Ventas)
+      }
 
-        } else if(input$ejemplos=="Horas"){
-          m1<-matrix(Horas)
-          colnames(m1)<-'Horas'
-          rownames(m1)<-c(paste0(" ",1:133))
-          return(m1)
-
-        } else if(input$ejemplos=="Ventas"){
-             m2<-matrix(Ventas)
-             colnames(m2)<-'Ventas'
-             rownames(m2)<-c(paste0(" ",1:10))
-             return(m2)
-        }
-
-  }
+    }
 
   })
 
 
- output$table <- renderTable({
+  output$table <- renderDataTable({ data() },
+                                  options = list(scrollX=TRUE,scrollY=300,searching=FALSE))
 
-   if(is.null(input$medias)||is.null(data())){
-     return()
+ output$medias1 <- renderPrint({
+
+   if(is.null(data())){
+     return(print("Inserte datos numéricos"))
    }
 
-   else if(input$medias=="Media aritmética"){
+  else if(input$n=="car"){
 
-     Media_aritmética<-apply(data(),2,mean)
+      ncol<-input$v
 
-     rbind(data(),Media_aritmética)
-    } else if(input$medias=="Media geométrica"){
-
-      Media_geométrica<-geometric.mean(data())
-
-      rbind(data(),Media_geométrica)
-    } else if(input$medias=="Media armónica"){
-
-     Media_armónica<-harmonic.mean(data())
-      rbind(data(),Media_armónica)
-
-    } else if(input$medias=="Mediana"){
-
-      Mediana<-apply(data(),2,median)
-      rbind(data(),Mediana)
-
-    } else if(input$medias=="Moda"){
-      Moda<-apply(data(),2,Mode)
-   rbind(data(),Moda)
-
-    } else if(input$medias=="Media ponderada"){
-
-      if(input$n=="gen"){
-        w<-prop.table(data(),2) #Pesos generados.
-
-        w1<-data()*w
-        Media_ponderada<-colSums(w1)
-
-        d<-rbind(data(),Media_ponderada)
-        return(d)
-      } else if(input$n=="car"){
-
-
-        w2<-prop.table(data(),2) #Pesos generados.
-
-        w3<-data()*w2
-        Media_ponderada<-colSums(w3)
-        d1<-rbind(data(),Media_ponderada)
-        return(d1)
-
-      } else if(input$n=="ejem"){
-
-       w4<-prop.table(data(),2) #Pesos generados.
-
-        w5<-data()*w4
-        Media_ponderada<-colSums(w5)
-        d2<-rbind(data(),Media_ponderada)
-        return(d2)
+     if(is.null(data())){
+        return(print("Inserte datos numéricos"))
       }
- }
 
- }, striped = TRUE,hover = TRUE,
-                             bordered = TRUE,rownames = TRUE)
+      else if(input$medias=="Media aritmética"){
+
+      apply(data()[,ncol],2,mean)
+
+      } else if(input$medias=="Media geométrica"){
+
+      geometric.mean(data()[,ncol])
+
+      } else if(input$medias=="Media armónica"){
+
+      harmonic.mean(data()[,ncol])
+
+
+      } else if(input$medias=="Mediana"){
+
+      apply(data()[,ncol],2,median)
+
+
+      } else if(input$medias=="Moda"){
+       apply(data()[,ncol],2,Mode)
+
+
+      } else if(input$medias=="Media ponderada"){
+
+
+        d<-as.matrix(data()[,ncol])
+        w2<-prop.table(d,2) #Pesos generados.
+
+        w3<-d*w2
+        w3<-colSums(w3)
+        return(w3)
+
+
+     }
+} else if(input$n=="gen" || input$n=="ejem"){
+
+  if(is.null(data())){
+    return(print("Inserte los datos"))
+  }
+
+  else if(input$medias=="Media aritmética"){
+
+    apply(data(),2,mean)
+
+  } else if(input$medias=="Media geométrica"){
+
+    geometric.mean(data())
+
+  } else if(input$medias=="Media armónica"){
+
+    harmonic.mean(data())
+
+
+  } else if(input$medias=="Mediana"){
+
+    apply(data(),2,median)
+
+
+  } else if(input$medias=="Moda"){
+    apply(data(),2,Mode)
+
+
+  } else if(input$medias=="Media ponderada"){
+
+    if(input$n=="gen"){
+      w<-prop.table(data(),2) #Pesos generados.
+
+      w1<-data()*w
+      w1<-colSums(w1)
+
+      return(w1)
+    }  else if(input$n=="ejem"){
+
+      d1<-as.matrix(data())
+      w4<-prop.table(d1,2) #Pesos generados.
+
+      w5<-d1*w4
+      w5<-colSums(w5)
+      return(w5)
+    }
+  }
+}
+
+ })
+
+
+ output$texto<-renderUI({
+     h3(input$medias)
+ })
 
 }
 

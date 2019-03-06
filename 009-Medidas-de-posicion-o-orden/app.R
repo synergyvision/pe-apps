@@ -54,7 +54,11 @@ ui <- fluidPage(
                                                 ),
                         selected = NULL),
       conditionalPanel(condition = "input.medias== 'Cuantiles'",textInput(inputId = "vect", label = "Introducir la probabilidad deseada",
-                                                                          placeholder = "0.1,0.2,...")),
+                                                                          placeholder = "0.1,0.2,..."),
+                        conditionalPanel(condition="input.n=='car'",numericInput( inputId = "d1", label="Escoja el número de columna deseado", min = 1,
+                                     max = 100,step = 1,
+                                     value = 1, width = "40%"))
+                       ),
       conditionalPanel(condition= "input.medias=='Diagrama de caja'",
                        conditionalPanel(condition= "input.n=='gen'",
                                         numericInput( inputId = "k", label="Escoja el número de la variable deseada", min = 1,
@@ -141,11 +145,16 @@ server <- function(input, output) {
 
       if(isTRUE(input$vect=="")){
         return(print('Introduzca la probabilidad asociada al cuantil'))
-       } else{
-       x <- as.numeric(unlist(strsplit(input$vect,",")))
+       } else if(input$n=="gen" || input$n=="ejem"){
+         x <- as.numeric(unlist(strsplit(input$vect,",")))
 
-       apply(data(),2,quantile,probs = x)
+         apply(data(),2,quantile,probs = x)
 
+       } else if(input$n=="car"){
+         x <- as.numeric(unlist(strsplit(input$vect,",")))
+
+         ncol1<-input$d1
+         apply(data()[,ncol1],2,quantile,probs = x)
        }
 
    }
