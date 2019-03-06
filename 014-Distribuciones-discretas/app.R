@@ -254,7 +254,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                         yend = dbinom(x2, size = 1,prob=p1)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Bernoulli',
+      labs( title = 'Cuantil Bernoulli',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -329,7 +329,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dbinom(x2, size = s1,prob=p1)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Binomial',
+      labs( title = 'Cuantil Binomial',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -405,7 +405,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dgeom(x2,prob=p1)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Geométrica',
+      labs( title = 'Cuantil Geométrica',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -485,7 +485,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dhyper(x2,m,n,k)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Hipergeométrica',
+      labs( title = 'Cuantil Hipergeométrica',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -566,7 +566,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dpois(x2,p1)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Poison',
+      labs( title = 'Cuantil Poisson',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -710,7 +710,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dnbinom(x2,k,p1)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Binomial Negativa',
+      labs( title = 'Cuantil Binomial negativa',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })

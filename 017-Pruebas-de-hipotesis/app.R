@@ -628,7 +628,15 @@ server <- function(input, output,session) {
     f<-(sigma2x/varx)/(sigma2y/vary)
 
 
-    x<-seq(0,10,0.01)
+    x<-if(f>=0 & f<=8){
+      seq(0,8,0.01)
+    }
+    else if(f<0){
+      seq(f-1,0,0.01)
+    }
+    else if(f>8){
+      seq(0,f+1,0.01)
+    }
 
     y<-df(x, df1= nx - 1,df2 = ny - 1)
 
@@ -653,10 +661,10 @@ server <- function(input, output,session) {
         annotate("text", x=f_alpha1, y =-0.02, label="-'F'[alpha/2]", parse = TRUE)+
         annotate("text", x=f_alpha2, y =-0.02, label="'F'[alpha/2]", parse = TRUE)+
         annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1 = nx - 1 ,df2 = ny - 1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha1-1.5, y=df(f_alpha1,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1= nx - 1,df2= ny - 1)+0.001, label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha1-0.8, y=df(f_alpha1,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha2+1.5, y=df(f_alpha2,df1= nx - 1,df2= ny - 1)+0.005, label="'Rechazar H'[0]", parse = TRUE)+
 
-        ylim(-0.05,max(y)+0.01)+xlim(if(f<f_alpha1){f-5}else if(f>f_alpha1){-3},10)+
+        ylim(-0.05,max(y)+0.01)+xlim(if(f<f_alpha1){f-2}else if(f>f_alpha1){-1},10)+
         labs( title = "Prueba de dos colas distribución Fisher",
               x = " ", y = " ",caption = "https://synergy.vision/" )
 

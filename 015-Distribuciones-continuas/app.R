@@ -333,7 +333,15 @@ server <- function(input, output,session) {
     x1<-input$valorexp
 
     l<-input$lambda
-    x <- seq(0,50,0.01)
+    x <-if(l>=0.3 & l<=1.5){
+      seq(0,10,0.01)
+    }
+    else if(l>1.5){
+      seq(0,2.5,0.01)
+    }
+    else if(l<0.3){
+      seq(0,40,0.01)
+    }
     hx <- dexp(x,l)
 
     dat<-data.frame(x,hx)
@@ -407,7 +415,7 @@ server <- function(input, output,session) {
 
     alpha<-input$alpha
     beta<-input$beta
-    x <- seq(0,50,0.01)
+    x <- seq(0,20,0.01)
     hx <- dgamma(x,shape = alpha,scale = beta)
 
     dat<-data.frame(x,hx)
@@ -567,7 +575,9 @@ server <- function(input, output,session) {
 
     gl<-input$df
 
-    x <- seq(0,100,0.01)
+    p<-gl*2.5
+
+    x <- seq(0,p,0.01)
     hx <- dchisq(x,df=gl)
 
     dat<-data.frame(x,hx)
@@ -648,7 +658,7 @@ server <- function(input, output,session) {
     gl1<-input$dfisher1
     gl2<-input$dfisher2
 
-    x <- seq(0,30,0.01)
+    x <- seq(0,8,0.01)
     hx <- df(x,df1=gl1,df2 = gl2)
 
     dat<-data.frame(x,hx)
@@ -807,7 +817,7 @@ server <- function(input, output,session) {
     alpha<-input$alphaw
     beta<-input$betaw
 
-    x <- seq(0,10,0.01)
+    x <- seq(0,8,0.01)
     hx <- dweibull(x,shape=beta,scale=alpha)
 
     dat<-data.frame(x,hx)
@@ -977,7 +987,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dunif(x2,l,u)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Uniforme',
+      labs( title = 'Cuantil Uniforme',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -986,7 +996,15 @@ server <- function(input, output,session) {
     x1<-input$valorexp2
 
     l<-input$lambda2
-    x <- seq(0,50,0.01)
+    x <-if(l>=0.3 & l<=1.5){
+      seq(0,10,0.01)
+    }
+    else if(l>1.5){
+      seq(0,2.5,0.01)
+    }
+    else if(l<0.3){
+      seq(0,40,0.01)
+    }
     hx <- dexp(x,l)
 
     x2<-qexp(x1,l)
@@ -998,7 +1016,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dexp(x2,l)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Exponencial',
+      labs( title = 'Cuantil Exponencial',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -1008,7 +1026,7 @@ server <- function(input, output,session) {
 
     alpha<-input$alpha2
     beta<-input$beta2
-    x <- seq(0,50,0.01)
+    x <- seq(0,20,0.01)
     hx <- dgamma(x,shape = alpha,scale = beta)
 
     x2<-qgamma(x1,shape = alpha,scale = beta)
@@ -1020,7 +1038,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dgamma(x2,shape = alpha,scale = beta)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Gamma',
+      labs( title = 'Cuantil Gamma',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -1042,7 +1060,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dbeta(x2,shape1 = alpha,shape2 = beta)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Beta',
+      labs( title = 'Cuantil Beta',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -1052,7 +1070,9 @@ server <- function(input, output,session) {
 
     gl<-input$df2
 
-    x <- seq(0,100,0.01)
+    p<-gl*2.5
+
+    x <- seq(0,p,0.01)
     hx <- dchisq(x,df=gl)
 
     x2<-qchisq(x1,gl)
@@ -1064,7 +1084,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dchisq(x2,df=gl)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Chi-Cuadrado',
+      labs( title = 'Cuantil Chi-Cuadrado',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -1075,7 +1095,7 @@ server <- function(input, output,session) {
     gl1<-input$dfisher5
     gl2<-input$dfisher6
 
-    x <- seq(0,30,0.01)
+    x <- seq(0,8,0.01)
     hx <- df(x,df1=gl1,df2 = gl2)
 
     dat<-data.frame(x,hx)
@@ -1087,7 +1107,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = df(x2,df1=gl1,df2=gl2)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Fisher',
+      labs( title = 'Cuantil Fisher',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -1109,7 +1129,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dt(x2,df=gl)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad T-Student',
+      labs( title = 'Cuantil T-Student',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -1120,7 +1140,7 @@ server <- function(input, output,session) {
     alpha<-input$alphaw2
     beta<-input$betaw2
 
-    x <- seq(0,10,0.01)
+    x <- seq(0,8,0.01)
     hx <- dweibull(x,shape=beta,scale=alpha)
 
     dat<-data.frame(x,hx)
@@ -1132,7 +1152,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dweibull(x2,shape=beta,scale=alpha)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Weibull',
+      labs( title = 'Cuantil Weibull',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
@@ -1155,7 +1175,7 @@ server <- function(input, output,session) {
       geom_segment(aes(x = x2, y =0 , xend = x2,
                        yend = dcauchy(x2,location = alpha,scale=beta)),
                    colour = "black",linetype=2)+
-      labs( title = 'Densidad Cauchy',
+      labs( title = 'Cuantil Cauchy',
             x = "x", y = "f(x)",caption = "https://synergy.vision/" )
     return(f)
   })
