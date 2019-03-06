@@ -25,55 +25,62 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
       radioButtons(inputId="n",
-                   label = "Tipos de Datos",
-                   choices = c('Ejemplos del libro','Generados aleatoriamente','Cargados'),
+                   label = "Origen de los datos",
+                   choices = c('Generados','Cargados','Ejemplos'),
                    selected = " "),
-      conditionalPanel( condition = "input.n=='Ejemplos del libro'",
-                        selectInput( inputId = "m", 
-                                     label = "Ejemplo",
-                                     choices= c('Tiempo de uso de equipos','Sueldos','Otros'), 
+      conditionalPanel( condition = "input.n=='Ejemplos'",
+                        selectInput( inputId = "m",
+                                     label = "Datos de ejemplo",
+                                     choices= c('Sueldos','Otros','Tiempo de uso de equipos'),
                                      selected = NULL),
-                        selectInput( inputId = "forma1", 
+                        selectInput( inputId = "forma1",
                                      label = "Elija medida de forma",
-                                     choices= c('Sesgo','Curtosis'), 
+                                     choices= c('Sesgo','Curtosis'),
                                      selected = NULL)
       ),
       conditionalPanel( condition = "input.n=='Cargados'",
                         fileInput( inputId = "datoscargados",
-                                   label = "Seleccionar archivo:", buttonLabel = "Buscar...",
+                                   label = "Seleccionar desde un archivo guardado", buttonLabel = "Buscar...",
                                    placeholder = "Aun no seleccionas el archivo..."),
-                        numericInput( inputId = "columna", 
-                                      label="Elija el número de columna deseado", 
-                                      min = 1, 
+                        numericInput( inputId = "columna",
+                                      label="Escoja el número de columna deseado",
+                                      min = 1,
                                       max = 100,
-                                      step = 1, 
-                                      value = 1, 
+                                      step = 1,
+                                      value = 1,
                                       width = "100%"),
-                        selectInput( inputId = "forma2", 
+                        selectInput( inputId = "forma2",
                                      label = "Elija medida de forma",
-                                     choices= c('Sesgo','Curtosis'), 
+                                     choices= c('Sesgo','Curtosis'),
                                      selected = NULL)
       ),
-      conditionalPanel( condition = "input.n=='Generados aleatoriamente'",
+      conditionalPanel( condition = "input.n=='Generados'",
                         sliderInput(inputId = "CantidadDatos",
-                                    label = "Cantidad de datos a generar",
+                                    label = "Cantidad de datos",
                                     min = 1,
                                     max = 100,
                                     value = 5),
-                        selectInput( inputId = "forma3", 
+                        selectInput( inputId = "forma3",
                                      label = "Elija medida de forma",
-                                     choices= c('Sesgo','Curtosis'), 
+                                     choices= c('Sesgo','Curtosis'),
                                      selected = NULL)
       )
-      
-      
+
+
     ),
 
     # Main panel for displaying outputs ----
     mainPanel(
-      fluidRow(column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput("table"))),
-      column(width=8,verbatimTextOutput(outputId = "texto"))),tags$br(),
-      fluidRow(plotOutput('ploteo'))
+
+      tabsetPanel(type = 'tabs',id='f',
+                  tabPanel('Datos',br(),dataTableOutput("table")),
+                  tabPanel('Densidad',br(),fluidRow(uiOutput('prueba')),br(),verbatimTextOutput("texto"),br(),plotOutput('density')),
+                  tabPanel('Tipos de sesgo y curtosis',br(),plotOutput('ploteo')))
+
+
+      # fluidRow(column(width=4,div(style="height:400px; overflow-y: scroll",tableOutput("table"))),
+      # column(width=8,verbatimTextOutput(outputId = "texto"))),tags$br(),
+      # fluidRow(plotOutput('ploteo'))
     )
   )
 )
@@ -83,56 +90,71 @@ server <- function(input, output) {
 
   Sueldos <- c(47,47,47,47,48,49,50,50,50,51,51,51,51,52,52,52,52,52,52,54,54,
                54,54,54,57,60,49,49,50,50,51,51,51,51,52,52,56,56,57,57,52,52)
-  
+
   Horas<-c(rep(2,46),rep(3,15),rep(4,12),rep(6,52),rep(7,8))
-  
+
   Otros<-c(rep(10,4),rep(22,5),rep(35,2),rep(46,10),rep(57,9),rep(68,6),rep(74,6))
-  
-  
+
+
   dat<-reactive({
-    
+
     infile <- input$n
     if(is.null(infile)){
       return()
       }
-    
-    else if(infile=='Ejemplos del libro'){
-      
+
+    else if(infile=='Ejemplos'){
+
       infile1<-input$m
-      
+
       if(infile1=='Sueldos'){
        data.frame(Sueldos)
       }
-      
+
       else if(infile1=='Tiempo de uso de equipos'){
         data.frame(Horas)
       }
-      
+
       else if(infile1=='Otros')
         data.frame(Otros)
     }
-    
+
     else if(infile=='Cargados'){
       infile2<-input$datoscargados
       if(is.null(infile2)){
         return()
       }
-      
+
       else{
         as.data.frame(read_excel(infile2$datapath))
       }
     }
-    
-    else if(infile=='Generados aleatoriamente'){
+
+    else if(infile=='Generados'){
       data.frame(Datos=sample(80:100,input$CantidadDatos,replace = TRUE))
     }
-    
+
     })
-  
-  output$table<-renderTable({
+
+  output$table<-renderDataTable({
     return(dat())
-  },digits = 1)
-  
+  },options = list(scrollX=TRUE,scrollY=300,searching=FALSE))
+
+  output$prueba<-renderUI({
+    if(is.null(input$n)){
+      return()
+    }
+    else if(input$n=='Generados'){
+      h3(input$forma3)
+    }
+    else if(input$n=='Ejemplos'){
+      h3(input$forma1)
+    }
+    else if(input$n=='Cargados'& !is.null(input$datoscargados)){
+      h3(input$forma2)
+    }
+  })
+
   output$texto<-renderPrint({
     if(is.null(input$n)){
       return()
@@ -149,7 +171,7 @@ server <- function(input, output) {
         return(sum((dat()[,ncolumna]-mean(dat()[,ncolumna]))^4)/(length(dat()[,ncolumna])*sd(dat()[,ncolumna])^4))
       }
     }
-    else if(input$n=='Ejemplos del libro'){
+    else if(input$n=='Ejemplos'){
       if(input$forma1=='Sesgo'){
         return(skewness(dat()[,1]))
       }
@@ -157,7 +179,7 @@ server <- function(input, output) {
         return(sum((dat()[,1]-mean(dat()[,1]))^4)/(length(dat()[,1])*sd(dat()[,1])^4))
       }
     }
-    else if(input$n=='Generados aleatoriamente'){
+    else if(input$n=='Generados'){
       if(input$forma3=='Sesgo'){
         return(skewness(dat()[,1]))
       }
@@ -166,20 +188,20 @@ server <- function(input, output) {
       }
     }
   })
-  
-  
+
+
   output$ploteo<-renderPlot({
     if(is.null(input$n)){
       return()
     }
-    else if(input$n=='Ejemplos del libro'){
+    else if(input$n=='Ejemplos'){
     if(input$forma1=='Sesgo'){
     x<-seq(0,8,0.01)
     Simetrica<-dnorm(x,4,0.5)
     Izquierdo<-df(-x+8,df1=25,df2=26)
     Derecho<-df(x,df1=25,df2=30)
     dat<-data.frame(x,Simetrica,Izquierdo,Derecho)
-    
+
     return(ggplot(dat, aes(x=x))+
       geom_line(aes(y=Simetrica,colour="Simétrica"))+
       geom_area(mapping = aes(x,Simetrica), fill = "blue",alpha = .2)+
@@ -187,7 +209,7 @@ server <- function(input, output) {
       geom_area(mapping = aes(x,Izquierdo), fill = "green",alpha = .2)+
       geom_line(aes(y=Derecho,colour="Derecho"))+
       geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
-      scale_colour_manual("",values = c("Simétrica"="blue", 
+      scale_colour_manual("",values = c("Simétrica"="blue",
                                         "Izquierdo"="green",
                                         "Derecho"="red")))
     }
@@ -197,7 +219,7 @@ server <- function(input, output) {
       Platicurtica<-dnorm(x,0,2)
       Mesocurtica<-dnorm(x,0,1)
       dat<-data.frame(x,Leptocurtica,Platicurtica,Mesocurtica)
-      
+
       return(ggplot(dat, aes(x=x))+
         geom_line(aes(y=Mesocurtica,colour="Mesocúrtica"))+
         geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
@@ -206,7 +228,7 @@ server <- function(input, output) {
         geom_line(aes(y=Platicurtica,colour="Platicúrtica"))+
         geom_area(mapping = aes(x,Platicurtica), fill = "green",alpha = .2)+
         xlim(-5,5)+
-        scale_colour_manual("",values = c("Leptocúrtica"="blue", 
+        scale_colour_manual("",values = c("Leptocúrtica"="blue",
                                           "Platicúrtica"="green",
                                           "Mesocúrtica"="red")))
     }
@@ -218,7 +240,7 @@ server <- function(input, output) {
         Izquierdo<-df(-x+8,df1=25,df2=26)
         Derecho<-df(x,df1=25,df2=30)
         dat<-data.frame(x,Simetrica,Izquierdo,Derecho)
-        
+
         return(ggplot(dat, aes(x=x))+
                  geom_line(aes(y=Simetrica,colour="Simétrica"))+
                  geom_area(mapping = aes(x,Simetrica), fill = "blue",alpha = .2)+
@@ -226,7 +248,7 @@ server <- function(input, output) {
                  geom_area(mapping = aes(x,Izquierdo), fill = "green",alpha = .2)+
                  geom_line(aes(y=Derecho,colour="Derecho"))+
                  geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
-                 scale_colour_manual("",values = c("Simétrica"="blue", 
+                 scale_colour_manual("",values = c("Simétrica"="blue",
                                                    "Izquierdo"="green",
                                                    "Derecho"="red")))
       }
@@ -236,7 +258,7 @@ server <- function(input, output) {
         Platicurtica<-dnorm(x,0,2)
         Mesocurtica<-dnorm(x,0,1)
         dat<-data.frame(x,Leptocurtica,Platicurtica,Mesocurtica)
-        
+
         return(ggplot(dat, aes(x=x))+
                  geom_line(aes(y=Mesocurtica,colour="Mesocúrtica"))+
                  geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
@@ -245,19 +267,19 @@ server <- function(input, output) {
                  geom_line(aes(y=Platicurtica,colour="Platicúrtica"))+
                  geom_area(mapping = aes(x,Platicurtica), fill = "green",alpha = .2)+
                  xlim(-5,5)+
-                 scale_colour_manual("",values = c("Leptocúrtica"="blue", 
+                 scale_colour_manual("",values = c("Leptocúrtica"="blue",
                                                    "Platicúrtica"="green",
                                                    "Mesocúrtica"="red")))
       }
     }
-    else if(input$n=='Generados aleatoriamente'){
+    else if(input$n=='Generados'){
       if(input$forma3=='Sesgo'){
         x<-seq(0,8,0.01)
         Simetrica<-dnorm(x,4,0.5)
         Izquierdo<-df(-x+8,df1=25,df2=26)
         Derecho<-df(x,df1=25,df2=30)
         dat<-data.frame(x,Simetrica,Izquierdo,Derecho)
-        
+
         return(ggplot(dat, aes(x=x))+
                  geom_line(aes(y=Simetrica,colour="Simétrica"))+
                  geom_area(mapping = aes(x,Simetrica), fill = "blue",alpha = .2)+
@@ -265,7 +287,7 @@ server <- function(input, output) {
                  geom_area(mapping = aes(x,Izquierdo), fill = "green",alpha = .2)+
                  geom_line(aes(y=Derecho,colour="Derecho"))+
                  geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
-                 scale_colour_manual("",values = c("Simétrica"="blue", 
+                 scale_colour_manual("",values = c("Simétrica"="blue",
                                                    "Izquierdo"="green",
                                                    "Derecho"="red")))
       }
@@ -275,7 +297,7 @@ server <- function(input, output) {
         Platicurtica<-dnorm(x,0,2)
         Mesocurtica<-dnorm(x,0,1)
         dat<-data.frame(x,Leptocurtica,Platicurtica,Mesocurtica)
-        
+
         return(ggplot(dat, aes(x=x))+
                  geom_line(aes(y=Mesocurtica,colour="Mesocúrtica"))+
                  geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
@@ -284,13 +306,13 @@ server <- function(input, output) {
                  geom_line(aes(y=Platicurtica,colour="Platicúrtica"))+
                  geom_area(mapping = aes(x,Platicurtica), fill = "green",alpha = .2)+
                  xlim(-5,5)+
-                 scale_colour_manual("",values = c("Leptocúrtica"="blue", 
+                 scale_colour_manual("",values = c("Leptocúrtica"="blue",
                                                    "Platicúrtica"="green",
                                                    "Mesocúrtica"="red")))
       }
     }
   })
-  
+
 }
 
 # Create Shiny app ----
