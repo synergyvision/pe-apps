@@ -63,6 +63,7 @@ ui <- fluidPage(
     mainPanel(
     tabsetPanel(type = 'tabs',id='anova',
      tabPanel("Datos",br(),dataTableOutput("table")),
+     tabPanel('Gráfico de caja',br(),plotOutput('box')),
      tabPanel("ANOVA",br(),br(),'Tabla ANOVA',verbatimTextOutput("table1")))
 
     )
@@ -142,15 +143,15 @@ output$table1<-renderPrint ({
          z<-c()
 
          for(i in 1:ncol(data1)){
-           z<-data.frame(Precio=c(z[,1],data1[,i]))
+           z<-data.frame(Valores=c(z[,1],data1[,i]))
          }
 
-         z1<-data.frame(variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+         z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
 
          g<-cbind(z,z1)
 
          #ANOVA
-         w<-summary(aov(g$Precio ~ g$variables))
+         w<-summary(aov(g$Valores ~ g$Variables))
 
          return(w)
          }
@@ -161,15 +162,15 @@ output$table1<-renderPrint ({
       z<-c()
 
       for(i in 1:ncol(data1)){
-        z<-data.frame(Precio=c(z[,1],data1[,i]))
+        z<-data.frame(Valores=c(z[,1],data1[,i]))
       }
 
-      z1<-data.frame(variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+      z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
 
       g<-cbind(z,z1)
 
       #ANOVA
-      w<-summary(aov(g$Precio ~ g$variables))
+      w<-summary(aov(g$Valores ~ g$Variables))
 
       return(w)
    }
@@ -177,6 +178,62 @@ output$table1<-renderPrint ({
 
 })
 
+
+output$box<-renderPlot ({
+
+  if(is.null(input$n)){
+    return("Introduzca los datos")
+  }
+
+  else if(input$factores=='ANOVA de un factor'){
+
+    if(input$n=="car"){
+
+
+      if(is.null(input$datoscargados) | isTRUE(input$vect=="") ){
+        return('Introduzca los datos y escoja las columnas numéricas deseadas (mínimo dos columnas).')
+      }
+      else{
+        col<-as.numeric(unlist(strsplit(input$vect,",")))
+        data1<-as.data.frame(data()[,col])
+
+        z<-c()
+
+        for(i in 1:ncol(data1)){
+          z<-data.frame(Valores=c(z[,1],data1[,i]))
+        }
+
+        z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+        g<-cbind(z,z1)
+
+        #ANOVA
+        w1<-ggplot(data = g, aes(x=Variables, y=Valores)) + geom_boxplot(aes(fill=Variables))
+
+        return(w1)
+      }
+
+    } else{
+      data1<-as.data.frame(data())
+
+      z<-c()
+
+      for(i in 1:ncol(data1)){
+        z<-data.frame(Valores=c(z[,1],data1[,i]))
+      }
+
+      z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+      g<-cbind(z,z1)
+
+      #ANOVA
+      w2<-ggplot(data = g, aes(x=Variables, y=Valores)) + geom_boxplot(aes(fill=Variables))
+
+      return(w2)
+    }
+  }
+
+})
 
 
 

@@ -42,59 +42,59 @@ ui <- fluidPage(
     ),
 
   mainPanel(withMathJax(),width = 9,
-    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza conocida'",column(width=3,numericInput(inputId = 'MediaHip',label = HTML('Inserte media hipotética &mu;<sub>o</sub>'),min=0,max = 100,value = 0,step = 0.1,width = '150px'),
-                     numericInput(inputId = 'MediaMuestral',label = 'Inserte media de la muestra',min=0,max = 100,value = 5,step = 0.1,width = '150px'),
+    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza conocida'",column(width=3,numericInput(inputId = 'MediaHip',label = HTML('Inserte media hipotética &mu;<sub>o</sub>'),min=0,max = 100,value = 0,step = 1,width = '150px'),
+                     numericInput(inputId = 'MediaMuestral',label = 'Inserte media de la muestra',min=0,max = 100,value = 5,step = 1,width = '150px'),
                      numericInput(inputId = 'Muestra',label = 'Inserte tamaño de la muestra',min=0,max = 100,value = 5,step = 1,width = '150px'),
-                     numericInput(inputId = 'VarianzaPob',label = 'Inserte varianza poblacional',min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
+                     numericInput(inputId = 'VarianzaPob',label = 'Inserte varianza poblacional',min=0.1,max = 50,value = 1,step = 1,width = '150px'),
                      numericInput(inputId = 'signif',label = 'Inserte nivel de significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
     ),column(width = 8,align='center',plotOutput('grafica1'))
                      ),
-    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza desconocida'",column(width=3,numericInput(inputId = 'MediaHip1',label = HTML('Inserte media hipotética &mu;<sub>o</sub>'),min=0,max = 100,value = 0,step = 0.1,width = '150px'),
-                                                                                                                 numericInput(inputId = 'MediaMuestral1',label = 'Inserte media de la muestra',min=0,max = 100,value = 5,step = 0.1,width = '150px'),
+    conditionalPanel(condition = "input.ph == 'Media de una población' & input.vc == 'Varianza desconocida'",column(width=3,numericInput(inputId = 'MediaHip1',label = HTML('Inserte media hipotética &mu;<sub>o</sub>'),min=0,max = 100,value = 0,step = 1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'MediaMuestral1',label = 'Inserte media de la muestra',min=0,max = 100,value = 5,step = 1,width = '150px'),
                                                                                                                  numericInput(inputId = 'Muestra1',label = 'Inserte tamaño de la muestra',min=0,max = 100,value = 5,step = 1,width = '150px'),
 
-                                                                                                                 numericInput(inputId = 'Varianzamu1',label = 'Inserte varianza muestral',min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
+                                                                                                                 numericInput(inputId = 'Varianzamu1',label = 'Inserte varianza muestral',min=0.1,max = 50,value = 1,step = 1,width = '150px'),
                                                                                                                 numericInput(inputId = 'signif1',label = 'Inserte nivel de significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
     ),column(width = 8,align='center',plotOutput('grafica2'))),
 
-    conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza conocida'",column(width = 2,numericInput(inputId = 'Media1Hip',label = HTML('Inserte media &mu;<sub>x</sub>'),min=0,max = 100,value = 1,step = 0.1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Media2Hip',label = HTML('Inserte media &mu;<sub>y</sub>'),min=0,max =100,value = 1,step = 0.1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Media1Muestral',label = HTML('Inserte media de la muestra X&#772;'),min=0,max = 100,value = 5,step = 0.1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Media2Muestral',label = HTML('Inserte media de la muestra Y&#772;'),min=0,max = 100,value = 7,step = 0.1,width = '150px'),
+    conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza conocida'",column(width = 2,numericInput(inputId = 'Media1Hip',label = HTML('Inserte media &mu;<sub>x</sub>'),min=0,max = 100,value = 1,step = 1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media2Hip',label = HTML('Inserte media &mu;<sub>y</sub>'),min=0,max =100,value = 1,step = 1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media1Muestral',label = HTML('Inserte media de la muestra X&#772;'),min=0,max = 100,value = 5,step = 1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media2Muestral',label = HTML('Inserte media de la muestra Y&#772;'),min=0,max = 100,value = 7,step = 1,width = '150px'),
                                                                                                                                    numericInput(inputId = 'signif2',label = 'Inserte nivel de significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
                                                                                                                                    ),
                                                                                                                             column(width = 2,br(),numericInput(inputId = 'Muestra11',label = HTML('Inserte tamaño de la muestra n<sub>x</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
                                                                                                                                    numericInput(inputId = 'Muestra12',label = HTML('Inserte tamaño de la muestra n<sub>y</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Varianza1Pob',label = HTML('Inserte varianza poblacional &sigma;<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Varianza2Pob',label = HTML('Inserte varianza poblacional &sigma;<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px')
+                                                                                                                                   numericInput(inputId = 'Varianza1Pob',label = HTML('Inserte varianza poblacional &sigma;<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Varianza2Pob',label = HTML('Inserte varianza poblacional &sigma;<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 1,width = '150px')
                                                                                                                                    ),
                                                                                                                             column(width = 8,align='center',plotOutput('grafica3'))),
-    conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza desconocida'",column(width = 2,numericInput(inputId = 'Media1Hip1',label = HTML('Inserte media &mu;<sub>x</sub>'),min=0,max = 100,value = 1,step = 0.1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Media2Hip1',label = HTML('Inserte media &mu;<sub>y</sub>'),min=0,max =100,value = 1,step = 0.1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Media1Muestral1',label = HTML('Inserte media muestral X&#772;'),min=0,max = 100,value = 5,step = 0.1,width = '150px'),
-                                                                                                                                   numericInput(inputId = 'Media2Muestral1',label = HTML('Inserte media muestral Y&#772;'),min=0,max = 100,value = 7,step = 0.1,width = '150px'),
+    conditionalPanel(condition = "input.ph == 'Diferencia de medias de dos poblaciones' & input.vc1 == 'Varianza desconocida'",column(width = 2,numericInput(inputId = 'Media1Hip1',label = HTML('Inserte media &mu;<sub>x</sub>'),min=0,max = 100,value = 1,step = 1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media2Hip1',label = HTML('Inserte media &mu;<sub>y</sub>'),min=0,max =100,value = 1,step = 1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media1Muestral1',label = HTML('Inserte media muestral X&#772;'),min=0,max = 100,value = 5,step = 1,width = '150px'),
+                                                                                                                                   numericInput(inputId = 'Media2Muestral1',label = HTML('Inserte media muestral Y&#772;'),min=0,max = 100,value = 7,step = 1,width = '150px'),
                                                                                                                                    numericInput(inputId = 'signif3',label = 'Inserte nivel de significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
     ),
     column(width = 2,br(),numericInput(inputId = 'Muestra13',label = HTML('Inserte tamaño de la muestra n<sub>x</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
            numericInput(inputId = 'Muestra14',label = HTML('Inserte tamaño de la muestra n<sub>y</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px'),
-           numericInput(inputId = 'Varianza1Mu1',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
-           numericInput(inputId = 'Varianza2Mu2',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px')
+           numericInput(inputId = 'Varianza1Mu1',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>x</sub>'),min=0.1,max = 50,value = 1,step = 1,width = '150px'),
+           numericInput(inputId = 'Varianza2Mu2',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>y</sub>'),min=0.1,max = 50,value = 2,step = 1,width = '150px')
     ),
     column(width = 8,align='center',plotOutput('grafica4')))
     ,
 
 
-     conditionalPanel(condition = "input.ph == 'Varianza de una población'",column(width=3,numericInput(inputId = 'SigmaHip',label = HTML('Inserte varianza hipotética &sigma;<sup>2</sup><sub>o</sub>'),min=0.1,max = 50,value = 1,step = 0.1,width = '150px'),
-                                                                                           numericInput(inputId = 'SigmaMuestral',label = HTML('Inserte varianza muestral S<sup>2</sup>'),min=0.1,max = 50,value = 2,step = 0.1,width = '150px'),
+     conditionalPanel(condition = "input.ph == 'Varianza de una población'",column(width=3,numericInput(inputId = 'SigmaHip',label = HTML('Inserte varianza hipotética &sigma;<sup>2</sup><sub>o</sub>'),min=0.1,max = 50,value = 1,step = 1,width = '150px'),
+                                                                                           numericInput(inputId = 'SigmaMuestral',label = HTML('Inserte varianza muestral S<sup>2</sup>'),min=0.1,max = 50,value = 2,step = 1,width = '150px'),
                                                                                            numericInput(inputId = 'MuestraVar',label = 'Inserte tamaño de la muestra',min=0,max = 100,value = 15,step = 1,width = '150px'),
                                                                                            numericInput(inputId = 'signif4',label = 'Inserte nivel de significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px'))
      ,column(width = 8,align='center',plotOutput('grafica5'))),
 
 
-    conditionalPanel(condition = "input.ph == 'Igualdad de varianzas de dos poblaciones'",column(width = 2,numericInput(inputId = 'var1Hip1',label = HTML('Inserte varianza &sigma;<sup>2</sup><sub>x</sub>'),min=0,max = 100,value = 1,step = 0.1,width = '150px'),
-                                                                                                                                      numericInput(inputId = 'var2Hip1',label = HTML('Inserte varianza &sigma;<sup>2</sup><sub>y</sub>'),min=0,max =100,value = 1,step = 0.1,width = '150px'),
-                                                                                                                                      numericInput(inputId = 'var1Muestral1',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>x</sub>'),min=0,max = 100,value = 5,step = 0.1,width = '150px'),
-                                                                                                                                      numericInput(inputId = 'var2Muestral1',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>y</sub>'),min=0,max = 100,value = 7,step = 0.1,width = '150px'),
+    conditionalPanel(condition = "input.ph == 'Igualdad de varianzas de dos poblaciones'",column(width = 2,numericInput(inputId = 'var1Hip1',label = HTML('Inserte varianza &sigma;<sup>2</sup><sub>x</sub>'),min=0,max = 100,value = 1,step = 1,width = '150px'),
+                                                                                                                                      numericInput(inputId = 'var2Hip1',label = HTML('Inserte varianza &sigma;<sup>2</sup><sub>y</sub>'),min=0,max =100,value = 1,step = 1,width = '150px'),
+                                                                                                                                      numericInput(inputId = 'var1Muestral1',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>x</sub>'),min=0,max = 100,value = 5,step = 1,width = '150px'),
+                                                                                                                                      numericInput(inputId = 'var2Muestral1',label = HTML('Inserte varianza muestral S<sup>2</sup><sub>y</sub>'),min=0,max = 100,value = 7,step = 1,width = '150px'),
                                                                                                                                       numericInput(inputId = 'signif5',label = 'Inserte nivel de significancia',min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')
     ),
     column(width = 2,br(),numericInput(inputId = 'Muestra4',label = HTML('Inserte tamaño de la muestra n<sub>x</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
@@ -628,14 +628,14 @@ server <- function(input, output,session) {
     f<-(sigma2x/varx)/(sigma2y/vary)
 
 
-    x<-if(f>=0 & f<=8){
-      seq(0,8,0.01)
+    x<-if(f>=0 & f<=5){
+      seq(0,5,0.001)
     }
     else if(f<0){
-      seq(f-1,0,0.01)
+      seq(f-1,0,0.001)
     }
-    else if(f>8){
-      seq(0,f+1,0.01)
+    else if(f>6){
+      seq(0,f+1,0.001)
     }
 
     y<-df(x, df1= nx - 1,df2 = ny - 1)
@@ -661,10 +661,10 @@ server <- function(input, output,session) {
         annotate("text", x=f_alpha1, y =-0.02, label="-'F'[alpha/2]", parse = TRUE)+
         annotate("text", x=f_alpha2, y =-0.02, label="'F'[alpha/2]", parse = TRUE)+
         annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1 = nx - 1 ,df2 = ny - 1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha1-0.8, y=df(f_alpha1,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha2+1.5, y=df(f_alpha2,df1= nx - 1,df2= ny - 1)+0.005, label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha1-0.5, y=df(f_alpha1,df1= nx - 1,df2= ny - 1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1= nx - 1,df2= ny - 1)+0.007, label="'Rechazar H'[0]", parse = TRUE)+
 
-        ylim(-0.05,max(y)+0.01)+xlim(if(f<f_alpha1){f-2}else if(f>f_alpha1){-1},10)+
+        ylim(-0.025,max(y)+0.01)+xlim(if(f<f_alpha1){f-0.2}else if(f>f_alpha1){-1},max(x))+
         labs( title = "Prueba de dos colas distribución Fisher",
               x = " ", y = " ",caption = "https://synergy.vision/" )
 
@@ -684,9 +684,9 @@ server <- function(input, output,session) {
         annotate("text", x=f, y =-0.02, label ="F", parse = TRUE)+
         annotate("text", x=f_alpha2, y =-0.02, label="'F'[alpha]", parse = TRUE)+
         annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1=nx-1,df2=ny-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha2+0.5, y=df(f_alpha2,df1=nx-1,df2=ny-1)+0.001, label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha2+0.4, y=df(f_alpha2,df1=nx-1,df2=ny-1)+0.007, label="'Rechazar H'[0]", parse = TRUE)+
 
-        ylim(-0.05,max(y)+0.01)+
+        ylim(-0.025,max(y)+0.01)+
         labs( title = "Prueba de cola superior distribución Fisher",
               x = " ", y = " ",caption = "https://synergy.vision/" )
 
@@ -705,9 +705,9 @@ server <- function(input, output,session) {
         annotate("text", x=f, y =-0.02, label ="F", parse = TRUE)+
         annotate("text", x=f_alpha1, y =-0.02, label="-'F'[alpha]", parse = TRUE)+
         annotate("text", x=ny/(ny-2), y = df(ny/(ny-2),df1=nx-1,df2 = ny-1)/2, label="'Aceptar H'[0]", parse = TRUE)+
-        annotate("text", x=f_alpha1-2, y=df(f_alpha1,df1=nx-1,df2=ny-1), label="'Rechazar H'[0]", parse = TRUE)+
+        annotate("text", x=f_alpha1-0.4, y=df(f_alpha1,df1=nx-1,df2=ny-1), label="'Rechazar H'[0]", parse = TRUE)+
 
-        ylim(-0.05,max(y)+0.01)+xlim(-3,10)+
+        ylim(-0.05,max(y)+0.01)+xlim(-0.4,max(x))+
         labs( title = "Prueba de cola inferior distribución Fisher",
               x = " ", y = " ",caption = "https://synergy.vision/" )
 
