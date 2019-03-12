@@ -157,18 +157,18 @@ server <- function(input, output) {
 
   output$texto<-renderPrint({
     if(is.null(input$n)){
-      return()
+      return("Introduzca los datos")
     }
     else if(input$n=='Cargados'){
       ncolumna<-input$columna
       if(is.null(input$datoscargados)){
-        return()
+        return(print("Introduzca los datos"))
       }
       else if(input$forma2=='Sesgo'){
         return(skewness(dat()[,ncolumna]))
       }
       else if(input$forma2=='Curtosis'){
-        return(sum((dat()[,ncolumna]-mean(dat()[,ncolumna]))^4)/(length(dat()[,ncolumna])*sd(dat()[,ncolumna])^4))
+        return(sum((dat()[,ncolumna]-mean(dat()[,ncolumna]))^4)/(length(dat()[,ncolumna])*sd(dat()[,ncolumna])^4) -3)
       }
     }
     else if(input$n=='Ejemplos'){
@@ -176,7 +176,7 @@ server <- function(input, output) {
         return(skewness(dat()[,1]))
       }
       else if(input$forma1=='Curtosis'){
-        return(sum((dat()[,1]-mean(dat()[,1]))^4)/(length(dat()[,1])*sd(dat()[,1])^4))
+        return(sum((dat()[,1]-mean(dat()[,1]))^4)/(length(dat()[,1])*sd(dat()[,1])^4) -3)
       }
     }
     else if(input$n=='Generados'){
@@ -184,7 +184,7 @@ server <- function(input, output) {
         return(skewness(dat()[,1]))
       }
       else if(input$forma3=='Curtosis'){
-        return(sum((dat()[,1]-mean(dat()[,1]))^4)/(length(dat()[,1])*sd(dat()[,1])^4))
+        return(sum((dat()[,1]-mean(dat()[,1]))^4)/(length(dat()[,1])*sd(dat()[,1])^4) -3)
       }
     }
   })
@@ -209,6 +209,16 @@ server <- function(input, output) {
         labs(title = "Densidad", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
     }
+    else if(input$n=='Cargados'){
+      ncolumna<-input$columna
+      ggplot(dat(),aes(x=dat()[,ncolumna]))+
+        geom_histogram( aes(y=..density..),
+                        alpha=0.7,stat='density',col='blue',fill='black')+
+        stat_density(col='red',fill=NA,size=0.8)+
+        labs(title = "Densidad", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
+
+
+    }
   })
 
 
@@ -222,37 +232,37 @@ server <- function(input, output) {
     Simetrica<-dnorm(x,4,0.5)
     Izquierdo<-df(-x+8,df1=25,df2=26)
     Derecho<-df(x,df1=25,df2=30)
-    dat<-data.frame(x,Simetrica,Izquierdo,Derecho)
+    dat1<-data.frame(x,Simetrica,Izquierdo,Derecho)
 
-    return(ggplot(dat, aes(x=x))+
-      geom_line(aes(y=Simetrica,colour="Simétrica"))+
+    return(ggplot(dat1, aes(x=x))+
+      geom_line(aes(y=Simetrica,colour="blue"))+
       geom_area(mapping = aes(x,Simetrica), fill = "blue",alpha = .2)+
-      geom_line(aes(y=Izquierdo,colour="Izquierdo"))+
+      geom_line(aes(y=Izquierdo,colour="green"))+
       geom_area(mapping = aes(x,Izquierdo), fill = "green",alpha = .2)+
-      geom_line(aes(y=Derecho,colour="Derecho"))+
+      geom_line(aes(y=Derecho,colour="red"))+
       geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
-      scale_colour_manual("",values = c("Simétrica"="blue",
-                                        "Izquierdo"="green",
-                                        "Derecho"="red")))
+      scale_colour_manual("",values = c("blue",
+                                        "green",
+                                        "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0')))
     }
     else if(input$forma1=='Curtosis'){
       x<-seq(-5,5,0.01)
       Leptocurtica<-dnorm(x,0,0.5)
       Platicurtica<-dnorm(x,0,2)
       Mesocurtica<-dnorm(x,0,1)
-      dat<-data.frame(x,Leptocurtica,Platicurtica,Mesocurtica)
+      dat1<-data.frame(x,Mesocurtica,Leptocurtica,Platicurtica)
 
-      return(ggplot(dat, aes(x=x))+
-        geom_line(aes(y=Mesocurtica,colour="Mesocúrtica"))+
-        geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
-        geom_line(aes(y=Leptocurtica,colour="Leptocúrtica"))+
+      return(ggplot(dat1, aes(x=x))+
+        geom_line(aes(y=Leptocurtica,colour="blue"))+
         geom_area(mapping = aes(x,Leptocurtica), fill = "blue",alpha = .2)+
-        geom_line(aes(y=Platicurtica,colour="Platicúrtica"))+
+        geom_line(aes(y=Platicurtica,colour="green"))+
         geom_area(mapping = aes(x,Platicurtica), fill = "green",alpha = .2)+
+        geom_line(aes(y=Mesocurtica,colour="red"))+
+        geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
         xlim(-5,5)+
-        scale_colour_manual("",values = c("Leptocúrtica"="blue",
-                                          "Platicúrtica"="green",
-                                          "Mesocúrtica"="red")))
+        scale_colour_manual("",values = c("blue",
+                                          "green",
+                                          "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0')))
     }
     }
     else if(input$n=='Cargados'){
@@ -261,37 +271,37 @@ server <- function(input, output) {
         Simetrica<-dnorm(x,4,0.5)
         Izquierdo<-df(-x+8,df1=25,df2=26)
         Derecho<-df(x,df1=25,df2=30)
-        dat<-data.frame(x,Simetrica,Izquierdo,Derecho)
+        dat1<-data.frame(x,Simetrica,Izquierdo,Derecho)
 
-        return(ggplot(dat, aes(x=x))+
-                 geom_line(aes(y=Simetrica,colour="Simétrica"))+
+        return(ggplot(dat1, aes(x=x))+
+                 geom_line(aes(y=Simetrica,colour="blue"))+
                  geom_area(mapping = aes(x,Simetrica), fill = "blue",alpha = .2)+
-                 geom_line(aes(y=Izquierdo,colour="Izquierdo"))+
+                 geom_line(aes(y=Izquierdo,colour="green"))+
                  geom_area(mapping = aes(x,Izquierdo), fill = "green",alpha = .2)+
-                 geom_line(aes(y=Derecho,colour="Derecho"))+
+                 geom_line(aes(y=Derecho,colour="red"))+
                  geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
-                 scale_colour_manual("",values = c("Simétrica"="blue",
-                                                   "Izquierdo"="green",
-                                                   "Derecho"="red")))
+                 scale_colour_manual("",values = c("blue",
+                                                   "green",
+                                                   "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0')))
       }
       else if(input$forma2=='Curtosis'){
         x<-seq(-5,5,0.01)
         Leptocurtica<-dnorm(x,0,0.5)
         Platicurtica<-dnorm(x,0,2)
         Mesocurtica<-dnorm(x,0,1)
-        dat<-data.frame(x,Leptocurtica,Platicurtica,Mesocurtica)
+        dat1<-data.frame(x,Mesocurtica,Leptocurtica,Platicurtica)
 
-        return(ggplot(dat, aes(x=x))+
-                 geom_line(aes(y=Mesocurtica,colour="Mesocúrtica"))+
-                 geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
-                 geom_line(aes(y=Leptocurtica,colour="Leptocúrtica"))+
+        return(ggplot(dat1, aes(x=x))+
+                 geom_line(aes(y=Leptocurtica,colour="blue"))+
                  geom_area(mapping = aes(x,Leptocurtica), fill = "blue",alpha = .2)+
-                 geom_line(aes(y=Platicurtica,colour="Platicúrtica"))+
+                 geom_line(aes(y=Platicurtica,colour="green"))+
                  geom_area(mapping = aes(x,Platicurtica), fill = "green",alpha = .2)+
+                 geom_line(aes(y=Mesocurtica,colour="red"))+
+                 geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
                  xlim(-5,5)+
-                 scale_colour_manual("",values = c("Leptocúrtica"="blue",
-                                                   "Platicúrtica"="green",
-                                                   "Mesocúrtica"="red")))
+                 scale_colour_manual("",values = c("blue",
+                                                   "green",
+                                                   "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0')))
       }
     }
     else if(input$n=='Generados'){
@@ -300,37 +310,37 @@ server <- function(input, output) {
         Simetrica<-dnorm(x,4,0.5)
         Izquierdo<-df(-x+8,df1=25,df2=26)
         Derecho<-df(x,df1=25,df2=30)
-        dat<-data.frame(x,Simetrica,Izquierdo,Derecho)
+        dat1<-data.frame(x,Simetrica,Izquierdo,Derecho)
 
-        return(ggplot(dat, aes(x=x))+
-                 geom_line(aes(y=Simetrica,colour="Simétrica"))+
+        return(ggplot(dat1, aes(x=x))+
+                 geom_line(aes(y=Simetrica,colour="blue"))+
                  geom_area(mapping = aes(x,Simetrica), fill = "blue",alpha = .2)+
-                 geom_line(aes(y=Izquierdo,colour="Izquierdo"))+
+                 geom_line(aes(y=Izquierdo,colour="green"))+
                  geom_area(mapping = aes(x,Izquierdo), fill = "green",alpha = .2)+
-                 geom_line(aes(y=Derecho,colour="Derecho"))+
+                 geom_line(aes(y=Derecho,colour="red"))+
                  geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
-                 scale_colour_manual("",values = c("Simétrica"="blue",
-                                                   "Izquierdo"="green",
-                                                   "Derecho"="red")))
+                 scale_colour_manual("",values = c("blue",
+                                                   "green",
+                                                   "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0')))
       }
       else if(input$forma3=='Curtosis'){
         x<-seq(-5,5,0.01)
+        Mesocurtica<-dnorm(x,0,1)
         Leptocurtica<-dnorm(x,0,0.5)
         Platicurtica<-dnorm(x,0,2)
-        Mesocurtica<-dnorm(x,0,1)
-        dat<-data.frame(x,Leptocurtica,Platicurtica,Mesocurtica)
+        dat1<-data.frame(x,Mesocurtica,Leptocurtica,Platicurtica)
 
-        return(ggplot(dat, aes(x=x))+
-                 geom_line(aes(y=Mesocurtica,colour="Mesocúrtica"))+
-                 geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
-                 geom_line(aes(y=Leptocurtica,colour="Leptocúrtica"))+
+        return(ggplot(dat1, aes(x=x))+
+                 geom_line(aes(y=Leptocurtica,colour="blue"))+
                  geom_area(mapping = aes(x,Leptocurtica), fill = "blue",alpha = .2)+
-                 geom_line(aes(y=Platicurtica,colour="Platicúrtica"))+
+                 geom_line(aes(y=Platicurtica,colour="green"))+
                  geom_area(mapping = aes(x,Platicurtica), fill = "green",alpha = .2)+
+                 geom_line(aes(y=Mesocurtica,colour="red"))+
+                 geom_area(mapping = aes(x,Mesocurtica), fill = "red",alpha = .2)+
                  xlim(-5,5)+
-                 scale_colour_manual("",values = c("Leptocúrtica"="blue",
-                                                   "Platicúrtica"="green",
-                                                   "Mesocúrtica"="red")))
+                 scale_colour_manual("",values = c("blue",
+                                                   "green",
+                                                   "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0')))
       }
     }
   })
