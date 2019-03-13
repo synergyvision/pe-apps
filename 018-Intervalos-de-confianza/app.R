@@ -9,9 +9,7 @@ ensure_version("shinydashboard", "0.7.1")
 ensure_version("psych", "1.8.10")
 ensure_version("matrixStats", "0.54.0")
 ensure_version("ggplot2","3.1.0")
-ensure_version("shinyjs","1.0")
 
-library(shinyjs)
 library(shiny)
 library(shinydashboard)
 library(readxl)
@@ -27,13 +25,13 @@ ui <- fluidPage(
 
     sidebarPanel(width = 3,
 
-  selectInput(inputId = 'ic',label = 'Escoja el intervalo de confianza deseado',choices = c('a','b','c'))
+  selectInput(inputId = 'ic',label = 'Escoja el intervalo de confianza deseado',choices = c('Media de una población','Proporción en una población','Varianza de una población','Diferencia de medias de dos poblaciones'),
+              selected = NULL),
+  conditionalPanel(condition = "input.ic=='Media de una población'",selectInput(inputId = 'vc',label = '',choices = c('Varianza conocida','Varianza desconocida'),selected = NULL)),
+  conditionalPanel(condition = "input.ic=='Diferencia de medias de dos poblaciones'",selectInput(inputId = 'vc1',label = '',choices = c('Varianza conocida','Varianza desconocida'),selected = NULL))
     ),
 
   mainPanel(
-    tabsetPanel(type='tabs',id='pri',
-                tabPanel('datos'),
-               tabPanel('grafico'))
 
     )
   )
@@ -42,14 +40,6 @@ ui <- fluidPage(
 
 
 server <- function(input, output,session) {
-
-  # observe({
-  #   toggle(condition = input$ic!='b',selector = "#pri li a[data-value=grafico]")
-  # })
-
-  observeEvent(input$ic,{
-    if(input$ic=='a' |input$ic=='b'){hideTab(inputId = 'pri',target = 'grafico')}else{showTab('pri','grafico')}
-  })
 
 
   }

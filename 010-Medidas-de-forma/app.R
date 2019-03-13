@@ -196,16 +196,16 @@ server <- function(input, output) {
     else if(input$n=="Ejemplos"){
       ggplot(dat(),aes(x=dat()[,1]))+
         geom_histogram( aes(y=..density..),
-                        alpha=0.7,stat='density',col='blue',fill='black')+
-        stat_density(col='red',fill=NA,size=0.8)+
+                        alpha=0.3,stat='density',col=NA,fill='blue')+
+        stat_density(col='blue',fill='blue',size=0.8,alpha=0.3)+
         labs(title = "Densidad", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
     }
     else if(input$n=='Generados'){
       ggplot(dat(),aes(x=dat()[,1]))+
         geom_histogram( aes(y=..density..),
-                        alpha=0.7,stat='density',col='blue',fill='black')+
-        stat_density(col='red',fill=NA,size=0.8)+
+                        alpha=0.3,stat='density',col=NA,fill='blue')+
+        stat_density(col='blue',fill='blue',size=0.8,alpha=0.3)+
         labs(title = "Densidad", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
     }
@@ -213,8 +213,8 @@ server <- function(input, output) {
       ncolumna<-input$columna
       ggplot(dat(),aes(x=dat()[,ncolumna]))+
         geom_histogram( aes(y=..density..),
-                        alpha=0.7,stat='density',col='blue',fill='black')+
-        stat_density(col='red',fill=NA,size=0.8)+
+                        alpha=0.3,stat='density',col=NA,fill='blue')+
+        stat_density(col='blue',fill='blue',size=0.8,alpha=0.3)+
         labs(title = "Densidad", x="Clases", y="Frecuencia",caption = "https://synergy.vision/")
 
 
