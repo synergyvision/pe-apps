@@ -56,7 +56,10 @@ ui <- fluidPage(
 
       selectInput( inputId = "factores", label = "Factores ANOVA",
                    choices= c("ANOVA de un factor","ANOVA de dos factores"),
-                   selected = NULL)
+                   selected = NULL),
+      conditionalPanel(condition = "input.factores=='ANOVA de dos factores'",
+                       numericInput(inputId = "vect1", label = "Introducir la columna caracter deseada",
+                                min=1,max = 100,step = 1,width = "40%",value = 1))
 
 
     ),
@@ -111,7 +114,7 @@ server <- function(input, output,session) {
 output$table<-renderDataTable({
 
   if(is.null(input$n)){
-    return(print("Introduzca los datos"))
+    print("Introduzca los datos")
   } else{
      return(data())
   }
@@ -124,13 +127,14 @@ output$table<-renderDataTable({
 
 output$table1<-renderPrint ({
 
-  if(is.null(input$n)){
-    return("Introduzca los datos")
-  }
 
-  else if(input$factores=='ANOVA de un factor'){
+  if(input$factores=='ANOVA de un factor'){
 
-      if(input$n=="car"){
+    if(is.null(input$n)){
+      return("Introduzca los datos")
+    }
+
+      else if(input$n=="car"){
 
 
          if(is.null(input$datoscargados) | isTRUE(input$vect=="") ){
@@ -156,7 +160,7 @@ output$table1<-renderPrint ({
          return(w)
          }
 
-    } else{
+    } else if(input$n=="gen" | input$n=="ejem"){
       data1<-as.data.frame(data())
 
       z<-c()
@@ -174,6 +178,49 @@ output$table1<-renderPrint ({
 
       return(w)
    }
+  } else if(input$factores=="ANOVA de dos factores"){
+
+    if(is.null(input$n)){
+      return("Introduzca los datos")
+    }
+
+    else if(input$n=="car"){
+
+      if(is.null(input$datoscargados) | isTRUE(input$vect=="") ){
+        return('Introduzca los datos y escoja las columnas numéricas deseadas (mínimo dos columnas).')
+      }
+      else{
+        col<-as.numeric(unlist(strsplit(input$vect,",")))
+        data1<-as.data.frame(data()[,col])
+
+        z<-c()
+
+        for(i in 1:ncol(data1)){
+          z<-data.frame(Valores=c(z[,1],data1[,i]))
+        }
+
+        z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+
+
+        col1<-input$vect1
+
+        data2<-as.data.frame(data()[,col1])
+
+          if(is.character(data2)==TRUE){
+
+          z2<-as.data.frame(Variables2=rep(data2,each=nrow(data2)))
+          g<-cbind(z,z1,z2)
+
+          #ANOVA
+          w<-summary(aov(g$Valores ~ g$Variables+g$Variables2))
+
+          return(w)
+          } else{
+          print("Seleccione una columna caracter")
+        }
+    }
+  }
 }
 
 })
@@ -181,13 +228,13 @@ output$table1<-renderPrint ({
 
 output$box<-renderPlot ({
 
-  if(is.null(input$n)){
-    return("Introduzca los datos")
-  }
+if(input$factores=='ANOVA de un factor'){
 
-  else if(input$factores=='ANOVA de un factor'){
+    if(is.null(input$n)){
+      return("Introduzca los datos")
+    }
 
-    if(input$n=="car"){
+    else if(input$n=="car"){
 
 
       if(is.null(input$datoscargados) | isTRUE(input$vect=="") ){
@@ -208,12 +255,14 @@ output$box<-renderPlot ({
         g<-cbind(z,z1)
 
         #ANOVA
-        w1<-ggplot(data = g, aes(x=Variables, y=Valores)) + geom_boxplot(aes(fill=Variables))
+        w1<-ggplot(data = g, aes(x=Variables, y=Valores)) + geom_boxplot(aes(fill=Variables))+
+          labs( title = "Gráfico de caja",
+                x = " ", y = " ",caption = "https://synergy.vision/" )
 
         return(w1)
       }
 
-    } else{
+    } else if(input$n=="gen" | input$n=="ejem"){
       data1<-as.data.frame(data())
 
       z<-c()
@@ -227,7 +276,9 @@ output$box<-renderPlot ({
       g<-cbind(z,z1)
 
       #ANOVA
-      w2<-ggplot(data = g, aes(x=Variables, y=Valores)) + geom_boxplot(aes(fill=Variables))
+      w2<-ggplot(data = g, aes(x=Variables, y=Valores)) + geom_boxplot(aes(fill=Variables))+
+        labs( title = "Gráfico de caja",
+              x = " ", y = " ",caption = "https://synergy.vision/" )
 
       return(w2)
     }
