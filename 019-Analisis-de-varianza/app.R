@@ -59,7 +59,7 @@ ui <- fluidPage(
                    selected = NULL),
       conditionalPanel(condition = "input.factores=='ANOVA de dos factores'",
                        numericInput(inputId = "vect1", label = "Introducir la columna caracter deseada",
-                                min=1,max = 100,step = 1,width = "40%",value = 1))
+                                min=1,max = 100,step = 1,width = "100%",value = 1))
 
 
     ),
@@ -207,15 +207,14 @@ output$table1<-renderPrint ({
 
         data2<-as.data.frame(data()[,col1])
 
-          if(is.character(data2)==TRUE){
-
-          z2<-as.data.frame(Variables2=rep(data2,each=nrow(data2)))
+          if(is.character(data2[,1])==TRUE){
+          Variables2=rep(data2[,1],times=ncol(data1))
+          z2<-data.frame(Variables2)
           g<-cbind(z,z1,z2)
 
           #ANOVA
           w<-summary(aov(g$Valores ~ g$Variables+g$Variables2))
-
-          return(w)
+          w
           } else{
           print("Seleccione una columna caracter")
         }
