@@ -243,7 +243,8 @@ server <- function(input, output) {
       geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
       scale_colour_manual("",values = c("blue",
                                         "green",
-                                        "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0')))
+                                        "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0'))+
+        labs(title = "Tipos de sesgos", x=" ", y=" ",caption = "https://synergy.vision/"))
     }
     else if(input$forma1=='Curtosis'){
       x<-seq(-5,5,0.01)
@@ -262,7 +263,8 @@ server <- function(input, output) {
         xlim(-5,5)+
         scale_colour_manual("",values = c("blue",
                                           "green",
-                                          "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0')))
+                                          "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0'))+
+          labs(title = "Tipos de curtosis", x=" ", y=" ",caption = "https://synergy.vision/"))
     }
     }
     else if(input$n=='Cargados'){
@@ -282,7 +284,8 @@ server <- function(input, output) {
                  geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
                  scale_colour_manual("",values = c("blue",
                                                    "green",
-                                                   "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0')))
+                                                   "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0'))+
+                 labs(title = "Tipos de sesgos", x=" ", y=" ",caption = "https://synergy.vision/"))
       }
       else if(input$forma2=='Curtosis'){
         x<-seq(-5,5,0.01)
@@ -301,7 +304,8 @@ server <- function(input, output) {
                  xlim(-5,5)+
                  scale_colour_manual("",values = c("blue",
                                                    "green",
-                                                   "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0')))
+                                                   "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0'))+
+                 labs(title = "Tipos de curtosis", x=" ", y=" ",caption = "https://synergy.vision/"))
       }
     }
     else if(input$n=='Generados'){
@@ -321,7 +325,8 @@ server <- function(input, output) {
                  geom_area(mapping = aes(x,Derecho), fill = "red",alpha = .2)+
                  scale_colour_manual("",values = c("blue",
                                                    "green",
-                                                   "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0')))
+                                                   "red"),labels=expression('Simétrica'%~~%'0','Izquierdo<0','Derecho>0'))+
+                 labs(title = "Tipos de sesgos", x=" ", y=" ",caption = "https://synergy.vision/"))
       }
       else if(input$forma3=='Curtosis'){
         x<-seq(-5,5,0.01)
@@ -340,7 +345,8 @@ server <- function(input, output) {
                  xlim(-5,5)+
                  scale_colour_manual("",values = c("blue",
                                                    "green",
-                                                   "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0')))
+                                                   "red"),labels=expression('Leptocúrtica>0','Platicúrtica<0','Mesocúrtica'%~~%'0'))+
+                 labs(title = "Tipos de curtosis", x=" ", y=" ",caption = "https://synergy.vision/"))
       }
     }
   })
