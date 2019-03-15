@@ -144,11 +144,22 @@ output$table1<-renderPrint ({
          col<-as.numeric(unlist(strsplit(input$vect,",")))
          data1<-as.data.frame(data()[,col])
 
-         z<-c()
+         g<-lapply(data1,is.character)
+         g1<-c()
 
          for(i in 1:ncol(data1)){
-           z<-data.frame(Valores=c(z[,1],data1[,i]))
+           g1<-c(g1[1],g[[i]])
          }
+
+         if(any(g1)==TRUE){
+           print("Inserte sólo columnas numéricas")
+         }else{
+
+          z<-c()
+
+          for(i in 1:ncol(data1)){
+            z<-data.frame(Valores=c(z[,1],data1[,i]))
+          }
 
          z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
 
@@ -159,6 +170,7 @@ output$table1<-renderPrint ({
 
          return(w)
          }
+      }
 
     } else if(input$n=="gen" | input$n=="ejem"){
       data1<-as.data.frame(data())
@@ -193,6 +205,18 @@ output$table1<-renderPrint ({
         col<-as.numeric(unlist(strsplit(input$vect,",")))
         data1<-as.data.frame(data()[,col])
 
+        #escojer sólo columnas numéricas
+      w<-lapply(data1,is.character)
+      w1<-c()
+
+      for(i in 1:length(w)){
+        w1<-c(w1[1],w[[i]])
+      }
+
+
+      if(any(w1)==TRUE){
+        print("Inserte sólo columnas numéricas")
+      }else{
         z<-c()
 
         for(i in 1:ncol(data1)){
@@ -200,7 +224,6 @@ output$table1<-renderPrint ({
         }
 
         z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
-
 
 
         col1<-input$vect1
@@ -217,7 +240,8 @@ output$table1<-renderPrint ({
           w
           } else{
           print("Seleccione una columna caracter")
-        }
+          }
+      }
     }
   }
 }
