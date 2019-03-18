@@ -104,7 +104,7 @@ ui <- fluidPage(
 
     conditionalPanel(condition = "input.ph == 'Proporción en una población'",column(width = 3,numericInput(inputId = 'PropHip',label = HTML('Inserte proporción hipotética <i>p</i><sub>o</sub>'),min=0,max = 1,value = 0.5,step = 0.05,width = '150px'),
                                                                                     numericInput(inputId = 'PropEstim',label = HTML('Inserte proporción estimada <i>p&#770;</i>'),min=0,max = 1,value = 0.6,step = 0.05,width = '150px'),
-                                                                                    numericInput(inputId = 'Muestra6',label = HTML('Inserte tamaño de la muestra <i>n</i>'),min=0,max = 100,value = 15,step = 1,width = '150px'),
+                                                                                    numericInput(inputId = 'Muestra6',label = HTML('Inserte tamaño de la muestra <i>n</i>'),min=30,max = 500,value = 50,step = 1,width = '150px'),
                                                                                     numericInput(inputId = 'signif6',label = HTML('Inserte nivel de significancia <i>&alpha;</i>'),min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')),
                      column(width = 8,align='center',plotOutput('grafica7'))
                      )
