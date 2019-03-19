@@ -62,7 +62,7 @@ ui <- fluidPage(
                        numericInput(inputId = "vect1", label = "Introducir la columna caracter deseada",
                                 min=1,max = 100,step = 1,width = "100%",value = 1)),
       conditionalPanel(condition = "input.n=='gen' & input.factores=='ANOVA de dos factores'",
-                       box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "Utilizaremos la columna caracter que hemos incluido a partir de los datos generados para usarla como segundo factor.")),
+                       box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "Utilizaremos la columna caracter Car_1 como segundo factor.")),
       conditionalPanel(condition = "input.n=='ejem' & input.factores=='ANOVA de dos factores'",
                        box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "En los datos Armands utilizaremos la columna Meses como segundo factor y en los datos Cars usaremos la columna Country."))
 
