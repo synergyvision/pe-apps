@@ -1,1 +1,1 @@
-Ésta es una aplicación que muestra cómo podemos interactuar con las pruebas de hipótesis manipulando las diferentes hipótesis.
+Ésta es una aplicación que muestra cómo podemos interactuar con los intervalos de confianza manipulando los diferentes parámetros.
