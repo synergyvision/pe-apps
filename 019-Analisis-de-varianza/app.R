@@ -52,7 +52,7 @@ ui <- fluidPage(
 
       conditionalPanel( condition = "input.n == 'ejem'",
                         selectInput( inputId = "ejemplos", label = "Datos de ejemplo",
-                                     choices= c("Armands"),
+                                     choices= c("Armands","Cars"),
                                      selected = NULL)),
 
       selectInput( inputId = "factores", label = "Factores ANOVA",
@@ -62,8 +62,9 @@ ui <- fluidPage(
                        numericInput(inputId = "vect1", label = "Introducir la columna caracter deseada",
                                 min=1,max = 100,step = 1,width = "100%",value = 1)),
       conditionalPanel(condition = "input.n=='gen' & input.factores=='ANOVA de dos factores'",
-                       box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "Utilizaremos la columna caracter que hemos incluido a partir de los datos generados para usarla como segundo factor."))
-
+                       box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "Utilizaremos la columna caracter que hemos incluido a partir de los datos generados para usarla como segundo factor.")),
+      conditionalPanel(condition = "input.n=='ejem' & input.factores=='ANOVA de dos factores'",
+                       box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "En los datos Armands no hay columnas caracteres para usarlas como segundo factor y en los datos Cars usaremos la primera columna ya que es caracter y además tiene mas de una característica."))
 
     ),
     mainPanel(
@@ -93,7 +94,7 @@ server <- function(input, output,session) {
       colnames(M)<-c(paste0("Vari_",1:input$f))
       rownames(M)<-c(paste0(" ",1:input$m))
 
-      car<-c("a","b","c","d")
+      car<-c("Enero","Febrero","Marzo","Abril")
       M1<-rep_len(car,input$m)
       M1<-as.matrix(M1)
       colnames(M1)<-c("Car_1")
@@ -117,6 +118,13 @@ server <- function(input, output,session) {
     } else if(input$n=="ejem"){
 
       Armands<-read_excel("Armand's.xlsx")
+      Cars<-read_excel("cars.xlsx")
+
+      if(input$ejemplos=="Armands"){
+        Armands
+      } else{
+        Cars
+      }
 
     }
 })
@@ -130,10 +138,6 @@ output$table<-renderDataTable({
   }
 
 },options = list(scrollX=TRUE,scrollY=300,searching=FALSE))
-
-# s<-data.frame(Precio=c(a[,1],a[,2],a[,3]))
-# variables<-rep(c(colnames(a)[1:3]),each=10)
-
 
 output$table1<-renderPrint ({
 
@@ -201,7 +205,9 @@ output$table1<-renderPrint ({
       return(w)
     } else if (input$n == "ejem"){
 
-      data1<-as.data.frame(data())
+      if(input$ejemplos=="Armands"){
+
+      data1<-as.data.frame(data()[,])
 
       z<-c()
 
@@ -217,7 +223,26 @@ output$table1<-renderPrint ({
       w<-summary(aov(g$Valores ~ g$Variables))
 
       return(w)
-   }
+      }else{
+        data1<-as.data.frame(data()[,-c(1,2)])
+
+        z<-c()
+
+        for(i in 1:ncol(data1)){
+          z<-data.frame(Valores=c(z[,1],data1[,i]))
+        }
+
+        z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+        g<-cbind(z,z1)
+
+        #ANOVA
+        w<-summary(aov(g$Valores ~ g$Variables))
+
+        return(w)
+    }
+  }
+
   } else if(input$factores=="ANOVA de dos factores"){
 
     if(is.null(input$n)){
@@ -292,6 +317,33 @@ output$table1<-renderPrint ({
       w<-summary(aov(g$Valores ~ g$Variables+g$Variables2))
 
       return(w)
+    } else if(input$n=="ejem"){
+      if(input$ejemplos=="Armands"){
+
+        print("No hay columnas caracteres para usarlas como segundo factor")
+
+      }else{
+        data1<-as.data.frame(data()[,-c(1,2)])
+
+        z<-c()
+
+        for(i in 1:ncol(data1)){
+          z<-data.frame(Valores=c(z[,1],data1[,i]))
+        }
+
+        z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+        data2<-as.data.frame(data()[,1])
+
+        z2<-data.frame(Variables2=rep(data2[,1],times=ncol(data1)))
+
+        g<-cbind(z,z1,z2)
+
+        #ANOVA
+        w<-summary(aov(g$Valores ~ g$Variables+g$Variables2))
+
+        return(w)
+      }
   }
 }
 
@@ -367,6 +419,9 @@ if(input$factores=='ANOVA de un factor'){
       return(w2)
 
     } else if(input$n=="ejem"){
+
+      if(input$ejemplos=="Armands"){
+
       data1<-as.data.frame(data())
 
       z<-c()
@@ -385,6 +440,26 @@ if(input$factores=='ANOVA de un factor'){
               x = " ", y = " ",caption = "https://synergy.vision/" )
 
       return(w2)
+      } else{
+      data1<-as.data.frame(data()[,-c(1,2)])
+
+      z<-c()
+
+      for(i in 1:ncol(data1)){
+        z<-data.frame(Valores=c(z[,1],data1[,i]))
+      }
+
+      z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+      g<-cbind(z,z1)
+
+      #ANOVA
+      w2<-ggplot(data = g, aes(x=Variables, y=Valores)) + geom_boxplot(aes(fill=Variables))+
+        labs( title = "Gráfico de caja para las columnas numéricas",
+              x = " ", y = " ",caption = "https://synergy.vision/" )
+
+      return(w2)
+      }
     }
 } else if(input$factores=="ANOVA de dos factores"){
 
@@ -459,6 +534,34 @@ if(input$factores=='ANOVA de un factor'){
             x = " ", y = " ",caption = "https://synergy.vision/" )
 
     return(w2)
+  } else if(input$n=="ejem"){
+    if(input$ejemplos=="Armands"){
+
+      print("No hay columnas caracteres para usarlas como segundo factor")
+
+    }else{
+      data1<-as.data.frame(data()[,-c(1,2)])
+
+      z<-c()
+
+      for(i in 1:ncol(data1)){
+        z<-data.frame(Valores=c(z[,1],data1[,i]))
+      }
+
+      z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+      data2<-as.data.frame(data()[,1])
+
+      z2<-data.frame(Variables2=rep(data2[,1],times=ncol(data1)))
+
+      g<-cbind(z,z1,z2)
+
+      w2<-ggplot(data = g, aes(x=Variables2, y=Valores)) + geom_boxplot(aes(fill=Variables2))+
+        labs( title = "Gráfico de caja para la columna categórica",
+              x = " ", y = " ",caption = "https://synergy.vision/" )
+
+      return(w2)
+    }
   }
 }
 
