@@ -54,20 +54,20 @@ ui <- fluidPage(
                                                                                         numericInput(inputId = 'signif3',label = HTML('Inserte nivel de significancia <i>&alpha;</i>'),min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')),
                              column(width = 8,align='center',uiOutput('intervalo3'),plotOutput('grafica4'))),
 
-            conditionalPanel(condition = "input.ic=='Diferencia de medias de dos poblaciones' & input.vc1=='Varianza conocida'",column(width = 2,numericInput(inputId = 'MediaMuestral2',label = HTML('Inserte media de la muestra X&#772;<sub>1</sub>'),min=0,max = 100,value = 5,step = 1,width = '150px'),
-                                                                                                                                       numericInput(inputId = 'MediaMuestral3',label = HTML('Inserte media de la muestra X&#772;<sub>2</sub>'),min=0,max = 100,value = 5,step = 1,width = '150px'),
+            conditionalPanel(condition = "input.ic=='Diferencia de medias de dos poblaciones' & input.vc1=='Varianza conocida'",column(width = 2,numericInput(inputId = 'MediaMuestral2',label = HTML('Inserte media de la muestra X&#772;<sub>1</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px'),
+                                                                                                                                       numericInput(inputId = 'MediaMuestral3',label = HTML('Inserte media de la muestra X&#772;<sub>2</sub>'),min=0,max = 100,value = 10,step = 1,width = '150px'),
                                                                                                                                        numericInput(inputId = 'Muestra4',label = HTML('Inserte tamaño de la muestra <i>n</i><sub>1</sub>'),min=1,max = 250,value = 50,step = 1,width = '150px'),
-                                                                                                                                       numericInput(inputId = 'Muestra5',label = HTML('Inserte tamaño de la muestra <i>n</i><sub>2</sub>'),min=1,max = 250,value = 50,step = 1,width = '150px')),
+                                                                                                                                       numericInput(inputId = 'Muestra5',label = HTML('Inserte tamaño de la muestra <i>n</i><sub>2</sub>'),min=1,max = 250,value = 40,step = 1,width = '150px')),
 
                              column(width = 2,br(),numericInput(inputId = 'VarianzaPob2',label = HTML('Inserte varianza poblacional <i>&sigma;<sup>2</sup><sub>1</sub></i>'),min=0.1,max = 50,value = 1,step = 1,width = '150px'),
                                     numericInput(inputId = 'VarianzaPob3',label = HTML('Inserte varianza poblacional <i>&sigma;<sup>2</sup><sub>2</sub></i>'),min=0.1,max = 50,value = 4,step = 1,width = '150px'),
                                     numericInput(inputId = 'signif4',label = HTML('Inserte nivel de significancia <i>&alpha;</i>'),min=0.01,max = 0.1,value = 0.05,step = 0.01,width = '150px')),
                              column(width = 8,align='center',uiOutput('intervalo4'),plotOutput('grafica5'))),
 
-            conditionalPanel(condition = "input.ic=='Diferencia de medias de dos poblaciones' & input.vc1=='Varianza desconocida'",column(width = 2,numericInput(inputId = 'MediaMuestral4',label = HTML('Inserte media de la muestra X&#772;<sub>1</sub>'),min=0,max = 100,value = 5,step = 1,width = '150px'),
+            conditionalPanel(condition = "input.ic=='Diferencia de medias de dos poblaciones' & input.vc1=='Varianza desconocida'",column(width = 2,numericInput(inputId = 'MediaMuestral4',label = HTML('Inserte media de la muestra X&#772;<sub>1</sub>'),min=0,max = 100,value = 15,step = 1,width = '150px'),
                                                                                                                                        numericInput(inputId = 'MediaMuestral5',label = HTML('Inserte media de la muestra X&#772;<sub>2</sub>'),min=0,max = 100,value = 5,step = 1,width = '150px'),
-                                                                                                                                       numericInput(inputId = 'Muestra6',label = HTML('Inserte tamaño de la muestra <i>n</i><sub>1</sub>'),min=1,max = 250,value = 50,step = 1,width = '150px'),
-                                                                                                                                       numericInput(inputId = 'Muestra7',label = HTML('Inserte tamaño de la muestra <i>n</i><sub>2</sub>'),min=1,max = 250,value = 50,step = 1,width = '150px')),
+                                                                                                                                       numericInput(inputId = 'Muestra6',label = HTML('Inserte tamaño de la muestra <i>n</i><sub>1</sub>'),min=1,max = 300,value = 10,step = 1,width = '150px'),
+                                                                                                                                       numericInput(inputId = 'Muestra7',label = HTML('Inserte tamaño de la muestra <i>n</i><sub>2</sub>'),min=1,max = 300,value = 15,step = 1,width = '150px')),
 
                              column(width = 2,br(),numericInput(inputId = 'VarianzaPob4',label = HTML('Inserte varianza muestral <i>S<sup>2</sup><sub>1</sub></i>'),min=0.1,max = 50,value = 1,step = 1,width = '150px'),
                                     numericInput(inputId = 'VarianzaPob5',label = HTML('Inserte varianza muestral <i>S<sup>2</sup><sub>2</sub></i>'),min=0.1,max = 50,value = 4,step = 1,width = '150px'),
@@ -314,6 +314,145 @@ server <- function(input, output,session) {
 
 
   })
+
+  output$intervalo4<-renderUI({
+
+    x_bar1<-input$MediaMuestral2
+    x_bar2<-input$MediaMuestral3
+    n1<-input$Muestra4
+    n2<-input$Muestra5
+    sigma2_1<-input$VarianzaPob2
+    sigma2_2<-input$VarianzaPob3
+    alpha<-input$signif4
+
+    alpha_2<-alpha/2
+
+    z_alpha2<-qnorm(1-alpha_2,0,1)
+
+    ic<-round(z_alpha2*(sqrt(sigma2_1/n1 + sigma2_2/n2)),2)
+    dif<- x_bar1 - x_bar2
+
+    left<-dif-ic
+    right<-dif+ic
+
+    p1<-paste(left,right,sep='  ,  ')
+    p2<-paste('[',p1,sep='')
+    p3<-paste(p2,']',sep='')
+
+    return(h2(p3))
+
+  })
+
+  output$grafica5<-renderPlot({
+
+    x_bar1<-input$MediaMuestral2
+    x_bar2<-input$MediaMuestral3
+    n1<-input$Muestra4
+    n2<-input$Muestra5
+    sigma2_1<-input$VarianzaPob2
+    sigma2_2<-input$VarianzaPob3
+    alpha<-input$signif4
+
+    alpha_2<-alpha/2
+
+    z_alpha2<-qnorm(1-alpha_2,0,1)
+
+    ic<-round(z_alpha2*(sqrt(sigma2_1/n1 + sigma2_2/n2)),2)
+    dif<- x_bar1 - x_bar2
+
+    left<-dif-ic
+    right<-dif+ic
+
+    f<-ggplot()+
+      geom_curve( aes(x = (dif-10), y = 0, xend = (dif+10), yend = 0),curvature = 0)+
+      #scale_x_continuous(breaks = seq(28000,38000,by=2000)) +xlab('')+ylab('')+
+      annotate("text", x=dif, y=-0.005, label=paste(dif),parse = TRUE)+ylim(-0.05,0.05)+
+      annotate("text",x=left-2,y=-0.005,label=paste(dif,ic,sep = ' - '),parse=TRUE)+
+      annotate("text",x=left-2,y=0,label="'('",parse=TRUE,col='red',size=8)+
+      annotate("text",x=right+2,y=-0.005,label=paste(dif,ic,sep = ' + '),parse=TRUE)+
+      annotate("text",x=right+2,y=0,label="')'",parse=TRUE,col='red',size=8)+
+      geom_segment(aes(x = dif, y =-0.002 , xend = dif,yend = 0),colour = "black",linetype=2)+
+      labs( title = "Intervalo de confianza",
+            x = " ", y = " ",caption = "https://synergy.vision/" )
+
+
+    return(f)
+
+
+  })
+
+  output$intervalo5<-renderUI({
+
+    x_bar1<-input$MediaMuestral4
+    x_bar2<-input$MediaMuestral5
+    n1<-input$Muestra6
+    n2<-input$Muestra7
+    s2_1<-input$VarianzaPob4
+    s2_2<-input$VarianzaPob5
+    alpha<-input$signif5
+
+    alpha_2<-alpha/2
+
+    t_alpha2<-qt(1-alpha_2,df=n1+n2-2)
+
+    sp<-((n1-1)*s2_1+(n2-1)*s2_2)/(n1+n2-2)
+
+    ic<-round(t_alpha2*sp*(sqrt(1/n1 + 1/n2)),2)
+    dif<- x_bar1 - x_bar2
+
+    left<-dif-ic
+    right<-dif+ic
+
+    p1<-paste(left,right,sep='  ,  ')
+    p2<-paste('[',p1,sep='')
+    p3<-paste(p2,']',sep='')
+
+    return(h2(p3))
+
+  })
+
+  output$grafica6<-renderPlot({
+
+    x_bar1<-input$MediaMuestral4
+    x_bar2<-input$MediaMuestral5
+    n1<-input$Muestra6
+    n2<-input$Muestra7
+    s2_1<-input$VarianzaPob4
+    s2_2<-input$VarianzaPob5
+    alpha<-input$signif5
+
+    alpha_2<-alpha/2
+
+    t_alpha2<-qt(1-alpha_2,df=n1+n2-2)
+
+    sp<-((n1-1)*s2_1+(n2-1)*s2_2)/(n1+n2-2)
+
+    ic<-round(t_alpha2*sp*(sqrt(1/n1 + 1/n2)),2)
+    dif<- x_bar1 - x_bar2
+
+    left<-dif-ic
+    right<-dif+ic
+
+    f<-ggplot()+
+      geom_curve( aes(x = (dif-10), y = 0, xend = (dif+10), yend = 0),curvature = 0)+
+      #scale_x_continuous(breaks = seq(28000,38000,by=2000)) +xlab('')+ylab('')+
+      annotate("text", x=dif, y=-0.005, label=paste(dif),parse = TRUE)+ylim(-0.05,0.05)+
+      annotate("text",x=left-2,y=-0.005,label=paste(dif,ic,sep = ' - '),parse=TRUE)+
+      annotate("text",x=left-2,y=0,label="'('",parse=TRUE,col='red',size=8)+
+      annotate("text",x=right+2,y=-0.005,label=paste(dif,ic,sep = ' + '),parse=TRUE)+
+      annotate("text",x=right+2,y=0,label="')'",parse=TRUE,col='red',size=8)+
+      geom_segment(aes(x = dif, y =-0.002 , xend = dif,yend = 0),colour = "black",linetype=2)+
+      labs( title = "Intervalo de confianza",
+            x = " ", y = " ",caption = "https://synergy.vision/" )
+
+
+    return(f)
+
+
+  })
+
+
+
 
 
   }
