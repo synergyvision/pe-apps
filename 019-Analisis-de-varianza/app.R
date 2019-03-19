@@ -64,7 +64,7 @@ ui <- fluidPage(
       conditionalPanel(condition = "input.n=='gen' & input.factores=='ANOVA de dos factores'",
                        box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "Utilizaremos la columna caracter que hemos incluido a partir de los datos generados para usarla como segundo factor.")),
       conditionalPanel(condition = "input.n=='ejem' & input.factores=='ANOVA de dos factores'",
-                       box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "En los datos Armands no hay columnas caracteres para usarlas como segundo factor y en los datos Cars usaremos la primera columna ya que es caracter y además tiene mas de una característica."))
+                       box(title = "Observación", width = NULL, solidHeader = TRUE, status = "warning", "En los datos Armands utilizaremos la columna Meses como segundo factor y en los datos Cars usaremos la columna Country."))
 
     ),
     mainPanel(
@@ -207,7 +207,7 @@ output$table1<-renderPrint ({
 
       if(input$ejemplos=="Armands"){
 
-      data1<-as.data.frame(data()[,])
+      data1<-as.data.frame(data()[,-4])
 
       z<-c()
 
@@ -320,7 +320,26 @@ output$table1<-renderPrint ({
     } else if(input$n=="ejem"){
       if(input$ejemplos=="Armands"){
 
-        print("No hay columnas caracteres para usarlas como segundo factor")
+        data1<-as.data.frame(data()[,-4])
+
+        z<-c()
+
+        for(i in 1:ncol(data1)){
+          z<-data.frame(Valores=c(z[,1],data1[,i]))
+        }
+
+        z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+        data2<-as.data.frame(data()[,4])
+
+        z2<-data.frame(Variables2=rep(data2[,1],times=ncol(data1)))
+
+        g<-cbind(z,z1,z2)
+
+        #ANOVA
+        w<-summary(aov(g$Valores ~ g$Variables+g$Variables2))
+
+        return(w)
 
       }else{
         data1<-as.data.frame(data()[,-c(1,2)])
@@ -422,7 +441,7 @@ if(input$factores=='ANOVA de un factor'){
 
       if(input$ejemplos=="Armands"){
 
-      data1<-as.data.frame(data())
+      data1<-as.data.frame(data()[,-4])
 
       z<-c()
 
@@ -536,8 +555,28 @@ if(input$factores=='ANOVA de un factor'){
     return(w2)
   } else if(input$n=="ejem"){
     if(input$ejemplos=="Armands"){
+      data1<-as.data.frame(data()[,-4])
 
-      print("No hay columnas caracteres para usarlas como segundo factor")
+      z<-c()
+
+      for(i in 1:ncol(data1)){
+        z<-data.frame(Valores=c(z[,1],data1[,i]))
+      }
+
+      z1<-data.frame(Variables=rep(c(colnames(data1)[1:ncol(data1)]),each=nrow(data1)))
+
+      data2<-as.data.frame(data()[,4])
+
+      z2<-data.frame(Variables2=rep(data2[,1],times=ncol(data1)))
+
+      g<-cbind(z,z1,z2)
+
+      w2<-ggplot(data = g, aes(x=Variables2, y=Valores)) + geom_boxplot(aes(fill=Variables2))+
+        labs( title = "Gráfico de caja para la columna categórica",
+              x = " ", y = " ",caption = "https://synergy.vision/" )
+
+      return(w2)
+
 
     }else{
       data1<-as.data.frame(data()[,-c(1,2)])
@@ -557,7 +596,7 @@ if(input$factores=='ANOVA de un factor'){
       g<-cbind(z,z1,z2)
 
       w2<-ggplot(data = g, aes(x=Variables2, y=Valores)) + geom_boxplot(aes(fill=Variables2))+
-        labs( title = "Gráfico de caja para la columna categórica",
+        labs( title = "Gráfico de caja para la columna categórica Country",
               x = " ", y = " ",caption = "https://synergy.vision/" )
 
       return(w2)
